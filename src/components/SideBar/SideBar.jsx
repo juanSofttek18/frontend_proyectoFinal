@@ -2,12 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './SideBar.css';
 
-// Define aquí los enlaces de tu aplicación
 const navLinks = [
     { to: "/solicitudes", label: "Gestión de Solicitudes" },
     { to: "/clientes", label: "Clientes" },
     { to: "/vehiculos", label: "Vehículos" },
-    // Puedes añadir más enlaces aquí
 ];
 
 const SideBar = () => {

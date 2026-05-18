@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import FormularioSolicitud from './views/Solicitudes/FormularioSolicitud.jsx'
-import ListadoSolicitud from './views/Solicitudes/ListadoSolicitudes.jsx'
+import App from './App.jsx'
 
-ReactDOM.createRoot(document.getElementById('root')).render(<ListadoSolicitud />)
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
