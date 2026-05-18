@@ -4,6 +4,7 @@ import DashBoard from "./views/Dashboard/DashBoard";
 import ListClient from "./views/Clientes/ListClient"; // 👈 Corregido el nombre del archivo de Clientes
 import VehicleCatalog from "./views/Vehicles/VehicleCatalog";
 import "./App.css";
+import ListClient from "./views/Clientes/ListClient";
 
 const RequestsPlaceholder = () => <h2 className="placeholder-text">Rental Requests Engine (Developer 4)</h2>;
 
@@ -18,7 +19,11 @@ function App() {
           
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/clients" element={<ListClient />} />
+<<<<<<< HEAD
           <Route path="/vehicles" element={<VehicleCatalog />} />
+=======
+          <Route path="/vehicles" element={<VehiclesPlaceholder />} />
+>>>>>>> feature/Alejandro
           <Route path="/requests" element={<RequestsPlaceholder />} />
         </Routes>
       </main>

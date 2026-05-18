@@ -12,6 +12,12 @@ return(
             <tbody>{children}</tbody>
         </table>
     </div>
+<<<<<<< HEAD
 );
+=======
+
+)
+
+>>>>>>> feature/Alejandro
 }
 export default GenericTable;
