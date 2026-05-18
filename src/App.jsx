@@ -1,25 +1,29 @@
-import { Route, Routes } from "react-router-dom"
-import SideBar from "./components/SideBar"
-import DashBoard from "./views/DashBoard/DashBoard"
-import "./App.css"
+import { Routes, Route, Navigate } from "react-router-dom"; 
+import SideBar from "./components/SideBar";
+import DashBoard from "./views/Dashboard/DashBoard"; 
+import "./App.css";
 
-const vehiclesPlaceHolder= () => <h2 className="placeholder-text">Vehicles</h2>;
-const clientsPlaceHolder= () => <h2 className="placeholder-text">Clients</h2>;
-const requestsPlaceHolder= () => <h2 className="placeholder-text">Requests</h2>;
+const ClientsPlaceholder = () => <h2 className="placeholder-text">Clients Module (Developer 2)</h2>;
+const VehiclesPlaceholder = () => <h2 className="placeholder-text">Vehicles Catalogue (Developer 3)</h2>;
+const RequestsPlaceholder = () => <h2 className="placeholder-text">Rental Requests Engine (Developer 4)</h2>;
 
 function App() {
   return (
-      <div className="app-container">
-        <SideBar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/vehicles" element={<vehiclesPlaceHolder />} />
-            <Route path="/clients" element={<clientsPlaceHolder />} />
-            <Route path="/requests" element={<requestsPlaceHolder />} />
-          </Routes>
-        </main>
-      </div>
-  )
+    <div className="container">
+      <SideBar />
+      
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          
+          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/clients" element={<ClientsPlaceholder />} />
+          <Route path="/vehicles" element={<VehiclesPlaceholder />} />
+          <Route path="/requests" element={<RequestsPlaceholder />} />
+        </Routes>
+      </main>
+    </div>
+  );
 }
-export default App
+
+export default App;

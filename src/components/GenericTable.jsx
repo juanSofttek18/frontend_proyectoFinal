@@ -1,5 +1,5 @@
 function GenericTable({ headers, children }) {
-
+return(
     <div>
         <table className="generic-table">
             <thead>
@@ -12,6 +12,7 @@ function GenericTable({ headers, children }) {
             <tbody>{children}</tbody>
         </table>
     </div>
+)
 }
 
 export default GenericTable;
