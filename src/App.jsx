@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Router } from "react-router-dom"
 import SideBar from "./components/SideBar"
-import DashBoard from "./views/DashBoard"
-import "App.css"
+import DashBoard from "./views/DashBoard/DashBoard"
+import "./App.css"
 
 const vehiclesPlaceHolder= () => <h2 className="placeholder-text">Vehicles</h2>;
 const clientsPlaceHolder= () => <h2 className="placeholder-text">Clients</h2>;
