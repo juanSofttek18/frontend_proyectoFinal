@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import useVehicles from "./useVehicles";
 import { getOneVehicleById } from "../../services/vehiculoService";
-import GenericTable from "../../components/GenericTable";
+
 import GenericCard from "../../components/GenericCard";
 
 function VehicleDetail() {
@@ -32,7 +32,7 @@ function VehicleDetail() {
     return (
       <div className="vehicle-detail-page">
         <GenericCard
-          title={`${vehicle.marca} ${vehicle.modelo}`}
+          title={`${vehicle.brand} ${vehicle.model}`}
           subtitle="Vehículo disponible para renting"
         >
           <p className="vehicle-description">
@@ -48,27 +48,27 @@ function VehicleDetail() {
           <div className="vehicle-specs-grid">
             <div className="vehicle-spec-item">
               <span>Matrícula</span>
-              <strong>{vehicle.matricula}</strong>
+              <strong>{vehicle.license_plate}</strong>
             </div>
 
             <div className="vehicle-spec-item">
               <span>Marca</span>
-              <strong>{vehicle.marca}</strong>
+              <strong>{vehicle.brand}</strong>
             </div>
 
             <div className="vehicle-spec-item">
               <span>Modelo</span>
-              <strong>{vehicle.modelo}</strong>
+              <strong>{vehicle.model}</strong>
             </div>
 
             <div className="vehicle-spec-item">
               <span>Potencia</span>
-              <strong>{vehicle.potencia} CV</strong>
+              <strong>{vehicle.potency} CV</strong>
             </div>
 
             <div className="vehicle-spec-item">
               <span>Cilindrada</span>
-              <strong>{vehicle.cilindrada} cc</strong>
+              <strong>{vehicle.cc} cc</strong>
             </div>
 
             <div className="vehicle-spec-item">
@@ -78,16 +78,85 @@ function VehicleDetail() {
 
             <div className="vehicle-spec-item">
               <span>Plazas</span>
-              <strong>{vehicle.plazas}</strong>
+              <strong>{vehicle.spots}</strong>
             </div>
 
             <div className="vehicle-spec-item">
               <span>Disponibilidad</span>
-              <strong>{vehicle.disponibilidad}</strong>
+              <strong>{vehicle.available ? "Sí" : "No"}</strong>
             </div>
           </div>
         </GenericCard>
 
+        <GenericCard
+          title="Información económica"
+          subtitle="Precio y cuota mensual base"
+        >
+          <div className="vehicle-price-grid">
+            <div className="vehicle-price-card">
+              <span>Precio del vehículo</span>
+              <strong>{vehicle.price} €</strong>
+            </div>
+
+            <div className="vehicle-price-card vehicle-price-card-highlight">
+              <span>Cuota mensual base</span>
+              <strong>{vehicle.base_monthly_fee} €</strong>
+              <p>/ mes</p>
+            </div>
+          </div>
+        </GenericCard>
+
+        <GenericCard
+          title="Servicios incluidos"
+          subtitle="Condiciones básicas del renting"
+        >
+          <div className="vehicle-services-grid">
+            <div className="vehicle-service-item">
+              <span>IVA incluido</span>
+              <strong>Sí</strong>
+            </div>
+
+            <div className="vehicle-service-item">
+              <span>Mantenimiento</span>
+              <strong>Incluido</strong>
+            </div>
+
+            <div className="vehicle-service-item">
+              <span>Seguro</span>
+              <strong>Incluido</strong>
+            </div>
+
+            <div className="vehicle-service-item">
+              <span>Asistencia 24h</span>
+              <strong>Incluida</strong>
+            </div>
+          </div>
+        </GenericCard>
+
+        <GenericCard
+          title="Equipamiento incluido"
+          subtitle="Características adicionales"
+        >
+          <div className="vehicle-equipment-grid">
+            <p>Sistema multimedia avanzado</p>
+            <p>Climatizador automático</p>
+            <p>Control de estabilidad</p>
+            <p>Asistente de aparcamiento</p>
+            <p>Faros LED</p>
+            <p>Volante multifunción</p>
+          </div>
+        </GenericCard>
+
+        <div className="vehicle-actions">
+          <button className="vehicle-primary-button">Solicitar Renting</button>
+
+          <button
+            className="vehicle-secondary-button"
+            onClick={() => navigate(-1)}
+          >
+            Volver al catálogo
+          </button>
+        </div>
       </div>
     );
   }
