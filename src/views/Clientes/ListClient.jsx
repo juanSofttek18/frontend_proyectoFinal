@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-import { useClient } from "./useClient";
-import "./Client.css";
-
-=======
 import { useClient } from "./useClientPrueba";
 import GenericTable from "../../components/GenericTable"; 
 import GenericCard from "../../components/GenericCard";
 import "./Client.css";
  
->>>>>>> feature/Alejandro
 function ListClient() {
   const { clients, loading, error, search, setSearch, deleteClient } = useClient();
  
