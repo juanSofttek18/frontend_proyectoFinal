@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom"; 
 import SideBar from "./components/SideBar";
 import DashBoard from "./views/Dashboard/DashBoard"; 
-import ListClient from "./views/Clientes/ListClient"; // 👈 Corregido el nombre del archivo de Clientes
+import ListClient from "./views/Clientes/ListClient";
 import VehicleCatalog from "./views/Vehicles/VehicleCatalog";
 import "./App.css";
 import ListClient from "./views/Clientes/ListClient";
