@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout/Layout';
 import ListadoSolicitudes from './views/Solicitudes/ListadoSolicitudes';
 const Clientes = () => <div style={{ fontSize: '1.5rem' }}>Página de Clientes</div>;
-const Vehiculos = () => <div style={{ fontSize: '1.5rem' }}>Página de Vehículos</div>;
+import Vehiculos from './views/Vehicles/VehicleCatalog'
 
 function App() {
   return (
