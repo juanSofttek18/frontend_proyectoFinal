@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import SideBar from "./components/SideBar";
 import DashBoard from "./views/Dashboard/DashBoard"; 
 import "./App.css";
+import ListClient from "./views/Clientes/ListClient";
 
 const ClientsPlaceholder = () => <h2 className="placeholder-text">Clients Module (Developer 2)</h2>;
 const VehiclesPlaceholder = () => <h2 className="placeholder-text">Vehicles Catalogue (Developer 3)</h2>;
@@ -17,7 +18,7 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
           <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/clients" element={<ClientsPlaceholder />} />
+          <Route path="/clients" element={<ListClient />} />
           <Route path="/vehicles" element={<VehiclesPlaceholder />} />
           <Route path="/requests" element={<RequestsPlaceholder />} />
         </Routes>
