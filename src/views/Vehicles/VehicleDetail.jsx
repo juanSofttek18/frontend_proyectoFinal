@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import useVehicles from "./useVehicles";
 import { getOneVehicleById } from "../../services/vehiculoService";
-import GenericTable from "../../components/GenericTable";
+
 import GenericCard from "../../components/GenericCard";
 
 function VehicleDetail() {

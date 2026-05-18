@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import SideBar from "./components/SideBar"
 import DashBoard from "./views/DashBoard/DashBoard"
+import VehicleCatalog from "./views/Vehicles/VehicleCatalog"
 import "./App.css"
 
 const vehiclesPlaceHolder= () => <h2 className="placeholder-text">Vehicles</h2>;
@@ -14,7 +15,7 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/vehicles" element={<vehiclesPlaceHolder />} />
+            <Route path="/vehicles" element={<VehicleCatalog />} />
             <Route path="/clients" element={<clientsPlaceHolder />} />
             <Route path="/requests" element={<requestsPlaceHolder />} />
           </Routes>
