@@ -1,6 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* --- Estilos Generales del Contenedor de Listados --- */
 .listado-container {
     padding: 1.5rem;
     background-color: #F7FAFC; /* Blanco Hielo */
@@ -10,8 +8,6 @@
     -moz-osx-font-smoothing: grayscale;
     box-sizing: border-box;
 }
-
-/* Cabecera del Listado */
 .listado-header {
     display: flex;
     justify-content: space-between;
@@ -25,8 +21,6 @@
     color: #1A365D; /* Azul Marino */
     margin: 0;
 }
-
-/* Botón para Añadir Nuevas Solicitudes */
 .btn-add {
     background-color: #1A365D; /* Azul Marino */
     color: #ffffff;

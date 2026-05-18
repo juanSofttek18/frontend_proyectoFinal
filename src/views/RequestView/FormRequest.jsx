@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './FormularioSolicitud.css';
+import './FormRequest.css';
 import { enviarSolicitud, getVehiculos, getExtras } from '../../services/solicitudService';
 
-export default function FormularioSolicitud({ onFormSubmit, onCancel }) {
+export default function FormRequest({ onFormSubmit, onCancel }) {
     const [formData, setFormData] = useState({
         dni: '',
         vehiculoId: '',
