@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom"; 
 import SideBar from "./components/SideBar";
 import DashBoard from "./views/Dashboard/DashBoard"; 
+import ListClient from "./views/Clientes/ListClient"; // 👈 Corregido el nombre del archivo de Clientes
+import VehicleCatalog from "./views/Vehicles/VehicleCatalog";
 import "./App.css";
 
-const ClientsPlaceholder = () => <h2 className="placeholder-text">Clients Module (Developer 2)</h2>;
-const VehiclesPlaceholder = () => <h2 className="placeholder-text">Vehicles Catalogue (Developer 3)</h2>;
 const RequestsPlaceholder = () => <h2 className="placeholder-text">Rental Requests Engine (Developer 4)</h2>;
 
 function App() {
@@ -17,8 +17,8 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
           <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/clients" element={<ClientsPlaceholder />} />
-          <Route path="/vehicles" element={<VehiclesPlaceholder />} />
+          <Route path="/clients" element={<ListClient />} />
+          <Route path="/vehicles" element={<VehicleCatalog />} />
           <Route path="/requests" element={<RequestsPlaceholder />} />
         </Routes>
       </main>

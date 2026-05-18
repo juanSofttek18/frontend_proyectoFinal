@@ -1,5 +1,5 @@
 import { useClient } from "./useClient";
-import "./Clientes.css";
+import "./Client.css";
 
 function ListClient() {
 
