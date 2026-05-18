@@ -1,0 +1,31 @@
+.table-responsive {
+    @apply w-full overflow-x-auto;
+}
+
+.generic-table {
+    @apply w-full caption-bottom text-sm;
+}
+
+.generic-table thead {
+    @apply [&_tr]:border-b;
+}
+
+.generic-table tbody {
+    @apply [&_tr:last-child]:border-0;
+}
+
+.generic-table th {
+    @apply h-12 px-4 text-left align-middle font-medium text-muted-foreground;
+}
+
+.generic-table td {
+    @apply p-4 align-middle;
+}
+
+.table-state-message {
+    @apply text-center p-4 text-muted-foreground;
+}
+
+.error-message {
+    @apply text-red-600 bg-red-50 border border-red-200 rounded-md;
+}
