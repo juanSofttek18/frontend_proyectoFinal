@@ -1,0 +1,34 @@
+.card-generica {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #1A365D;
+}
+
+.card-generica-header {
+  margin-bottom: 1.5rem;
+}
+
+.card-generica-header h2 {
+  margin: 0;
+  color: #1A365D;
+  font-size: 1.5rem;
+}
+
+.card-generica-header p {
+  margin: 0.5rem 0 0;
+  color: #4A5568;
+  font-size: 1rem;
+}
+
+.card-generica-content {
+  color: #1A365D;
+}
+
+.card-generica-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
