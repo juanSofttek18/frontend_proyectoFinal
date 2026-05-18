@@ -1,0 +1,11 @@
+.app-layout {
+    display: flex;
+}
+
+.main-content {
+    flex-grow: 1;
+    margin-left: 260px; /* Mismo ancho que el sidebar */
+    padding: 2.5rem;
+    background-color: #F7FAFC; /* Blanco Hielo */
+    min-height: 100vh;
+}

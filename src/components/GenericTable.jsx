@@ -12,7 +12,10 @@ return(
             <tbody>{children}</tbody>
         </table>
     </div>
+<<<<<<< HEAD
 )
+=======
+>>>>>>> feature/SolitiudesView
 }
 
 export default GenericTable;
