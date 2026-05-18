@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- Contenedor General de la Página del Catálogo --- */
+.catalog-page-container {
+    padding: 1.5rem;
+    background-color: #F7FAFC; /* Blanco Hielo */
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+}
+
+/* Cabecera del catálogo */
+.catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.catalog-header h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1A365D; /* Azul Marino */
+    margin: 0;
+}
+
+/* --- Estados de Carga y Mensajes --- */
+.loading-message,
+.empty-message {
+    text-align: center;
+    padding: 2.5rem;
+    color: #4A5568; /* Azul Pizarra */
+    font-size: 0.875rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.error-message {
+    background-color: #FFF5F5;
+    color: #C53030;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #FEB2B2;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Integración y estilos de la Tabla Genérica --- */
+/* Forzamos a que el GenericTable herede el diseño limpio en esta vista */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E2E8F0;
+}
+
+.generic-table {
+    width: 100%;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+}
+
+.generic-table thead tr {
+    background-color: #F7FAFC; /* Blanco Hielo */
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.generic-table th {
+    height: 3rem;
+    padding: 0 1rem;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: 600;
+    color: #1A365D; /* Azul Marino */
+}
+
+.generic-table tbody tr {
+    border-bottom: 1px solid #E2E8F0;
+    transition: background-color 0.15s ease;
+}
+
+.generic-table tbody tr:hover {
+    background-color: #F7FAFC; /* Iluminación en Blanco Hielo */
+}
+
+.generic-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.generic-table td {
+    padding: 1rem;
+    vertical-align: middle;
+    color: #4A5568; /* Azul Pizarra */
+}
+
+/* Resaltado específico para precios o cuotas mensuales */
+.generic-table td:nth-child(4),
+.generic-table td:nth-child(9) {
+    font-weight: 600;
+    color: #1A365D;
+}
