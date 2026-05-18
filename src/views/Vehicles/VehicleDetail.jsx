@@ -48,7 +48,7 @@ function VehicleDetail() {
           <div className="vehicle-specs-grid">
             <div className="vehicle-spec-item">
               <span>Matrícula</span>
-              <strong>{vehicle.matricula}</strong>
+              <strong>{vehicle.license_plate}</strong>
             </div>
 
             <div className="vehicle-spec-item">

@@ -31,7 +31,7 @@ function VehicleCatalog() {
 
     return (
       <GenericTable
-        columns={[
+        headers={[
           "Matrícula",
           "Marca",
           "Modelo",
@@ -46,16 +46,16 @@ function VehicleCatalog() {
       >
         {vehicles.map((vehicle) => (
           <tr key={vehicle.id}>
-            <td>{vehicle.matricula}</td>
-            <td>{vehicle.marca}</td>
-            <td>{vehicle.modelo}</td>
-            <td>{vehicle.precio} €</td>
-            <td>{vehicle.cilindrada}</td>
-            <td>{vehicle.potencia}</td>
+            <td>{vehicle.license_plate}</td>
+            <td>{vehicle.brand}</td>
+            <td>{vehicle.model}</td>
+            <td>{vehicle.price} €</td>
+            <td>{vehicle.engine_size}</td>
+            <td>{vehicle.potency}</td>
             <td>{vehicle.color}</td>
-            <td>{vehicle.plazas}</td>
-            <td>{vehicle.cuota_mensual_base} €</td>
-            <td>{vehicle.disponibilidad}</td>
+            <td>{vehicle.spots}</td>
+            <td>{vehicle.base_monthly_fee} €</td>
+            <td>{vehicle.available ? "Sí" : "No"}</td>
           </tr>
         ))}
       </GenericTable>
