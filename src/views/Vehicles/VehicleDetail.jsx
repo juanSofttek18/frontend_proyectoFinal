@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import useVehicles from "./useVehicles";
 import { getOneVehicleById , getVehicleDetailWithExtras} from "../../services/vehiculoService";
-
+import "./VehicleDetail.css";
 import GenericCard from "../../components/GenericCard";
 
 function VehicleDetail() {
@@ -161,7 +161,7 @@ function VehicleDetail() {
         </GenericCard>
 
         <div className="vehicle-actions">
-          <button className="vehicle-primary-button">Solicitar Renting</button>
+          <button onClick={() => navigate('/requests')} className="vehicle-primary-button">Solicitar Renting</button>
 
           <button
             className="vehicle-secondary-button"

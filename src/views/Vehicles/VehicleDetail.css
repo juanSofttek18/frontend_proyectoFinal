@@ -1,73 +1,174 @@
-.vehicle-detail-container {
-    padding: 20px;
-    background-color: var(--color-ice);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.vehicle-detail-header {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--color-navy);
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #E2E8F0;
-}
-
-.vehicle-detail-page > p {
-    text-align: center;
+.vehicle-detail-page {
     padding: 2rem;
+    background: #F7FAFA;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.vehicle-description {
     color: #4A5568;
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    border: 1px solid #E2E8F0;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0.5rem 0;
 }
 
+.vehicle-specs-grid,
+.vehicle-services-grid,
 .vehicle-extras-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.9rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem;
+    padding: 1rem 0;
 }
 
+.vehicle-spec-item,
+.vehicle-service-item,
 .vehicle-extra-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #F7FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 1rem;
+    background: #F7FAFA;
+    border: 1px solid #E2E8F0;
+    padding: 1.2rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.vehicle-extra-item strong {
-  display: block;
-  color: #1A365D;
-  margin-bottom: 0.25rem;
+.vehicle-spec-item:hover,
+.vehicle-service-item:hover,
+.vehicle-extra-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 54, 93, 0.05);
 }
 
-.vehicle-extra-item span {
-  color: #4A5568;
-  font-size: 0.9rem;
+.vehicle-spec-item span,
+.vehicle-service-item span {
+    color: #4A5568;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.vehicle-spec-item strong,
+.vehicle-service-item strong {
+    color: #1A365D;
+    font-size: 1.1rem;
+}
+
+.vehicle-extra-item div strong {
+    color: #1A365D;
+    font-size: 1rem;
 }
 
 .vehicle-extra-item p {
-  margin: 0;
-  color: #D69E2E;
-  font-weight: 700;
+    margin: 0;
+    color: #D69E2E;
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
-@media (max-width: 900px) {
-  .vehicle-extras-grid {
-    grid-template-columns: 1fr;
-  }
+.vehicle-price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
 }
 
-@media (max-width: 480px) {
-    .vehicle-specs-grid {
-        grid-template-columns: 1fr; 
-    }
+.vehicle-price-card {
+    background: #F7FAFA;
+    border: 1px solid #E2E8F0;
+    padding: 2rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    text-align: center;
+}
 
-    .vehicle-detail-page {
-        padding: 1rem;
-    }
+.vehicle-price-card span {
+    color: #4A5568;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.vehicle-price-card strong {
+    color: #1A365D;
+    font-size: 2rem;
+}
+
+.vehicle-price-card-highlight {
+    background: #ffffff;
+    border: 2px solid #D69E2E;
+    box-shadow: 0 10px 25px rgba(214, 158, 46, 0.12);
+    transform: scale(1.02);
+}
+
+.vehicle-price-card-highlight strong {
+    color: #D69E2E;
+}
+
+.vehicle-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+.vehicle-primary-button,
+.vehicle-secondary-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.vehicle-primary-button {
+    background: #1A365D;
+    color: white;
+}
+
+.vehicle-primary-button:hover {
+    background: #4A5568;
+    box-shadow: 0 4px 12px rgba(26, 54, 93, 0.15);
+}
+
+.vehicle-secondary-button {
+    background: #e2e8f0;
+    color: #4A5568;
+}
+
+.vehicle-secondary-button:hover {
+    background: #cbd5e1;
+    color: #1A365D;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #E2E8F0;
+    border-top: 6px solid #D69E2E;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
