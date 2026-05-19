@@ -18,15 +18,15 @@ function SideBar() {
           </NavLink>
 
           <NavLink to="/clients" className={getNavLinkClass}>
-            Clients
+            Clientes
           </NavLink>
 
           <NavLink to="/vehicles" className={getNavLinkClass}>
-            Vehicles
+            Vehículos
           </NavLink>
 
           <NavLink to="/requests" className={getNavLinkClass}>
-            Requests
+            Solicitudes
           </NavLink>
         </nav>
       </div>

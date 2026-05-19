@@ -1,55 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { getSolicitudes, eliminarSolicitud, actualizarEstadoSolicitud } from '../../services/solicitudService';
+import React, { useState } from 'react';
+import { useRequest } from '../../hooks/useRequest';
 import FormularioSolicitud from './FormRequest';
 import './ListRequest.css';
 
 export default function ListRequest() {
-    const [solicitudes, setSolicitudes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { requests, loading, error, deleteRequest, updateRequestStatus, saveRequest } = useRequest();
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-    const cargarSolicitudes = useCallback(async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            const data = await getSolicitudes();
-            setSolicitudes(data);
-        } catch (err) {
-            setError('Error al cargar las solicitudes. Por favor, inténtelo de nuevo.');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        cargarSolicitudes();
-    }, [cargarSolicitudes]);
-
-    const handleEliminar = useCallback(async (id) => {
-        if (window.confirm('¿Estás seguro de que deseas eliminar esta solicitud? Esta acción no se puede deshacer.')) {
-            try {
-                await eliminarSolicitud(id);
-                setSolicitudes(prev => prev.filter(s => s.id !== id));
-            } catch (err) {
-                alert(`Error al eliminar la solicitud: ${err.message}`);
-            }
-        }
-    }, []);
-
-    const handleActualizarEstado = useCallback(async (id, nuevoEstado) => {
-        try {
-            const solicitudActualizada = await actualizarEstadoSolicitud(id, nuevoEstado);
-            setSolicitudes(prev => prev.map(s => (s.id === id ? solicitudActualizada : s)));
-        } catch (err) {
-            alert(`Error al actualizar el estado: ${err.message}`);
-        }
-    }, []);
-
-    const handleFormSubmit = useCallback(() => {
+    const handleFormSubmit = () => {
         setMostrarFormulario(false);
-        cargarSolicitudes();
-    }, [cargarSolicitudes]);
+    };
 
     const renderContent = () => {
         if (loading) {
@@ -64,7 +24,7 @@ export default function ListRequest() {
             return <div className="error-message">{error}</div>;
         }
 
-        if (solicitudes.length === 0) {
+        if (!requests || requests.length === 0) {
             return <div className="empty-message">No hay solicitudes para mostrar.</div>;
         }
 
@@ -73,7 +33,7 @@ export default function ListRequest() {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>DNI</th>
+                        <th>DNI Cliente</th>
                         <th>Vehículo</th>
                         <th>Plazo (meses)</th>
                         <th>Estado</th>
@@ -81,38 +41,45 @@ export default function ListRequest() {
                     </tr>
                 </thead>
                 <tbody>
-                    {solicitudes.map(solicitud => (
-                        <tr key={solicitud.id}>
-                            <td>{solicitud.id}</td>
-                            <td>{solicitud.clienteDni}</td>
-                            <td>{`${solicitud.vehiculo?.marca || ''} ${solicitud.vehiculo?.modelo || ''}`}</td>
-                            <td>{solicitud.plazo}</td>
-                            <td>
-                                <span className={`status-badge status-${solicitud.estado?.toLowerCase()}`}>
-                                    {solicitud.estado}
-                                </span>
-                            </td>
-                            <td>
-                                <div className="actions-cell">
-                                    <button className="action-btn btn-aprobar" onClick={() => handleActualizarEstado(solicitud.id, 'APROBADA')}>
-                                        Aprobar
-                                    </button>
-                                    <button className="action-btn btn-rechazar" onClick={() => handleActualizarEstado(solicitud.id, 'DENEGADA')}>
-                                        Rechazar
-                                    </button>
-                                    <button className="action-btn btn-garantias" onClick={() => handleActualizarEstado(solicitud.id, 'APROBADA_CON_GARANTIAS')}>
-                                        Garantías
-                                    </button>
-                                    <button className="action-btn btn-modificar">
-                                        Modificar
-                                    </button>
-                                    <button className="action-btn btn-eliminar" onClick={() => handleEliminar(solicitud.id)}>
-                                        Eliminar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
+                    {requests.map(solicitud => {
+                        const marca = solicitud.vehiculo?.marca || solicitud.vehiculoMarca || '';
+                        const modelo = solicitud.vehiculo?.modelo || solicitud.vehiculoModelo || '';
+                        const vehiculoTexto = `${marca} ${modelo}`.trim() || 'No especificado';
+                        const estadoClase = solicitud.estado ? solicitud.estado.toLowerCase() : 'pendiente';
+
+                        return (
+                            <tr key={solicitud.id}>
+                                <td>{solicitud.id}</td>
+                                <td>{solicitud.clienteDni || solicitud.dniCliente || 'N/A'}</td>
+                                <td>{vehiculoTexto}</td>
+                                <td>{solicitud.plazo}</td>
+                                <td>
+                                    <span className={`status-badge status-${estadoClase}`}>
+                                        {solicitud.estado || 'PENDIENTE'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div className="actions-cell">
+                                        <button className="action-btn btn-aprobar" onClick={() => updateRequestStatus(solicitud.id, 'APPROVED')}>
+                                            Aprobar
+                                        </button>
+                                        <button className="action-btn btn-rechazar" onClick={() => updateRequestStatus(solicitud.id, 'REJECTED')}>
+                                            Rechazar
+                                        </button>
+                                        <button className="action-btn btn-garantias" onClick={() => updateRequestStatus(solicitud.id, 'APPROVED_WITH_GUARANTEES')}>
+                                            Garantías
+                                        </button>
+                                        <button className="action-btn btn-modificar">
+                                            Modificar
+                                        </button>
+                                        <button className="action-btn btn-eliminar" onClick={() => deleteRequest(solicitud.id)}>
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         );
@@ -136,6 +103,7 @@ export default function ListRequest() {
                 open={mostrarFormulario}
                 close={() => setMostrarFormulario(false)}
                 onFormSubmit={handleFormSubmit}
+                saveRequest={saveRequest}
             />
         </div>
     );

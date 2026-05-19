@@ -8,19 +8,19 @@ import {
 
 export function useRequest() {
   const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState("idle");
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchRequests = useCallback(async () => {
     try {
-      setLoading("loading");
+      setLoading(true);
       setError(null);
       const data = await getPendingRequests();
-      setRequests(data);
-      setLoading("success");
+      setRequests(Array.isArray(data) ? data : []);
     } catch (err) {
-      setError(err);
-      setLoading("error");
+      setError(err.message || "Error al cargar las solicitudes");
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -33,15 +33,13 @@ export function useRequest() {
       await logicalDeleteRequest(id);
       setRequests((prev) => prev.filter((r) => r.id !== id));
     } catch (err) {
-      alert(`Error al eliminar la solicitud: ${err.message}`);
+      alert(`Error al eliminar: ${err.message}`);
     }
   }, []);
 
   const updateRequestStatus = useCallback(async (id, nuevoEstado) => {
     try {
-      const resolveDTO = { status: nuevoEstado };
-      const updatedData = await resolveRequest(id, resolveDTO);
-
+      const updatedData = await resolveRequest(id, { status: nuevoEstado });
       setRequests((prev) =>
         prev.map((r) => (r.id === id ? updatedData : r))
       );
@@ -55,7 +53,7 @@ export function useRequest() {
       await createRequest(dto);
       await fetchRequests();
     } catch (err) {
-      alert(`Error al guardar la solicitud: ${err.message}`);
+      alert(`Error al guardar: ${err.message}`);
     }
   }, [fetchRequests]);
 
@@ -65,7 +63,6 @@ export function useRequest() {
     error,
     deleteRequest,
     updateRequestStatus,
-    saveRequest,
-    refreshRequests: fetchRequests
+    saveRequest
   };
 }

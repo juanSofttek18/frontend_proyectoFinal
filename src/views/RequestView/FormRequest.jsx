@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './FormRequest.css';
-import { enviarSolicitud, getVehiculos, getExtras } from '../../services/solicitudService';
+import {
+  getPendingRequests,
+  createRequest,
+  resolveRequest,
+  logicalDeleteRequest
+} from '../../services/solicitudService';
 
 export default function FormRequest({ open, close, onFormSubmit }) {
     const [formData, setFormData] = useState({
