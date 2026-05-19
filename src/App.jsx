@@ -4,6 +4,7 @@ import DashBoard from "./views/Dashboard/DashBoard";
 import ListClient from "./views/Clientes/ListClient";
 import VehicleCatalog from "./views/Vehicles/VehicleCatalog";
 import ListRequest from "./views/RequestView/ListRequest";
+import NotFoundView from "./components/NotFoundView";
 import "./App.css";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/requests" element={<ListRequest />} />
           <Route path="/clients" element={<ListClient />} />
           <Route path="/vehicles" element={<VehicleCatalog />} />
+          <Route path="*" element={<NotFoundView />} />
         </Routes>
       </main>
     </div>
