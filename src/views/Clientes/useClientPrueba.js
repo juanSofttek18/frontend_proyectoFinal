@@ -14,33 +14,33 @@ export function useClient() {
       const fakeData = [
         {
           id: 1,
-          nombre: "Juan",
-          apellido: "Pérez",
-          documento: "12345678A",
-          tipo: "Particular",
-          contacto: "juan@email.com",
+          name: "Juan",
+          first_surname: "Pérez",
+          nif: "12345678A",
+          employment_status: "Particular",
+          phone: "juan@email.com",
           scoring: 85,
-          estado: "Activo",
+          is_active: true,
         },
         {
           id: 2,
-          nombre: "María",
-          apellido: "Gómez",
-          documento: "87654321B",
-          tipo: "Empresa",
-          contacto: "maria@empresa.com",
+          name: "María",
+          first_surname: "Gómez",
+          nif: "87654321B",
+          employment_status: "Empresa",
+          phone: "maria@empresa.com",
           scoring: 92,
-          estado: "Activo",
+          is_active: true,
         },
         {
           id: 3,
-          nombre: "Carlos",
-          apellido: "Ruiz",
-          documento: "11223344C",
-          tipo: "Particular",
-          contacto: "carlos@email.com",
+          name: "Carlos",
+          first_surname: "Ruiz",
+          nif: "11223344C",
+          employment_status: "Particular",
+          phone: "carlos@email.com",
           scoring: 60,
-          estado: "Inactivo",
+          is_active: false,
         },
       ];
 
@@ -56,7 +56,7 @@ export function useClient() {
 
 
   const filteredClients = clients.filter((c) =>
-    `${c.nombre} ${c.apellido} ${c.documento}`
+    `${c.name} ${c.first_surname} ${c.nif}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );

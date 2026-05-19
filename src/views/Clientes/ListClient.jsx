@@ -57,9 +57,9 @@ function ListClient() {
 <td>{client.name} {client.first_surname}</td>
 <td>{client.nif}</td>
 <td>{client.employment_status}</td>
-<td>{client.contacto}</td>
+<td>{client.phone}</td>
 <td>{client.scoring}</td>
-<td>{client.estado}</td>
+<td>{client.is_active ? "Activo" : "Inactivo"}</td>
 <td>
 <button className="Edit_Client" onClick={() => {
   setClientEdit(client);
