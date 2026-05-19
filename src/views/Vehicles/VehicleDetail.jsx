@@ -188,4 +188,4 @@ function formatExtraPrice(extra, vehicle) {
 }
 
 export default VehicleDetail;
-export default VehicleDetail;
+
