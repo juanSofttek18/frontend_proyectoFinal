@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { getSolicitudes, eliminarSolicitud, actualizarEstadoSolicitud } from '../../services/solicitudService';
+import React, {useState, useEffect, useCallback} from 'react';
+import {getSolicitudes, eliminarSolicitud, actualizarEstadoSolicitud} from '../../services/solicitudService';
 import './ListRequest.css';
 import FormularioSolicitud from './FormRequest';
 
@@ -53,15 +53,7 @@ export default function ListRequest() {
         cargarSolicitudes();
     }, [cargarSolicitudes]);
 
-    // Función para renderizar la tabla o los mensajes de estado
     const renderTablaSolicitudes = () => {
-        if (loading) {
-            return <div className="loading-message">Cargando solicitudes...</div>;
-        }
-
-        if (error) {
-            return <div className="error-message">{error}</div>;
-        }
 
         if (solicitudes.length === 0) {
             return <div className="empty-message">No hay solicitudes para mostrar.</div>;
@@ -71,51 +63,74 @@ export default function ListRequest() {
             <div className="tabla-wrapper">
                 <table className="tabla-solicitudes">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>DNI Cliente</th>
-                            <th>Vehículo</th>
-                            <th>Plazo (meses)</th>
-                            <th>Estado</th>
-                            <th className="acciones-cell">Acciones</th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>DNI Cliente</th>
+                        <th>Vehículo</th>
+                        <th>Plazo (meses)</th>
+                        <th>Estado</th>
+                        <th className="acciones-cell">Acciones</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {solicitudes.map(solicitud => (
-                            <tr key={solicitud.id}>
-                                <td>{solicitud.id}</td>
-                                <td>{solicitud.clienteDni}</td>
-                                <td>{`${solicitud.vehiculo.marca} ${solicitud.vehiculo.modelo}`}</td>
-                                <td>{solicitud.plazo}</td>
-                                <td>
-                                    <span className={`status-badge status-${solicitud.estado.toLowerCase()}`}>{solicitud.estado}</span>
-                                </td>
-                                <td className="acciones-cell">
-                                    <button className="action-btn btn-aprobar" onClick={() => handleActualizarEstado(solicitud.id, 'APROBADA')}>Aprobar</button>
-                                    <button className="action-btn btn-rechazar" onClick={() => handleActualizarEstado(solicitud.id, 'DENEGADA')}>Rechazar</button>
-                                    <button className="action-btn btn-garantias" onClick={() => handleActualizarEstado(solicitud.id, 'APROBADA_CON_GARANTIAS')}>Aprob. con Garantías</button>
-                                    <button className="action-btn btn-modificar">Modificar</button>
-                                    <button className="action-btn btn-eliminar" onClick={() => handleEliminar(solicitud.id)}>Eliminar</button>
-                                </td>
-                            </tr>
-                        ))}
+                    {solicitudes.map(solicitud => (
+                        <tr key={solicitud.id}>
+                            <td>{solicitud.id}</td>
+                            <td>{solicitud.clienteDni}</td>
+                            <td>{`${solicitud.vehiculo.marca} ${solicitud.vehiculo.modelo}`}</td>
+                            <td>{solicitud.plazo}</td>
+                            <td>
+                                <span
+                                    className={`status-badge status-${solicitud.estado.toLowerCase()}`}>{solicitud.estado}</span>
+                            </td>
+                            <td className="acciones-cell">
+                                <button className="action-btn btn-aprobar"
+                                        onClick={() => handleActualizarEstado(solicitud.id, 'APROBADA')}>Aprobar
+                                </button>
+                                <button className="action-btn btn-rechazar"
+                                        onClick={() => handleActualizarEstado(solicitud.id, 'DENEGADA')}>Rechazar
+                                </button>
+                                <button className="action-btn btn-garantias"
+                                        onClick={() => handleActualizarEstado(solicitud.id, 'APROBADA_CON_GARANTIAS')}>Aprob.
+                                    con Garantías
+                                </button>
+                                <button className="action-btn btn-modificar">Modificar</button>
+                                <button className="action-btn btn-eliminar"
+                                        onClick={() => handleEliminar(solicitud.id)}>Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
         );
     };
 
+    if (loading) {
+        return (
+            <div className="loading-spinner">
+                <div className="spinner"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return <div className="error-message">{error}</div>;
+    }
+
     return (
         <div className="listado-container">
             {mostrarFormulario ? (
-                <FormularioSolicitud onFormSubmit={handleFormSubmit} onCancel={() => setMostrarFormulario(false)} />
+                <FormularioSolicitud onFormSubmit={handleFormSubmit} onCancel={() => setMostrarFormulario(false)}/>
             ) : (
                 <>
                     <div className="listado-header">
-                        <h2>Gestión de Solicitudes</h2>
-                        <button className="btn-add" onClick={() => setMostrarFormulario(true)}>
-                            Añadir Solicitud
-                        </button>
+                        <div>
+                            <h1>Gestión de Solicitudes</h1>
+                            <p>Administra y crea solicitudes</p>
+                        </div>
+                        <button className="btn-add">Añadir Solicitud</button>
                     </div>
                     {renderTablaSolicitudes()}
                 </>

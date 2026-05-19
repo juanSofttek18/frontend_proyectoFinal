@@ -1,0 +1,29 @@
+.vehicle-container {
+    padding: 20px;
+    background-color: var(--color-ice);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-header {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #E2E8F0;
+}
+
+.btn-primary {
+    background-color: var(--color-navy) !important;
+    color: var(--color-white) !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    font-weight: 600 !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-slate) !important;
+}

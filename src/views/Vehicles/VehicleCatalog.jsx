@@ -21,7 +21,11 @@ function VehicleCatalog() {
   }
 
   if (vehiclesStatus === "loading") {
-    return <p>Cargando vehículos...</p>;
+    return (
+      <div className="loading-spinner">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   if (vehiclesStatus === "error") {

@@ -1,163 +1,198 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* ListRequest.css */
+
+/* Contenedor Principal */
 .listado-container {
-    padding: 1.5rem;
-    background-color: #F7FAFC; /* Blanco Hielo */
+    padding: 2rem;
+    background: #F7FAFA;
     min-height: 100vh;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Header del Listado */
 .listado-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(26, 54, 93, 0.08);
+    border-left: 5px solid #D69E2E; /* Dorado */
 }
 
-.listado-header h2 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: #1A365D; /* Azul Marino */
-    margin: 0;
+/* Títulos y textos del Header */
+.listado-header h1 {
+    margin: 0 0 0.4rem 0;
+    font-size: 1.6rem;
+    color: #1A365D; /* Azul marino */
 }
+
+.listado-header p {
+    margin: 0;
+    color: #4A5568;
+    font-size: 0.95rem;
+}
+
+/* Botón Añadir Solicitud */
 .btn-add {
-    background-color: #1A365D; /* Azul Marino */
-    color: #ffffff;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    background: #1A365D;
+    color: white;
     border: none;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(26, 54, 93, 0.2);
+    padding: 10px 16px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    font-size: 0.95rem;
 }
 
 .btn-add:hover {
-    background-color: #2A4365;
+    background: #4A5568;
 }
 
-/* --- Estilos para la Tabla --- */
-.table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    border: 1px solid #E2E8F0;
+/* Contenedor de la Tabla */
+.tabla-wrapper {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(26, 54, 93, 0.06);
+    border-top: 3px solid #D69E2E;
 }
 
-.generic-table {
+/* Estructura de la Tabla */
+.tabla-solicitudes {
     width: 100%;
-    font-size: 0.875rem;
     border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.generic-table thead tr {
-    background-color: #F7FAFC; /* Blanco Hielo en la cabecera */
-    border-bottom: 1px solid #E2E8F0;
+.tabla-solicitudes thead {
+    background: #1A365D;
 }
 
-.generic-table th {
-    height: 3rem;
-    padding: 0 1rem;
+.tabla-solicitudes th {
     text-align: left;
-    vertical-align: middle;
+    padding: 12px;
+    font-size: 0.85rem;
+    color: #F7FAFA;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tabla-solicitudes td {
+    padding: 12px;
+    border-top: 1px solid #E2E8F0;
+    font-size: 0.9rem;
+    color: #1A365D;
+}
+
+.tabla-solicitudes tbody tr:hover {
+    background: #F7FAFA;
+}
+
+/* Celda de Acciones */
+.acciones-cell {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Base de los Botones de Acción */
+.action-btn {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
     font-weight: 600;
-    color: #1A365D; /* Azul Marino para resaltar columnas */
+    font-size: 0.85rem;
+    transition: 0.2s;
 }
 
-.generic-table tbody tr {
-    border-bottom: 1px solid #E2E8F0;
-    transition: background-color 0.15s ease;
+/* Variantes de botones de acción */
+.btn-aprobar {
+    background: #28a745;
+    color: white;
+}
+.btn-aprobar:hover {
+    background: #218838;
 }
 
-.generic-table tbody tr:hover {
-    background-color: #F7FAFC; /* Blanco Hielo al hacer hover en filas */
+.btn-rechazar {
+    background: #dc3545;
+    color: white;
+}
+.btn-rechazar:hover {
+    background: #c82333;
 }
 
-.generic-table tbody tr:last-child {
-    border-bottom: none;
+.btn-garantias {
+    background: #D69E2E;
+    color: #1A365D;
+}
+.btn-garantias:hover {
+    background: #b7791f;
+    color: white;
 }
 
-.generic-table td {
-    padding: 1rem;
-    vertical-align: middle;
-    color: #4A5568; /* Azul Pizarra para legibilidad del texto */
+.btn-modificar {
+    background: #4A5568;
+    color: white;
+}
+.btn-modificar:hover {
+    background: #1A365D;
 }
 
-/* --- Badges de Estado (Equilibrados con la paleta) --- */
+.btn-eliminar {
+    background: #e2e8f0;
+    color: #4A5568;
+}
+.btn-eliminar:hover {
+    background: #cbd5e1;
+    color: #dc3545;
+}
+
+/* Badges de estado discretos */
 .status-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.8125rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
     font-weight: 600;
+    display: inline-block;
 }
 
 .status-aprobada {
-    background-color: #C6F6D5;
-    color: #22543D;
+    background: #e6fffa;
+    color: #234e52;
+    border: 1px solid #b2f5ea;
 }
 
 .status-denegada {
-    background-color: #FED7D7;
-    color: #742A2A;
-}
-
-.status-pendiente {
-    background-color: #FEFCBF; /* Fondo amarillo claro */
-    color: #B7791F; /* Texto usando variaciones del Dorado Suave para contraste */
+    background: #fff5f5;
+    color: #9b2c2c;
+    border: 1px solid #fed7d7;
 }
 
 .status-aprobada_con_garantias {
-    background-color: #E2E8F0;
-    color: #2D3748;
+    background: #fffaf0;
+    color: #9c4221;
+    border: 1px solid #feebc8;
 }
 
-/* --- Botones de Acción en la Tabla --- */
-.acciones-cell {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.action-btn {
-    padding: 0.25rem 0.75rem;
-    border: none;
-    border-radius: 0.375rem;
-    color: #ffffff;
+/* Mensajes de estado de la app */
+.loading-message, .error-message, .empty-message {
+    padding: 1.5rem;
+    color: #4A5568;
+    font-size: 1rem;
     font-weight: 600;
-    font-size: 0.8125rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    transition: opacity 0.15s ease;
-}
-
-.action-btn:hover {
-    opacity: 0.85;
-}
-
-.btn-aprobar    { background-color: #38A169; }
-.btn-rechazar   { background-color: #E53E3E; }
-.btn-garantias  { background-color: #D69E2E; } /* Dorado Suave corporativo */
-.btn-modificar  { background-color: #4A5568; } /* Azul Pizarra corporativo */
-.btn-eliminar   { background-color: #1A365D; } /* Azul Marino corporativo */
-
-/* --- Mensajes de Carga, Error y Vacíos --- */
-.error-message {
-    background-color: #FFF5F5;
-    color: #C53030;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #FEB2B2;
-}
-
-.table-state-message {
     text-align: center;
-    padding: 2.5rem;
-    color: #4A5568; /* Azul Pizarra */
-    font-size: 0.875rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(26, 54, 93, 0.06);
+}
+
+.error-message {
+    color: #dc3545;
+    border-left: 5px solid #dc3545;
 }
