@@ -47,42 +47,42 @@ function VehicleDetail() {
         >
           <div className="vehicle-specs-grid">
             <div className="vehicle-spec-item">
-              <span>Matrícula</span>
+              <span>Matrícula: </span>
               <strong>{vehicle.license_plate}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Marca</span>
+              <span>Marca: </span>
               <strong>{vehicle.brand}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Modelo</span>
+              <span>Modelo: </span>
               <strong>{vehicle.model}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Potencia</span>
+              <span>Potencia: </span>
               <strong>{vehicle.potency} CV</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Cilindrada</span>
+              <span>Cilindrada: </span>
               <strong>{vehicle.cc} cc</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Color</span>
+              <span>Color: </span>
               <strong>{vehicle.color}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Plazas</span>
+              <span>Plazas: </span>
               <strong>{vehicle.spots}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Disponibilidad</span>
+              <span>Disponibilidad: </span>
               <strong>{vehicle.available ? "Sí" : "No"}</strong>
             </div>
           </div>
@@ -94,14 +94,14 @@ function VehicleDetail() {
         >
           <div className="vehicle-price-grid">
             <div className="vehicle-price-card">
-              <span>Precio del vehículo</span>
+              <span>Precio del vehículo </span>
               <strong>{vehicle.price} €</strong>
             </div>
 
             <div className="vehicle-price-card vehicle-price-card-highlight">
-              <span>Cuota mensual base</span>
-              <strong>{vehicle.base_monthly_fee} €</strong>
-              <p>/ mes</p>
+              <span>Cuota mensual base </span>
+              <strong>{vehicle.base_monthly_fee} € </strong>
+              / mes
             </div>
           </div>
         </GenericCard>
@@ -112,17 +112,17 @@ function VehicleDetail() {
         >
           <div className="vehicle-services-grid">
             <div className="vehicle-service-item">
-              <span>IVA incluido</span>
+              <span>IVA incluido </span>
               <strong>Sí</strong>
             </div>
 
             <div className="vehicle-service-item">
-              <span>Mantenimiento</span>
+              <span>Mantenimiento </span>
               <strong>Incluido</strong>
             </div>
 
             <div className="vehicle-service-item">
-              <span>Seguro</span>
+              <span>Seguro </span>
               <strong>Incluido</strong>
             </div>
 
