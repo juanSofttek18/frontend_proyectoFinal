@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import useVehicles from "./useVehicles";
-import { getOneVehicleById } from "../../services/vehiculoService";
+import { getOneVehicleById , getVehicleDetailWithExtras} from "../../services/vehiculoService";
 
 import GenericCard from "../../components/GenericCard";
 
@@ -10,10 +10,12 @@ function VehicleDetail() {
   const navigate = useNavigate();
 
   const apiFn = useCallback(() => {
-    return getOneVehicleById(params.id);
+    return getVehicleDetailWithExtras(params.id);
   }, [params.id]);
 
   const [vehicle, vehicleStatus, vehicleError] = useVehicles(apiFn);
+
+  
 
   if (vehicleStatus === "loading") {
     return <p>Cargando vehículo...</p>;
@@ -133,18 +135,25 @@ function VehicleDetail() {
           </div>
         </GenericCard>
 
-        <GenericCard
-          title="Equipamiento incluido"
-          subtitle="Características adicionales"
+<GenericCard
+          title="Extras disponibles"
+          subtitle="Extras generales disponibles para todos los vehículos"
         >
-          <div className="vehicle-equipment-grid">
-            <p>Sistema multimedia avanzado</p>
-            <p>Climatizador automático</p>
-            <p>Control de estabilidad</p>
-            <p>Asistente de aparcamiento</p>
-            <p>Faros LED</p>
-            <p>Volante multifunción</p>
-          </div>
+          {!vehicle.extras || vehicle.extras.length === 0 ? (
+            <p>No hay extras disponibles.</p>
+          ) : (
+            <div className="vehicle-extras-grid">
+              {vehicle.extras.map((extra) => (
+                <div className="vehicle-extra-item" key={extra.id}>
+                  <div>
+                    <strong>{extra.name}</strong>
+                  </div>
+
+                  <p>{formatExtraPrice(extra, vehicle)}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </GenericCard>
 
         <div className="vehicle-actions">
@@ -161,4 +170,17 @@ function VehicleDetail() {
     );
   }
 }
+
+function formatExtraPrice(extra, vehicle) {
+  if (extra.price !== null && extra.price !== undefined) {
+    return `${extra.price} €`;
+  }
+
+  if (extra.percentage !== null && extra.percentage !== undefined) {
+    return `${extra.percentage}% =  ${Math.round(extra.percentage * 100) / 100 *  vehicle.price} €`;
+  }
+
+  return "Sin precio";
+}
+
 export default VehicleDetail;

@@ -61,27 +61,21 @@
     border-collapse: collapse;
 }
 
-.generic-table thead tr {
-    background-color: #F7FAFC; 
-    border-bottom: 1px solid #E2E8F0;
-}
 
 .generic-table th {
-    height: 3rem;
-    padding: 0 1rem;
-    text-align: left;
-    vertical-align: middle;
-    font-weight: 600;
-    color: #1A365D; 
+  padding: 1rem;
+  text-align: left;
+  background-color: #F7FAFC;
+  color: #1A365D;
+  font-weight: 700;
+  border-bottom: 1px solid #E2E8F0;
+}
 
 .generic-table tbody tr {
     border-bottom: 1px solid #E2E8F0;
     transition: background-color 0.15s ease;
 }
 
-.generic-table tbody tr:hover {
-    background-color: #F7FAFC;
-}
 
 .generic-table tbody tr:last-child {
     border-bottom: none;
@@ -91,11 +85,23 @@
     padding: 1rem;
     vertical-align: middle;
     color: #4A5568; 
+}
+.generic-table tbody tr:hover {
+  background-color: #F7FAFC;
+}
 
-.generic-table td:nth-child(4),
-.generic-table td:nth-child(9) {
-    font-weight: 600;
-    color: #1A365D;
-        }
-    }
+
+.vehicle-detail-button {
+  background-color: #1A365D;
+  color: #F7FAFC;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.vehicle-detail-button:hover {
+  background-color: #D69E2E;
+  color: #1A365D;
 }
