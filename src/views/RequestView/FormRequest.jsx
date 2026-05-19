@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './FormRequest.css';
 import { enviarSolicitud, getVehiculos, getExtras } from '../../services/solicitudService';
 
-export default function FormRequest({ onFormSubmit, onCancel }) {
+export default function FormRequest({ open, close, onFormSubmit }) {
     const [formData, setFormData] = useState({
         dni: '',
         vehiculoId: '',
@@ -18,24 +18,29 @@ export default function FormRequest({ onFormSubmit, onCancel }) {
     const [fetchError, setFetchError] = useState(null);
 
     useEffect(() => {
-        const loadInitialData = async () => {
-            try {
-                setFetchError(null);
-                setIsDataLoading(true);
-                const [vehiculosData, extrasData] = await Promise.all([
-                    getVehiculos(),
-                    getExtras()
-                ]);
-                setVehiculos(vehiculosData);
-                setExtras(extrasData);
-            } catch (err) {
-                setFetchError('Error al cargar los datos. Por favor, recargue la página.');
-            } finally {
-                setIsDataLoading(false);
-            }
-        };
-        loadInitialData();
-    }, []);
+        if (open) {
+            const loadInitialData = async () => {
+                try {
+                    setFetchError(null);
+                    setIsDataLoading(true);
+                    const [vehiculosData, extrasData] = await Promise.all([
+                        getVehiculos(),
+                        getExtras()
+                    ]);
+                    setVehiculos(vehiculosData);
+                    setExtras(extrasData);
+                } catch (err) {
+                    setFetchError('Error al cargar los datos. Por favor, recargue la página.');
+                } finally {
+                    setIsDataLoading(false);
+                }
+            };
+            loadInitialData();
+
+            setFormData({ dni: '', vehiculoId: '', color: '', extras: [], plazo: 12 });
+            setError(null);
+        }
+    }, [open]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -52,7 +57,7 @@ export default function FormRequest({ onFormSubmit, onCancel }) {
             setFormData(prevState => ({
                 ...prevState,
                 [name]: value,
-                color: '' // Resetea el color si cambia el vehículo
+                color: ''
             }));
         } else {
             setFormData(prevState => ({
@@ -80,19 +85,27 @@ export default function FormRequest({ onFormSubmit, onCancel }) {
         }
     };
 
+    if (!open) return null;
+
     const selectedVehiculo = vehiculos.find(v => String(v.id) === formData.vehiculoId);
 
     return (
-        <div className="form-container">
-            <h2>Formulario de Solicitud</h2>
-            {fetchError && <p className="error-message">{fetchError}</p>}
-            <form onSubmit={handleSubmit} noValidate>
-                <div className="form-group">
-                    <label htmlFor="dni">DNI del Cliente</label>
-                    <input type="text" id="dni" name="dni" value={formData.dni} onChange={handleChange} required />
+        <div className="Modal_Overlay">
+            <div className="Modal_Request">
+                <div className="Modal_Header">
+                    <div>
+                        <h2>Formulario de Solicitud</h2>
+                        <p>Complete los datos para generar una nueva solicitud</p>
+                    </div>
+                    <button onClick={close}>X</button>
                 </div>
 
-                <div className="form-group">
+                {fetchError && <p className="error-message">{fetchError}</p>}
+
+                <form onSubmit={handleSubmit} noValidate>
+                    <label htmlFor="dni">DNI del Cliente</label>
+                    <input type="text" id="dni" name="dni" value={formData.dni} onChange={handleChange} required />
+
                     <label htmlFor="vehiculoId">Vehículo</label>
                     <select id="vehiculoId" name="vehiculoId" value={formData.vehiculoId} onChange={handleChange} required disabled={isDataLoading}>
                         <option value="">{isDataLoading ? 'Cargando vehículos...' : '-- Seleccione un vehículo --'}</option>
@@ -102,9 +115,7 @@ export default function FormRequest({ onFormSubmit, onCancel }) {
                             </option>
                         ))}
                     </select>
-                </div>
 
-                <div className="form-group">
                     <label htmlFor="color">Color del Vehículo</label>
                     <select
                         id="color"
@@ -121,9 +132,7 @@ export default function FormRequest({ onFormSubmit, onCancel }) {
                             <option key={color} value={color}>{color}</option>
                         ))}
                     </select>
-                </div>
 
-                <div className="form-group">
                     <label>Extras</label>
                     <div className="checkbox-group">
                         {extras.map((extra) => (
@@ -141,24 +150,22 @@ export default function FormRequest({ onFormSubmit, onCancel }) {
                             </div>
                         ))}
                     </div>
-                </div>
 
-                <div className="form-group">
                     <label htmlFor="plazo">Plazo del Contrato (meses)</label>
                     <input type="number" id="plazo" name="plazo" value={formData.plazo} onChange={handleChange} min="6" max="60" required />
-                </div>
 
-                {error && <p className="error-message">{error}</p>}
+                    {error && <p className="error-message" style={{ color: '#dc3545', marginTop: '1rem', fontSize: '0.9rem', fontWeight: 'bold' }}>{error}</p>}
 
-                <div className="form-actions">
-                    <button type="button" className="cancel-btn" onClick={onCancel} disabled={loading}>
-                        Cancelar
-                    </button>
-                    <button type="submit" className="submit-btn" disabled={loading || isDataLoading}>
-                        {loading ? 'Enviando...' : 'Enviar Solicitud'}
-                    </button>
-                </div>
-            </form>
+                    <div className="Modal_Actions">
+                        <button type="button" onClick={close} disabled={loading}>
+                            Cancelar
+                        </button>
+                        <button type="submit" disabled={loading || isDataLoading}>
+                            {loading ? 'Enviando...' : 'Enviar Solicitud'}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

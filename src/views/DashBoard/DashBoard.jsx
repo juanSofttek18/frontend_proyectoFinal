@@ -8,7 +8,9 @@ function DashBoard() {
         <div className="dashboard">
             <h1>Dashboard</h1>
             {loading ? (
-                <p>Loading...</p>
+                <div className="loading-spinner">
+                    <div className="spinner"></div>
+                </div>
             ) : (
                 <div className="stats-container">
                     <div className="stat-card">

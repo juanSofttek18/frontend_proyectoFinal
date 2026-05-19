@@ -15,8 +15,14 @@ function ListClient() {
     setOpenForm(false);
     setClientEdit(null);
   };
- 
-  if (loading) return <p>Loading clients data...</p>;
+
+  if (loading === "loading") {
+    return (
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+        </div>
+    );
+  }
   if (error) return <p>Error: {error.message}</p>;
  
   return (

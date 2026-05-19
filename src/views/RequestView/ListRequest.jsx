@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {getSolicitudes, eliminarSolicitud, actualizarEstadoSolicitud} from '../../services/solicitudService';
+import React, { useState, useEffect, useCallback } from 'react';
+import { getSolicitudes, eliminarSolicitud, actualizarEstadoSolicitud } from '../../services/solicitudService';
 import './ListRequest.css';
 import FormularioSolicitud from './FormRequest';
 
@@ -54,7 +54,6 @@ export default function ListRequest() {
     }, [cargarSolicitudes]);
 
     const renderTablaSolicitudes = () => {
-
         if (solicitudes.length === 0) {
             return <div className="empty-message">No hay solicitudes para mostrar.</div>;
         }
@@ -121,20 +120,21 @@ export default function ListRequest() {
 
     return (
         <div className="listado-container">
-            {mostrarFormulario ? (
-                <FormularioSolicitud onFormSubmit={handleFormSubmit} onCancel={() => setMostrarFormulario(false)}/>
-            ) : (
-                <>
-                    <div className="listado-header">
-                        <div>
-                            <h1>Gestión de Solicitudes</h1>
-                            <p>Administra y crea solicitudes</p>
-                        </div>
-                        <button className="btn-add">Añadir Solicitud</button>
-                    </div>
-                    {renderTablaSolicitudes()}
-                </>
-            )}
+            <div className="listado-header">
+                <div>
+                    <h1>Gestión de Solicitudes</h1>
+                    <p>Administra y crea solicitudes</p>
+                </div>
+                <button onClick={() => setMostrarFormulario(true)} className="btn-add">Añadir Solicitud</button>
+            </div>
+
+            {renderTablaSolicitudes()}
+
+            <FormularioSolicitud
+                open={mostrarFormulario}
+                close={() => setMostrarFormulario(false)}
+                onFormSubmit={handleFormSubmit}
+            />
         </div>
     );
 }
