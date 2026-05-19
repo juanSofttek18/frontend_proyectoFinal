@@ -1,4 +1,4 @@
-.card-generica {
+.generic-card {
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 18px;
@@ -7,27 +7,27 @@
   color: #1A365D;
 }
 
-.card-generica-header {
+.generic-card-header {
   margin-bottom: 1.5rem;
 }
 
-.card-generica-header h2 {
+.generic-card-header h2 {
   margin: 0;
   color: #1A365D;
   font-size: 1.5rem;
 }
 
-.card-generica-header p {
+.generic-card-header p {
   margin: 0.5rem 0 0;
   color: #4A5568;
   font-size: 1rem;
 }
 
-.card-generica-content {
+.generic-card-content {
   color: #1A365D;
 }
 
-.card-generica-actions {
+.generic-card-actions {
   display: flex;
   gap: 0.8rem;
   margin-top: 1.5rem;

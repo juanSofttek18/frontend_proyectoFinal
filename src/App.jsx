@@ -3,6 +3,7 @@ import SideBar from "./components/SideBar";
 import DashBoard from "./views/Dashboard/DashBoard"; 
 import ListClient from "./views/Clientes/ListClient";
 import VehicleCatalog from "./views/Vehicles/VehicleCatalog";
+import VehicleDetail from "./views/Vehicles/VehicleDetail";
 import ListRequest from "./views/RequestView/ListRequest";
 import NotFoundView from "./components/NotFoundView";
 import "./App.css";
@@ -20,6 +21,7 @@ function App() {
           <Route path="/requests" element={<ListRequest />} />
           <Route path="/clients" element={<ListClient />} />
           <Route path="/vehicles" element={<VehicleCatalog />} />
+          <Route path="/vehicles/:id" element={<VehicleDetail />} />
           <Route path="*" element={<NotFoundView />} />
         </Routes>
       </main>

@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import useVehicles from "./useVehicles";
-import { getOneVehicleById } from "../../services/vehiculoService";
+import { getOneVehicleById , getVehicleDetailWithExtras} from "../../services/vehiculoService";
 
 import GenericCard from "../../components/GenericCard";
 
@@ -10,10 +10,12 @@ function VehicleDetail() {
   const navigate = useNavigate();
 
   const apiFn = useCallback(() => {
-    return getOneVehicleById(params.id);
+    return getVehicleDetailWithExtras(params.id);
   }, [params.id]);
 
   const [vehicle, vehicleStatus, vehicleError] = useVehicles(apiFn);
+
+  
 
   if (vehicleStatus === "loading") {
     return (
@@ -51,42 +53,42 @@ function VehicleDetail() {
         >
           <div className="vehicle-specs-grid">
             <div className="vehicle-spec-item">
-              <span>Matrícula</span>
+              <span>Matrícula: </span>
               <strong>{vehicle.license_plate}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Marca</span>
+              <span>Marca: </span>
               <strong>{vehicle.brand}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Modelo</span>
+              <span>Modelo: </span>
               <strong>{vehicle.model}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Potencia</span>
+              <span>Potencia: </span>
               <strong>{vehicle.potency} CV</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Cilindrada</span>
+              <span>Cilindrada: </span>
               <strong>{vehicle.cc} cc</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Color</span>
+              <span>Color: </span>
               <strong>{vehicle.color}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Plazas</span>
+              <span>Plazas: </span>
               <strong>{vehicle.spots}</strong>
             </div>
 
             <div className="vehicle-spec-item">
-              <span>Disponibilidad</span>
+              <span>Disponibilidad: </span>
               <strong>{vehicle.available ? "Sí" : "No"}</strong>
             </div>
           </div>
@@ -98,14 +100,14 @@ function VehicleDetail() {
         >
           <div className="vehicle-price-grid">
             <div className="vehicle-price-card">
-              <span>Precio del vehículo</span>
+              <span>Precio del vehículo </span>
               <strong>{vehicle.price} €</strong>
             </div>
 
             <div className="vehicle-price-card vehicle-price-card-highlight">
-              <span>Cuota mensual base</span>
-              <strong>{vehicle.base_monthly_fee} €</strong>
-              <p>/ mes</p>
+              <span>Cuota mensual base </span>
+              <strong>{vehicle.base_monthly_fee} € </strong>
+              / mes
             </div>
           </div>
         </GenericCard>
@@ -116,17 +118,17 @@ function VehicleDetail() {
         >
           <div className="vehicle-services-grid">
             <div className="vehicle-service-item">
-              <span>IVA incluido</span>
+              <span>IVA incluido </span>
               <strong>Sí</strong>
             </div>
 
             <div className="vehicle-service-item">
-              <span>Mantenimiento</span>
+              <span>Mantenimiento </span>
               <strong>Incluido</strong>
             </div>
 
             <div className="vehicle-service-item">
-              <span>Seguro</span>
+              <span>Seguro </span>
               <strong>Incluido</strong>
             </div>
 
@@ -137,18 +139,25 @@ function VehicleDetail() {
           </div>
         </GenericCard>
 
-        <GenericCard
-          title="Equipamiento incluido"
-          subtitle="Características adicionales"
+<GenericCard
+          title="Extras disponibles"
+          subtitle="Extras generales disponibles para todos los vehículos"
         >
-          <div className="vehicle-equipment-grid">
-            <p>Sistema multimedia avanzado</p>
-            <p>Climatizador automático</p>
-            <p>Control de estabilidad</p>
-            <p>Asistente de aparcamiento</p>
-            <p>Faros LED</p>
-            <p>Volante multifunción</p>
-          </div>
+          {!vehicle.extras || vehicle.extras.length === 0 ? (
+            <p>No hay extras disponibles.</p>
+          ) : (
+            <div className="vehicle-extras-grid">
+              {vehicle.extras.map((extra) => (
+                <div className="vehicle-extra-item" key={extra.id}>
+                  <div>
+                    <strong>{extra.name}</strong>
+                  </div>
+
+                  <p>{formatExtraPrice(extra, vehicle)}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </GenericCard>
 
         <div className="vehicle-actions">
@@ -165,4 +174,18 @@ function VehicleDetail() {
     );
   }
 }
+
+function formatExtraPrice(extra, vehicle) {
+  if (extra.price !== null && extra.price !== undefined) {
+    return `${extra.price} €`;
+  }
+
+  if (extra.percentage !== null && extra.percentage !== undefined) {
+    return `${extra.percentage}% =  ${Math.round(extra.percentage * 100) / 100 *  vehicle.price} €`;
+  }
+
+  return "Sin precio";
+}
+
+export default VehicleDetail;
 export default VehicleDetail;

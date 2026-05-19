@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import useVehicles from "./useVehicles";
 import { getAllAbleVehicles } from "../../services/vehiculoService";
 import GenericTable from "../../components/GenericTable";
+import "./VehicleCatalog.css";
 
 function VehicleCatalog() {
   const params = useParams();
