@@ -9,13 +9,13 @@ function FormClient({
 }) {
 
   const [id, setId] = useState(null);
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [documento, setDocumento] = useState("");
-  const [tipo, setTipo] = useState("Particular");
-  const [contacto, setContacto] = useState("");
+  const [name, setName] = useState("");
+  const [first_surname, setFirstSurname] = useState("");
+  const [nif, setNif] = useState("");
+  const [employment_status, setEmploymentStatus] = useState("Particular");
+  const [phone, setPhone] = useState("");
   const [scoring, setScoring] = useState(750);
-  const [estado, setEstado] = useState("Activo");
+  const [is_active, setIsActive] = useState(true);
 
   
   useEffect(() => {
@@ -23,24 +23,24 @@ function FormClient({
     if (clientEdit) {
 
       setId(clientEdit.id);
-      setNombre(clientEdit.nombre);
-      setApellido(clientEdit.apellido);
-      setDocumento(clientEdit.documento);
-      setTipo(clientEdit.tipo);
-      setContacto(clientEdit.contacto);
+      setName(clientEdit.name);
+      setFirstSurname(clientEdit.first_surname);
+      setNif(clientEdit.nif);
+      setEmploymentStatus(clientEdit.employment_status);
+      setPhone(clientEdit.phone);
       setScoring(clientEdit.scoring);
-      setEstado(clientEdit.estado);
+      setIsActive(clientEdit.is_active ? "Activo" : "Inactivo");
 
     } else {
 
       setId(null);
-      setNombre("");
-      setApellido("");
-      setDocumento("");
-      setTipo("Particular");
-      setContacto("");
+      setName("");
+      setFirstSurname("");
+      setNif("");
+      setEmploymentStatus("Particular");
+      setPhone("");
       setScoring(750);
-      setEstado("Activo");
+      setIsActive("Activo");
     }
 
   }, [clientEdit]);
@@ -51,13 +51,13 @@ function FormClient({
 
     const clientData = {
       id,
-      nombre,
-      apellido,
-      documento,
-      tipo,
-      contacto,
+      name,
+      first_surname,
+      nif,
+      employment_status,
+      phone,
       scoring,
-      estado,
+      is_active,
     };
 
     saveClient(clientData);
@@ -100,8 +100,8 @@ function FormClient({
           <label>Tipo</label>
 
           <select
-            value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
+            value={employment_status}
+            onChange={(e) => setEmploymentStatus(e.target.value)}
           >
             <option>Particular</option>
             <option>Empresa</option>
@@ -111,32 +111,32 @@ function FormClient({
 
           <input
             type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
 
           <label>Apellido</label>
 
           <input
             type="text"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
+            value={first_surname}
+            onChange={(e) => setFirstSurname(e.target.value)}
           />
 
           <label>Documento</label>
 
           <input
             type="text"
-            value={documento}
-            onChange={(e) => setDocumento(e.target.value)}
+            value={nif}
+            onChange={(e) => setNif(e.target.value)}
           />
 
           <label>Contacto</label>
 
           <input
             type="text"
-            value={contacto}
-            onChange={(e) => setContacto(e.target.value)}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
 
           <label>Scoring</label>
@@ -150,8 +150,8 @@ function FormClient({
           <label>Estado</label>
 
           <select
-            value={estado}
-            onChange={(e) => setEstado(e.target.value)}
+            value={is_active ? "Activo" : "Inactivo"}
+            onChange={(e) => setIsActive(e.target.value === "Activo")}
           >
             <option>Activo</option>
             <option>Inactivo</option>
