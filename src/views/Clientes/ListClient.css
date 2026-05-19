@@ -1,23 +1,11 @@
-/* ListClient.css */
-
-/* Contenedor Principal */
-.List_Client {
+.list-client-container {
   padding: 2rem;
   background: #F7FAFA;
   min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, sans-serif;
 }
 
-/* Mensajes de estado (Loading, Error) */
-.List_Client > p {
-  padding: 1.5rem;
-  color: #4A5568;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-/* Header del Listado */
-.Header_Client {
+.client-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,24 +14,22 @@
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(26, 54, 93, 0.08);
-  border-left: 5px solid #D69E2E; /* Dorado */
+  border-left: 5px solid #D69E2E;
 }
 
-/* Títulos y textos del Header */
-.Header_Client h1 {
+.client-header h1 {
   margin: 0 0 0.4rem 0;
   font-size: 1.6rem;
-  color: #1A365D; /* Azul marino */
+  color: #1A365D;
 }
 
-.Header_Client p {
+.client-header p {
   margin: 0;
   color: #4A5568;
   font-size: 0.95rem;
 }
 
-/* Botón Agregar Cliente */
-.Add_Client {
+.btn-add-client {
   background: #1A365D;
   color: white;
   border: none;
@@ -51,20 +37,18 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.2s;
   font-size: 0.95rem;
 }
 
-.Add_Client:hover {
+.btn-add-client:hover {
   background: #4A5568;
 }
 
-/* Filtros (Buscador) */
-.clientes__filters {
+.client-filters {
   margin-bottom: 1.5rem;
 }
 
-.clientes__filters input {
+.search-input {
   width: 100%;
   max-width: 400px;
   padding: 10px 14px;
@@ -73,87 +57,126 @@
   font-size: 0.95rem;
   color: #1A365D;
   outline: none;
-  transition: border-color 0.2s;
 }
 
-.clientes__filters input:focus {
-  border-color: #D69E2E; /* Hover/Focus dorado */
+.search-input:focus {
+  border-color: #D69E2E;
 }
 
-/* Estructura de la Tabla (Aplica a la GenericTable) */
-.List_Client table {
+.list-client-container table {
   width: 100%;
   border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
   background: white;
-  box-shadow: 0 10px 25px rgba(26, 54, 93, 0.06);
   border-top: 3px solid #D69E2E;
 }
 
-.List_Client thead {
-  background: #1A365D;
-}
-
-.List_Client th {
+.list-client-container th {
   text-align: left;
   padding: 12px;
   font-size: 0.85rem;
+  background: #1A365D;
   color: #F7FAFA;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.List_Client td {
+.list-client-container td {
   padding: 12px;
   border-top: 1px solid #E2E8F0;
   font-size: 0.9rem;
   color: #1A365D;
 }
 
-.List_Client tbody tr:hover {
+.list-client-container tbody tr:hover {
   background: #F7FAFA;
 }
 
-/* Celda de Acciones (Asume que es la última columna) */
-.List_Client td:last-child {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  font-weight: 600;
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 50px;
 }
 
-/* Botón Editar Cliente */
-.Edit_Client {
-  background: #D69E2E;
-  color: #1A365D;
+.status-badge.active {
+  background: #C6F6D5;
+  color: #22543D;
+}
+
+.status-badge.inactive {
+  background: #EDF2F7;
+  color: #4A5568;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-edit-client, .btn-delete-client {
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.9rem;
-  transition: 0.2s;
+  font-size: 0.85rem;
 }
 
-.Edit_Client:hover {
+.btn-edit-client {
+  background: #D69E2E;
+  color: #1A365D;
+}
+
+.btn-edit-client:hover {
   background: #b7791f;
   color: white;
 }
 
-/* Botón Eliminar Cliente */
-.Delete_Client {
-  background: #dc3545; /* Rojo para eliminación */
+.btn-delete-client {
+  background: #dc3545;
   color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: 0.2s;
 }
 
-.Delete_Client:hover {
+.btn-delete-client:hover {
   background: #c82333;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #E2E8F0;
+  border-top-color: #1A365D;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.error-message {
+  background: #FFF5F5;
+  color: #C53030;
+  border: 1px solid #FEB2B2;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.empty-message {
+  text-align: center;
+  color: #4A5568;
+  padding: 3rem 0;
+  font-style: italic;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .client-header { flex-direction: column; align-items: flex-start; }
+  .btn-add-client { width: 100%; text-align: center; }
 }
