@@ -6,6 +6,7 @@ export function useClient() {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
+
   useEffect(() => {
     try {
       setLoading(true);
@@ -47,21 +48,49 @@ export function useClient() {
         setClients(fakeData);
         setLoading(false);
       }, 600);
-
     } catch (err) {
       setError(err);
       setLoading(false);
     }
   }, []);
 
-  // 🔎 FILTRO
+
   const filteredClients = clients.filter((c) =>
     `${c.nombre} ${c.apellido} ${c.documento}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
 
-  // 🗑️ DELETE SIMULADO
+
+  const addClient = (client) => {
+    const newClient = {
+      ...client,
+      id: Date.now(), 
+    };
+
+    setClients((prev) => [...prev, newClient]);
+  };
+
+  const updateClient = (updatedClient) => {
+    setClients((prev) =>
+      prev.map((client) =>
+        client.id === updatedClient.id
+          ? updatedClient
+          : client
+      )
+    );
+  };
+
+
+  const saveClient = (client) => {
+    if (client.id) {
+      updateClient(client);
+    } else {
+      addClient(client);
+    }
+  };
+
+ 
   const deleteClient = (id) => {
     setClients((prev) => prev.filter((c) => c.id !== id));
   };
@@ -73,5 +102,7 @@ export function useClient() {
     search,
     setSearch,
     deleteClient,
+    saveClient, 
+    setClients, 
   };
 }
