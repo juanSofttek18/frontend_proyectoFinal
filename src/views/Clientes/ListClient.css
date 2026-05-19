@@ -1,11 +1,22 @@
+/* ListClient.css */
+
+/* Contenedor Principal */
 .List_Client {
   padding: 2rem;
-  background: #F7FAFA; 
+  background: #F7FAFA;
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Mensajes de estado (Loading, Error) */
+.List_Client > p {
+  padding: 1.5rem;
+  color: #4A5568;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
 
+/* Header del Listado */
 .Header_Client {
   display: flex;
   justify-content: space-between;
@@ -15,22 +26,23 @@
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(26, 54, 93, 0.08);
-  border-left: 5px solid #D69E2E; /* dorado */
+  border-left: 5px solid #D69E2E; /* Dorado */
 }
 
+/* Títulos y textos del Header */
 .Header_Client h1 {
-  margin: 0;
+  margin: 0 0 0.4rem 0;
   font-size: 1.6rem;
-  color: #1A365D; /* azul marino */
+  color: #1A365D; /* Azul marino */
 }
 
 .Header_Client p {
-  margin: 0.3rem 0 0;
-  color: #4A5568; /* azul pizarra */
-  font-size: 0.9rem;
+  margin: 0;
+  color: #4A5568;
+  font-size: 0.95rem;
 }
 
-
+/* Botón Agregar Cliente */
 .Add_Client {
   background: #1A365D;
   color: white;
@@ -39,76 +51,51 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.2s;
+  transition: background-color 0.2s;
+  font-size: 0.95rem;
 }
 
 .Add_Client:hover {
   background: #4A5568;
 }
 
-
-.clientes__card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(26, 54, 93, 0.06);
-  border-top: 3px solid #D69E2E;
-}
-
-
-.clientes__card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.clientes__card-header h2 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #1A365D;
-}
-
-.clientes__card-header span {
-  font-size: 0.9rem;
-  color: #4A5568;
-}
-
-
+/* Filtros (Buscador) */
 .clientes__filters {
-  margin-bottom: 1rem;
-  width: 80%;
+  margin-bottom: 1.5rem;
 }
 
 .clientes__filters input {
   width: 100%;
-  padding: 10px 12px;
+  max-width: 400px;
+  padding: 10px 14px;
   border: 1px solid #E2E8F0;
   border-radius: 8px;
-  outline: none;
-  transition: 0.2s;
-  background: #F7FAFA;
+  font-size: 0.95rem;
   color: #1A365D;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
 .clientes__filters input:focus {
-  border-color: #D69E2E;
-  box-shadow: 0 0 0 3px rgba(214, 158, 46, 0.2);
+  border-color: #D69E2E; /* Hover/Focus dorado */
 }
 
-
-table {
+/* Estructura de la Tabla (Aplica a la GenericTable) */
+.List_Client table {
   width: 100%;
   border-collapse: collapse;
   border-radius: 10px;
   overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 25px rgba(26, 54, 93, 0.06);
+  border-top: 3px solid #D69E2E;
 }
 
-thead {
+.List_Client thead {
   background: #1A365D;
 }
 
-th {
+.List_Client th {
   text-align: left;
   padding: 12px;
   font-size: 0.85rem;
@@ -117,27 +104,26 @@ th {
   letter-spacing: 0.5px;
 }
 
-td {
+.List_Client td {
   padding: 12px;
   border-top: 1px solid #E2E8F0;
   font-size: 0.9rem;
   color: #1A365D;
 }
 
-
-tbody tr:hover {
+.List_Client tbody tr:hover {
   background: #F7FAFA;
 }
 
-
-td:last-child {
+/* Celda de Acciones (Asume que es la última columna) */
+.List_Client td:last-child {
   display: flex;
   gap: 0.75rem;
   align-items: center;
   font-weight: 600;
 }
 
-
+/* Botón Editar Cliente */
 .Edit_Client {
   background: #D69E2E;
   color: #1A365D;
@@ -146,6 +132,7 @@ td:last-child {
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 0.9rem;
   transition: 0.2s;
 }
 
@@ -154,17 +141,19 @@ td:last-child {
   color: white;
 }
 
+/* Botón Eliminar Cliente */
 .Delete_Client {
-  background: #4A5568;
+  background: #dc3545; /* Rojo para eliminación */
   color: white;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 0.9rem;
   transition: 0.2s;
 }
 
 .Delete_Client:hover {
-  background: #1A365D;
+  background: #c82333;
 }

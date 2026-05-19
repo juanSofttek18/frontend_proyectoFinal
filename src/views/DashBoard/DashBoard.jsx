@@ -2,16 +2,7 @@ import useDashBoard from "./useDashBoard";
 import "./DashBoard.css";
 
 function DashBoard() {
-    const { data, loading, error } = useDashBoard();
-
-    if (error) {
-        return (
-            <div className="dashboard">
-                <h1>Dashboard</h1>
-                <p className="error-message">{error.message}</p>
-            </div>
-        );
-    }
+    const { data, loading } = useDashBoard();
 
     return (
         <div className="dashboard">

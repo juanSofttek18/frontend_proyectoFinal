@@ -16,7 +16,11 @@ function VehicleDetail() {
   const [vehicle, vehicleStatus, vehicleError] = useVehicles(apiFn);
 
   if (vehicleStatus === "loading") {
-    return <p>Cargando vehículo...</p>;
+    return (
+      <div className="loading-spinner">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   if (vehicleStatus === "error") {
