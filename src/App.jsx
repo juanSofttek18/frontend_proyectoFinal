@@ -6,8 +6,6 @@ import VehicleCatalog from "./views/Vehicles/VehicleCatalog";
 import ListRequest from "./views/RequestView/ListRequest";
 import "./App.css";
 
-const RequestsPlaceholder = () => <h2 className="placeholder-text">Rental Requests Engine (Developer 4)</h2>;
-
 function App() {
   return (
     <div className="container">

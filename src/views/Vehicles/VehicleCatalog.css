@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* --- Contenedor General de la Página del Catálogo --- */
 .catalog-page-container {
     padding: 1.5rem;
-    background-color: #F7FAFC; /* Blanco Hielo */
+    background-color: #F7FAFC; 
     min-height: 100vh;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -11,7 +10,6 @@
     box-sizing: border-box;
 }
 
-/* Cabecera del catálogo */
 .catalog-header {
     display: flex;
     justify-content: space-between;
@@ -22,16 +20,15 @@
 .catalog-header h2 {
     font-size: 1.875rem;
     font-weight: 700;
-    color: #1A365D; /* Azul Marino */
+    color: #1A365D; 
     margin: 0;
 }
 
-/* --- Estados de Carga y Mensajes --- */
 .loading-message,
 .empty-message {
     text-align: center;
     padding: 2.5rem;
-    color: #4A5568; /* Azul Pizarra */
+    color: #4A5568; 
     font-size: 0.875rem;
     background-color: #ffffff;
     border-radius: 0.5rem;
@@ -49,8 +46,6 @@
     margin-bottom: 1.5rem;
 }
 
-/* --- Integración y estilos de la Tabla Genérica --- */
-/* Forzamos a que el GenericTable herede el diseño limpio en esta vista */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
@@ -67,7 +62,7 @@
 }
 
 .generic-table thead tr {
-    background-color: #F7FAFC; /* Blanco Hielo */
+    background-color: #F7FAFC; 
     border-bottom: 1px solid #E2E8F0;
 }
 
@@ -77,8 +72,7 @@
     text-align: left;
     vertical-align: middle;
     font-weight: 600;
-    color: #1A365D; /* Azul Marino */
-}
+    color: #1A365D; 
 
 .generic-table tbody tr {
     border-bottom: 1px solid #E2E8F0;
@@ -86,7 +80,7 @@
 }
 
 .generic-table tbody tr:hover {
-    background-color: #F7FAFC; /* Iluminación en Blanco Hielo */
+    background-color: #F7FAFC;
 }
 
 .generic-table tbody tr:last-child {
@@ -96,12 +90,12 @@
 .generic-table td {
     padding: 1rem;
     vertical-align: middle;
-    color: #4A5568; /* Azul Pizarra */
-}
+    color: #4A5568; 
 
-/* Resaltado específico para precios o cuotas mensuales */
 .generic-table td:nth-child(4),
 .generic-table td:nth-child(9) {
     font-weight: 600;
     color: #1A365D;
+        }
+    }
 }

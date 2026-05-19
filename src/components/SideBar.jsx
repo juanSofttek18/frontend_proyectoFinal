@@ -2,7 +2,6 @@ import "./SideBar.css";
 import { NavLink } from "react-router-dom";
 
 function SideBar() {
-  // Función auxiliar para mantener limpio el JSX y concatenar las clases correctamente
   const getNavLinkClass = ({ isActive }) =>
     isActive ? "menu-item menu-item-active" : "menu-item";
 
