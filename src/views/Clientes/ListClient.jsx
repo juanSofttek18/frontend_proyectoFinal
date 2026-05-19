@@ -1,7 +1,7 @@
 import { useClient } from "./useClientPrueba";
 import GenericTable from "../../components/GenericTable"; 
 import GenericCard from "../../components/GenericCard";
-import "./Client.css";
+import "./ListClient.css";
 import FormClient from "./FormClient";
 import { useState } from "react";
  
