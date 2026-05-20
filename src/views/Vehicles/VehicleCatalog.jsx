@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
-import useVehicles from "./useVehicles";
+import useVehicles from "../../hooks/useVehicles";
 import { getAllAbleVehicles } from "../../services/vehiculoService";
 import GenericTable from "../../components/GenericTable";
 import GenericCard from "../../components/GenericCard";

@@ -10,7 +10,7 @@ function useDashBoard() {
         const timer=setTimeout(() => {
             setData({ total: 24, approved: 16, denied: 6 });
             setLoading(false);
-            setError(new Error("500 - Failed to fetch data"));
+            setError(null); 
         }, 800);
 
         return () => clearTimeout(timer);

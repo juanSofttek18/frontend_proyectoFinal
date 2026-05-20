@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useClient } from "./useClientPrueba";
+import { useClient } from "../../hooks/useClientPrueba";
 import GenericTable from "../../components/GenericTable";
 import GenericCard from "../../components/GenericCard";
 import FormClient from "./FormClient";
