@@ -1,32 +1,39 @@
 import api from "./api";
 
     
-// GET clientes
+// GET customers
 
-export const getClientes = async () => {
+export const getCustomers = async () => {
   const { data } = await api.get("/clientes");
   return data;
 };
 
+// POST income for customer
 
-// POST cliente
-
-export const crearCliente = async (cliente) => {
-  const { data } = await api.post("/clientes", cliente);
+export const addCustomerIncome = async (id, income) => {
+  const { data } = await api.post(`/clientes/${id}/ingresos`, income);
   return data;
 };
 
 
-// PUT cliente
+// POST customer
 
-export const actualizarCliente = async (id, cliente) => {
-  const { data } = await api.put(`/clientes/${id}`, cliente);
+export const createCustomer = async (customer) => {
+  const { data } = await api.post("/clientes", customer);
   return data;
 };
 
 
-// DELETE cliente
+// PUT customer
+
+export const updateCustomer = async (id, customer) => {
+  const { data } = await api.put(`/clientes/${id}`, customer);
+  return data;
+};
+
+
+// DELETE customer
  
-export const eliminarCliente = async (id) => {
+export const deleteCustomer = async (id) => {
   await api.delete(`/clientes/${id}`);
 };

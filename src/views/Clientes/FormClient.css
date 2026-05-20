@@ -91,6 +91,12 @@
   background-color: #ffffff;
 }
 
+.FormError {
+  color: #d9534f;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
 .Modal_Actions {
   display: flex;
   justify-content: flex-end;

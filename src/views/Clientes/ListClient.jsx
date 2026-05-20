@@ -3,12 +3,15 @@ import { useClient } from "./useClientPrueba";
 import GenericTable from "../../components/GenericTable";
 import GenericCard from "../../components/GenericCard";
 import FormClient from "./FormClient";
+import FormIngreso from "./FormIngreso";
 import "./ListClient.css";
 
 function ListClient() {
-  const { clients = [], loading, error, search, setSearch, deleteClient, saveClient } = useClient();
+  const { clients = [], loading, error, search, setSearch, deleteClient, saveClient, saveClientIncome } = useClient();
   const [openForm, setOpenForm] = useState(false);
   const [clientEdit, setClientEdit] = useState(null);
+  const [openIncomeForm, setOpenIncomeForm] = useState(false);
+  const [clientForIncome, setClientForIncome] = useState(null);
 
   const handleOpenCreateForm = () => {
     setClientEdit(null);
@@ -31,9 +34,14 @@ function ListClient() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
-      deleteClient(id);
-    }
+    
+    deleteClient(id);
+    
+  };
+
+  const handleAddIngresoForm = (client) => {
+    setClientForIncome(client);
+    setOpenIncomeForm(true);
   };
 
   return (
@@ -64,10 +72,7 @@ function ListClient() {
           <div className="client-filters">
             <input
               type="text"
-              placeholder="Buscar por nombre o documento..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
+                  placeholder="Buscar por nombre o NIF..."
             />
           </div>
 
@@ -75,12 +80,13 @@ function ListClient() {
             <div className="empty-message">No se encontraron clientes.</div>
           ) : (
             <GenericTable
-              headers={["Cliente", "Documento", "Tipo", "Contacto", "Scoring", "Estado", "Acciones"]}
+              headers={["Cliente", "NIF", "Nacionalidad", "Tipo", "Contacto", "Scoring", "Estado", "Acciones"]}
             >
               {clients.map((client) => (
                 <tr key={client.id}>
-                  <td>{client.name} {client.first_surname || ""}</td>
+                  <td>{client.name} {client.first_surname || ""} {client.second_surname || ""}</td>
                   <td>{client.nif}</td>
+                  <td>{client.nationality}</td>
                   <td>{client.employment_status}</td>
                   <td>{client.phone}</td>
                   <td>{client.scoring}</td>
@@ -97,6 +103,9 @@ function ListClient() {
                       <button className="btn-delete-client" onClick={() => handleDelete(client.id)}>
                         Eliminar
                       </button>
+                      <button className="btn-add-client" onClick={() => handleAddIngresoForm(client)}>
+                        Añadir Ingreso
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -111,6 +120,20 @@ function ListClient() {
         close={handleCloseForm}
         saveClient={handleSave}
         clientEdit={clientEdit}
+      />
+
+      <FormIngreso
+        open={openIncomeForm}
+        close={() => {
+          setOpenIncomeForm(false);
+          setClientForIncome(null);
+        }}
+        client={clientForIncome}
+        saveIncome={async (clientId, ingreso) => {
+          saveClientIncome(clientId, ingreso);
+          setOpenIncomeForm(false);
+          setClientForIncome(null);
+        }}
       />
     </div>
   );

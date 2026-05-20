@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import {
-  getClientes,
-  crearCliente,
-  actualizarCliente,
-  eliminarCliente,
+  getCustomers,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
+  addCustomerIncome,
 } from "../services/clientService";
 
 export function useClient() {
@@ -12,13 +13,13 @@ export function useClient() {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
-  //  CARGAR CLIENTES
+ 
   const fetchClients = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const data = await getClientes();
+      const data = await getCustomers();
       setClients(data);
 
     } catch (err) {
@@ -32,27 +33,27 @@ export function useClient() {
     fetchClients();
   }, []);
 
-  // 🔍 FILTRO
+ 
   const filteredClients = clients.filter((c) =>
-    `${c.nombre} ${c.apellido} ${c.documento}`
+    `${c.name} ${c.first_surname || ""} ${c.second_surname || ""} ${c.nif} ${c.nationality || ""}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
 
-  //  CREAR CLIENTE
+  
   const addClient = async (client) => {
     try {
-      const newClient = await crearCliente(client);
+      const newClient = await createCustomer(client);
       setClients((prev) => [...prev, newClient]);
     } catch (err) {
       setError(err);
     }
   };
 
-  //  ACTUALIZAR CLIENTE
+
   const updateClient = async (client) => {
     try {
-      const updated = await actualizarCliente(client.id, client);
+      const updated = await updateCustomer(client.id, client);
 
       setClients((prev) =>
         prev.map((c) =>
@@ -64,7 +65,7 @@ export function useClient() {
     }
   };
 
-  //  GUARDAR (CREATE + UPDATE)
+
   const saveClient = async (client) => {
     if (client.id) {
       await updateClient(client);
@@ -73,10 +74,33 @@ export function useClient() {
     }
   };
 
-  // ELIMINAR
+  const saveClientIncome = async (clientId, income) => {
+    try {
+      const response = await addCustomerIncome(clientId, income);
+
+      setClients((prev) =>
+        prev.map((client) => {
+          if (client.id !== clientId) return client;
+
+          if (response && response.id && response.ingresos) {
+            return response;
+          }
+
+          return {
+            ...client,
+            ingresos: [...(client.ingresos || []), response],
+          };
+        })
+      );
+    } catch (err) {
+      setError(err);
+    }
+  };
+
+ 
   const deleteClient = async (id) => {
     try {
-      await eliminarCliente(id);
+      await deleteCustomer(id);
       setClients((prev) => prev.filter((c) => c.id !== id));
     } catch (err) {
       setError(err);
@@ -91,6 +115,7 @@ export function useClient() {
     setSearch,
     deleteClient,
     saveClient,
+    saveClientIncome,
     refreshClients: fetchClients,
   };
 }
