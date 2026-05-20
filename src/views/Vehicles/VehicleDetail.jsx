@@ -54,7 +54,7 @@ function VehicleDetail() {
           <div className="vehicle-specs-grid">
             <div className="vehicle-spec-item">
               <span>Matrícula: </span>
-              <strong>{vehicle.license_plate}</strong>
+              <strong>{vehicle.licensePlate}</strong>
             </div>
 
             <div className="vehicle-spec-item">
@@ -106,7 +106,7 @@ function VehicleDetail() {
 
             <div className="vehicle-price-card vehicle-price-card-highlight">
               <span>Cuota mensual base </span>
-              <strong>{vehicle.base_monthly_fee} € </strong>
+              <strong>{vehicle.baseMonthlyFee} € </strong>
               / mes
             </div>
           </div>
