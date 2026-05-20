@@ -164,6 +164,9 @@ function FormClient({
             value={nif}
             onChange={(e) => setNif(e.target.value)}
             required
+            minLength={8}
+            maxLength={10}
+            
           />
 
           <label>Nacionalidad</label>
@@ -198,6 +201,8 @@ function FormClient({
           <input
             type="text"
             value={phone}
+            minLength={9}
+            maxLength={9}       
             onChange={(e) => setPhone(e.target.value)}
             required
           />
