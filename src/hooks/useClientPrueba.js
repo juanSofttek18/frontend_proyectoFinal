@@ -17,8 +17,9 @@ export function useClient() {
           name: "Juan",
           first_surname: "Pérez",
           nif: "12345678A",
+          nationality: "Española",
           employment_status: "Particular",
-          phone: "juan@email.com",
+          phone: "612345678",
           scoring: 85,
           is_active: true,
         },
@@ -27,8 +28,9 @@ export function useClient() {
           name: "María",
           first_surname: "Gómez",
           nif: "87654321B",
+          nationality: "Española",
           employment_status: "Empresa",
-          phone: "maria@empresa.com",
+          phone: "698765432",
           scoring: 92,
           is_active: true,
         },
@@ -37,8 +39,9 @@ export function useClient() {
           name: "Carlos",
           first_surname: "Ruiz",
           nif: "11223344C",
+          nationality: "Española",
           employment_status: "Particular",
-          phone: "carlos@email.com",
+          phone: "654321987",
           scoring: 60,
           is_active: false,
         },
@@ -90,7 +93,19 @@ export function useClient() {
     }
   };
 
- 
+  const saveClientIncome = (clientId, ingreso) => {
+    setClients((prev) =>
+      prev.map((client) =>
+        client.id === clientId
+          ? {
+              ...client,
+              ingresos: [...(client.ingresos || []), ingreso],
+            }
+          : client
+      )
+    );
+  };
+
   const deleteClient = (id) => {
     setClients((prev) => prev.filter((c) => c.id !== id));
   };
@@ -102,7 +117,8 @@ export function useClient() {
     search,
     setSearch,
     deleteClient,
-    saveClient, 
-    setClients, 
+    saveClient,
+    saveClientIncome,
+    setClients,
   };
 }
