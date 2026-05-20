@@ -131,7 +131,7 @@
     background: #cbd5e1;
 }
 
-/* 📱 Cambios para móvil: Los botones de acción se adaptan a todo el ancho */
+
 @media (max-width: 576px) {
   .vehicle-actions {
     flex-direction: column;

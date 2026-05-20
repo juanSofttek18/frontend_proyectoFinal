@@ -72,7 +72,6 @@ export default function EditRequest({ open, close, onFormSubmit, updateRequest, 
 
     const handlePlazoChange = (e) => {
         let val = Number(e.target.value);
-        // Validadores estrictos en tiempo real frente a entradas absurdas
         if (val > 60) val = 60;
         setFormData(prev => ({ ...prev, plazo: val }));
     };

@@ -57,7 +57,7 @@ export function useRequest() {
 
       await resolveRequest(id, dto);
 
-      // Como el listado es de pendientes, al resolverla la quitamos de la tabla
+      
       setRequests((prev) => prev.filter((request) => request.id !== id));
     } catch (err) {
       console.error("Error al resolver solicitud:", err);

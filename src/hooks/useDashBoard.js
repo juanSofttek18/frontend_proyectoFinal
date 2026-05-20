@@ -1,19 +1,46 @@
 import { useState, useEffect } from "react";
+import { getDashboardStats } from "../services/solicitudService";
 
 function useDashBoard() {
-    const [data, setData] = useState({total: 0, approved: 0, denied: 0});
+    const [data, setData] = useState({
+        totalRequests: 0,
+        approvedRequests: 0,
+        deniedRequests: 0,
+        pendingRequests: 0,
+        totalCustomers: 0,
+        totalVehicles: 0,
+        availableVehicles: 0
+    });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        let isMounted = true;
+        const fetchStats = async () => {
+            try {
+                setLoading(true);
+                const stats = await getDashboardStats();
+                if (isMounted) {
+                    setData(stats);
+                    setError(null);
+                }
+            } catch (err) {
+                console.error("Error fetching dashboard stats:", err);
+                if (isMounted) {
+                    setError(err.message || "Error al cargar estadísticas");
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        };
 
-        const timer=setTimeout(() => {
-            setData({ total: 24, approved: 16, denied: 6 });
-            setLoading(false);
-            setError(null); 
-        }, 800);
+        fetchStats();
 
-        return () => clearTimeout(timer);
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     return { data, loading, error };

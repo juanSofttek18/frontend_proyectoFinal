@@ -67,7 +67,7 @@
   white-space: nowrap;
 }
 
-/* Envolver la tabla de ListRequest en un div con esta clase para salvar layouts */
+
 .list-request-container table {
   width: 100%;
   border-collapse: collapse;
@@ -151,7 +151,7 @@
   border: 1px solid #feebc8;
 }
 
-/* Forzar responsive a la tabla nativa */
+
 @media (max-width: 768px) {
   .request-header {
     flex-direction: column;

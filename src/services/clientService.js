@@ -1,6 +1,5 @@
 import api from "./api";
 
-// Mantenemos los parámetros que tu controlador de Spring Boot necesita recibir
 export const getCustomers = async (page = 0, size = 10) => {
   const { data } = await api.get("/customers", {
     params: { page, size },
@@ -27,7 +26,6 @@ export const deleteCustomer = async (id) => {
   await api.delete(`/customers/${id}`);
 };
 
-// Nueva función del servicio para añadir los ingresos del cliente
 export const addCustomerIncome = async (clientId, income) => {
   const { data } = await api.post(`/customers/${clientId}/incomes`, income);
   return data;

@@ -86,15 +86,15 @@ function ListClient() {
             >
               {clients.map((client) => (
                 <tr key={client.id}>
-                  <td>{client.name} {client.first_Surname || ""} {client.second_surname || ""}</td>
+                  <td>{client.name} {client.firstSurname || ""} {client.secondSurname || ""}</td>
                   <td>{client.nif}</td>
                   <td>{client.nationality}</td>
-                  <td>{client.employment_status}</td>
+                  <td>{client.employmentStatus === "EMPLOYED" ? "Trabajador" : "Autónomo"}</td>
                   <td>{client.phone}</td>
-                  <td>{client.scoring}</td>
+                  <td>{client.scoring != null ? Number(client.scoring).toFixed(1) : "0.0"} / 10</td>
                   <td>
-                    <span className={`status-badge ${client.is_active ? "active" : "inactive"}`}>
-                      {client.is_active ? "Activo" : "Inactivo"}
+                    <span className={`status-badge ${client.nonPayment === 0 ? "active" : "inactive"}`}>
+                      {client.nonPayment === 0 ? "Al día" : "Impagos"}
                     </span>
                   </td>
                   <td>

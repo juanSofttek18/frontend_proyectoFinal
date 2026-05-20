@@ -10,40 +10,35 @@ function FormClient({
 
   const [id, setId] = useState(null);
   const [name, setName] = useState("");
-  const [first_surname, setFirstSurname] = useState("");
-  const [second_surname, setSecondSurname] = useState("");
+  const [firstSurname, setFirstSurname] = useState("");
+  const [secondSurname, setSecondSurname] = useState("");
   const [nif, setNif] = useState("");
   const [nationality, setNationality] = useState("");
   const [birthdate, setBirthdate] = useState("");
-  const [career_time, setCareerTime] = useState("");
-  const [employment_status, setEmploymentStatus] = useState("EMPLOYED");
+  const [careerTime, setCareerTime] = useState("");
+  const [employmentStatus, setEmploymentStatus] = useState("EMPLOYED");
   const [phone, setPhone] = useState("");
   const [scoring, setScoring] = useState(0);
-  const [non_payment, setNonPayment] = useState(false);
-  const [is_active, setIsActive] = useState(true);
+  const [nonPayment, setNonPayment] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const [formError, setFormError] = useState("");
 
-  
   useEffect(() => {
-
     if (clientEdit) {
-
       setId(clientEdit.id);
       setName(clientEdit.name || "");
-      setFirstSurname(clientEdit.first_surname || "");
-      setSecondSurname(clientEdit.second_surname || "");
+      setFirstSurname(clientEdit.firstSurname || clientEdit.first_surname || "");
+      setSecondSurname(clientEdit.secondSurname || clientEdit.second_surname || "");
       setNif(clientEdit.nif || "");
       setNationality(clientEdit.nationality || "");
       setBirthdate(clientEdit.birthdate ? clientEdit.birthdate.slice(0, 10) : "");
-      setCareerTime(clientEdit.career_time ? clientEdit.career_time.slice(0, 10) : "");
-      setEmploymentStatus(clientEdit.employment_status || "EMPLOYED");
+      setCareerTime(clientEdit.careerTime || clientEdit.career_time ? (clientEdit.careerTime || clientEdit.career_time).slice(0, 10) : "");
+      setEmploymentStatus(clientEdit.employmentStatus || clientEdit.employment_status || "EMPLOYED");
       setPhone(clientEdit.phone || "");
       setScoring(clientEdit.scoring ?? 0);
-      setNonPayment(Boolean(clientEdit.non_payment));
-      setIsActive(Boolean(clientEdit.is_active));
-
+      setNonPayment(clientEdit.nonPayment === 1 || clientEdit.non_payment === 1 || Boolean(clientEdit.non_payment));
+      setIsActive(true);
     } else {
-
       setId(null);
       setName("");
       setFirstSurname("");
@@ -58,20 +53,18 @@ function FormClient({
       setNonPayment(false);
       setIsActive(true);
     }
-
   }, [clientEdit]);
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
 
     const numericScoring = Number(scoring);
-    if (!name.trim() || !first_surname.trim() || !nif.trim() || !nationality.trim() || !birthdate || !career_time || !phone.trim() || scoring === "" || scoring === null) {
+    if (!name.trim() || !firstSurname.trim() || !nif.trim() || !nationality.trim() || !birthdate || !careerTime || !phone.trim() || scoring === "" || scoring === null) {
       setFormError("Por favor completa todos los campos obligatorios.");
       return;
     }
-    if (Number.isNaN(numericScoring) || numericScoring < 0 || numericScoring > 100) {
-      setFormError("El scoring debe estar entre 0 y 100.");
+    if (Number.isNaN(numericScoring) || numericScoring < 0 || numericScoring > 10) {
+      setFormError("El scoring debe estar entre 0 y 10.");
       return;
     }
 
@@ -80,21 +73,19 @@ function FormClient({
     const clientData = {
       id,
       name,
-      first_surname,
-      second_surname: second_surname.trim() || null,
+      firstSurname,
+      secondSurname: secondSurname.trim() || null,
       nif,
       nationality,
       birthdate,
-      career_time,
-      employment_status,
+      careerTime,
+      employmentStatus,
       phone,
       scoring: Number(scoring),
-      non_payment,
-      is_active,
+      nonPayment: nonPayment ? 1 : 0,
     };
 
     saveClient(clientData);
-
   };
 
   if (!open) return null;
@@ -133,7 +124,7 @@ function FormClient({
           <label>Tipo</label>
 
           <select
-            value={employment_status}
+            value={employmentStatus}
             onChange={(e) => setEmploymentStatus(e.target.value)}
           >
             <option value="EMPLOYED">Trabajador</option>
@@ -153,7 +144,7 @@ function FormClient({
 
           <input
             type="text"
-            value={first_surname}
+            value={firstSurname}
             onChange={(e) => setFirstSurname(e.target.value)}
             required
           />
@@ -162,7 +153,7 @@ function FormClient({
 
           <input
             type="text"
-            value={second_surname}
+            value={secondSurname}
             onChange={(e) => setSecondSurname(e.target.value)}
           />
 
@@ -197,7 +188,7 @@ function FormClient({
 
           <input
             type="date"
-            value={career_time}
+            value={careerTime}
             onChange={(e) => setCareerTime(e.target.value)}
             required
           />
@@ -219,14 +210,14 @@ function FormClient({
             onChange={(e) => setScoring(e.target.value)}
             required
             min="0"
-            max="100"
-            step="1"
+            max="10"
+            step="0.1"
           />
 
           <label>¿Tiene impagos?</label>
 
           <select
-            value={non_payment ? "1" : "0"}
+            value={nonPayment ? "1" : "0"}
             onChange={(e) => setNonPayment(e.target.value === "1")}
           >
             <option value="0">No</option>
@@ -240,7 +231,7 @@ function FormClient({
           <label>Estado</label>
 
           <select
-            value={is_active ? "Activo" : "Inactivo"}
+            value={isActive ? "Activo" : "Inactivo"}
             onChange={(e) => setIsActive(e.target.value === "Activo")}
           >
             <option>Activo</option>

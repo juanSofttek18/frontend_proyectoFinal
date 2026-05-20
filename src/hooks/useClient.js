@@ -13,7 +13,6 @@ export function useClient() {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
-  // Añadimos control del paginado para sincronizarnos con tu Backend sin romperlo
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
@@ -26,7 +25,6 @@ export function useClient() {
 
       const data = await getCustomers(page, size);
       
-      // CORRECCIÓN CRÍTICA: Spring Boot devuelve los clientes en 'content'
       setClients(data.content || []);
       setTotalPages(data.totalPages || 0);
       setTotalElements(data.totalElements || 0);
@@ -41,9 +39,9 @@ export function useClient() {
 
   useEffect(() => {
     fetchClients();
-  }, [page]); // Re-ejecuta si cambia la página
+  }, [page]);
 
-  // Filtro local optimizado (Soporta propiedades camelCase y snake_case para evitar undefined)
+  
   const filteredClients = clients.filter((c) => {
     const name = c.name || "";
     const firstSurname = c.first_surname || c.firstSurname || "";
@@ -55,7 +53,6 @@ export function useClient() {
     return searchString.toLowerCase().includes(search.toLowerCase().trim());
   });
 
-  // Limpiador para convertir strings vacíos del formulario en nulls (evita errores 500 en el backend)
   const cleanData = (data) => {
     return Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key, value === "" ? null : value])
@@ -107,7 +104,7 @@ export function useClient() {
         prev.map((client) => {
           if (client.id !== clientId) return client;
 
-          // Si el servidor te devuelve el cliente entero actualizado con sus ingresos
+          
           if (response && response.id && response.ingresos) {
             return response;
           }
@@ -132,7 +129,6 @@ export function useClient() {
       await deleteCustomer(id);
       setClients((prev) => prev.filter((c) => c.id !== id));
       
-      // Si borras el último cliente de una página, retrocedemos una página
       if (clients.length === 1 && page > 0) {
         setPage((p) => p - 1);
       }

@@ -12,7 +12,7 @@
   width: 100%;
   border-collapse: collapse;
   background: white;
-  min-width: 800px; /* Garantiza legibilidad bajo el scroll horizontal en móviles */
+  min-width: 800px; 
 }
 
 .generic-table th, 
@@ -20,7 +20,7 @@
   padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid #E2E8F0;
-  white-space: nowrap; /* Evita cortes extraños de texto */
+  white-space: nowrap; 
 }
 
 .list-client-container {
