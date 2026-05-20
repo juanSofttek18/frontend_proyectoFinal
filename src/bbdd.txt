@@ -1,0 +1,133 @@
+CREATE TABLE customer(
+
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    nif VARCHAR2(10) UNIQUE NOT NULL,
+
+    name VARCHAR2(50) NOT NULL,
+
+    first_surname VARCHAR2(40) NOT NULL,
+
+    second_surname VARCHAR2(40),
+
+    nationality VARCHAR2(20) NOT NULL,
+
+    birthdate DATE NOT NULL,
+
+    scoring DECIMAL(10,2) NOT NULL,
+
+    employment_status VARCHAR2(30) CHECK (employment_status IN ('EMPLOYED', 'SELF_EMPLOYED')),
+
+    phone VARCHAR2(20) NOT NULL UNIQUE,
+
+    non_payment NUMBER(1) NOT NULL CHECK (non_payment IN (1, 0)),
+
+    is_active NUMBER(1) NOT NULL CHECK (is_active IN (1, 0)),
+
+    career_time DATE NOT NULL
+
+);
+
+CREATE TABLE income(
+
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    pre_taxes DECIMAL(10,2) NOT NULL,
+
+    post_taxes DECIMAL(10,2) NOT NULL,
+
+    created_at TIMESTAMP NOT NULL,
+
+    customer_id NUMBER NOT NULL,
+
+    CONSTRAINT fk_income_customer FOREIGN KEY (customer_id) REFERENCES customer(id)
+
+);
+
+CREATE TABLE request(
+
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    customer_id NUMBER NOT NULL,
+
+    created_at TIMESTAMP NOT NULL,
+
+    state VARCHAR2(30) CHECK (state IN ('APPROVED_WITH_WARRANTIES', 'DENIED', 'APPROVED')),
+
+    resolution_date TIMESTAMP NOT NULL,
+
+    period_in_months NUMBER NOT NULL,
+
+    is_active NUMBER(1) NOT NULL CHECK (is_active IN (1, 0)),
+
+    CONSTRAINT fk_request_customer FOREIGN KEY (customer_id) REFERENCES customer(id)
+
+);
+
+CREATE TABLE extra(
+
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    name VARCHAR2(30) NOT NULL,
+
+    price DECIMAL(10,2),
+
+    category VARCHAR2(30) CHECK (category IN ('WHEELS', 'COLOR', 'TAPESTRY', 'RADIO', 'LIGHTS')) NOT NULL,
+
+    percentage DECIMAL(5,2)
+
+);
+
+CREATE TABLE vehicle(
+
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    license_plate VARCHAR2(10) NOT NULL UNIQUE,
+
+    brand VARCHAR2(30) NOT NULL,
+
+    model VARCHAR2(30) NOT NULL,
+
+    price DECIMAL(10,2) NOT NULL,
+
+    cc NUMBER NOT NULL,
+
+    potency NUMBER NOT NULL,
+
+    color VARCHAR2(20) NOT NULL,
+
+    spots NUMBER NOT NULL,
+
+    base_monthly_fee DECIMAL(10,2) NOT NULL,
+
+    available NUMBER(1) NOT NULL CHECK (available IN (1, 0))
+
+);
+
+CREATE TABLE request_detail(
+
+    id_request NUMBER NOT NULL,
+
+    id_vehicle NUMBER NOT NULL,
+
+    id_extra NUMBER,
+
+    CONSTRAINT fk_request_detail_request FOREIGN KEY (id_request) REFERENCES request(id),
+
+    CONSTRAINT fk_request_detail_vehicle FOREIGN KEY (id_vehicle) REFERENCES vehicle(id),
+
+    CONSTRAINT fk_request_detail_extra FOREIGN KEY (id_extra) REFERENCES extra(id),
+
+    CONSTRAINT uk_request_detail_unique UNIQUE (id_request, id_vehicle, id_extra)
+
+);
+ CREATE TABLE request(
+     id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+     customer_id NUMBER NOT NULL,
+     created_at TIMESTAMP NOT NULL,
+     state VARCHAR2(30) CHECK (state IN ('PENDING_ANALYST', 'APPROVED_WITH_WARRANTIES', 'DENIED', 'APPROVED')),
+     resolution_date TIMESTAMP NOT NULL,
+     period_in_months NUMBER NOT NULL,
+     is_active NUMBER(1) NOT NULL CHECK (is_active IN (1, 0)),
+     CONSTRAINT fk_request_customer FOREIGN KEY (customer_id) REFERENCES customer(id)
+ );
