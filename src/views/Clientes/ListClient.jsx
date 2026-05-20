@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useClient } from "../../hooks/useClientPrueba";
+import { useClient } from "../../hooks/useClient";
 import GenericTable from "../../components/GenericTable";
 import GenericCard from "../../components/GenericCard";
 import FormClient from "./FormClient";
@@ -84,7 +84,7 @@ function ListClient() {
             >
               {clients.map((client) => (
                 <tr key={client.id}>
-                  <td>{client.name} {client.first_surname || ""} {client.second_surname || ""}</td>
+                  <td>{client.name} {client.first_Surname || ""} {client.second_surname || ""}</td>
                   <td>{client.nif}</td>
                   <td>{client.nationality}</td>
                   <td>{client.employment_status}</td>

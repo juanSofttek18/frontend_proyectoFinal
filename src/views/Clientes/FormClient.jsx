@@ -54,7 +54,7 @@ function FormClient({
       setCareerTime("");
       setEmploymentStatus("EMPLOYED");
       setPhone("");
-      setScoring(750);
+      setScoring(0);
       setNonPayment(false);
       setIsActive(true);
     }
@@ -89,8 +89,8 @@ function FormClient({
       employment_status,
       phone,
       scoring: Number(scoring),
-      non_payment: non_payment ? 1 : 0,
-      is_active: is_active ? 1 : 0,
+      non_payment,
+      is_active,
     };
 
     saveClient(clientData);
@@ -112,12 +112,12 @@ function FormClient({
 
             <h2>
               {clientEdit
-                ? "Edit Customer"
-                : "Add Customer"}
+                ? "Editar Cliente"
+                : "Añadir Cliente"}
             </h2>
 
             <p>
-              Complete customer information
+              Completa la información del cliente
             </p>
 
           </div>
@@ -131,17 +131,17 @@ function FormClient({
 
         <form onSubmit={handleSubmit}>
 
-          <label>Employment type</label>
+          <label>Tipo</label>
 
           <select
             value={employment_status}
             onChange={(e) => setEmploymentStatus(e.target.value)}
           >
-            <option value="Trabajador">Trabajador</option>
-            <option value="Trabajador cuenta propia">Trabajador cuenta propia</option>
+            <option value="EMPLOYED">Trabajador</option>
+            <option value="SELF_EMPLOYED">Trabajador cuenta propia</option>
           </select>
 
-          <label>First name</label>
+          <label>Nombre</label>
 
           <input
             type="text"
@@ -150,7 +150,7 @@ function FormClient({
             required
           />
 
-          <label>Last name</label>
+          <label>Apellido</label>
 
           <input
             type="text"
@@ -159,7 +159,7 @@ function FormClient({
             required
           />
 
-          <label>Second surname</label>
+          <label>Segundo apellido</label>
 
           <input
             type="text"
@@ -176,7 +176,7 @@ function FormClient({
             required
           />
 
-          <label>Nationality</label>
+          <label>Nacionalidad</label>
 
           <input
             type="text"
@@ -185,7 +185,7 @@ function FormClient({
             required
           />
 
-          <label>Birthdate</label>
+          <label>Fecha de nacimiento</label>
 
           <input
             type="date"
@@ -194,7 +194,7 @@ function FormClient({
             required
           />
 
-          <label>Career start date</label>
+          <label>Fecha de inicio de carrera</label>
 
           <input
             type="date"
@@ -203,7 +203,7 @@ function FormClient({
             required
           />
 
-          <label>Contact</label>
+          <label>Contacto</label>
 
           <input
             type="text"
@@ -224,28 +224,28 @@ function FormClient({
             step="1"
           />
 
-          <label>Has non-payment?</label>
+          <label>¿Tiene impagos?</label>
 
           <select
             value={non_payment ? "1" : "0"}
             onChange={(e) => setNonPayment(e.target.value === "1")}
           >
             <option value="0">No</option>
-            <option value="1">Yes</option>
+            <option value="1">Sí</option>
           </select>
 
           {formError && (
             <p className="FormError">{formError}</p>
           )}
 
-          <label>Status</label>
+          <label>Estado</label>
 
           <select
-            value={is_active ? "Active" : "Inactive"}
-            onChange={(e) => setIsActive(e.target.value === "Active")}
+            value={is_active ? "Activo" : "Inactivo"}
+            onChange={(e) => setIsActive(e.target.value === "Activo")}
           >
-            <option>Active</option>
-            <option>Inactive</option>
+            <option>Activo</option>
+            <option>Inactivo</option>
           </select>
 
           <div className="Modal_Actions">
@@ -254,12 +254,12 @@ function FormClient({
               type="button"
               onClick={close}
             >
-              Cancel
+              Cancelar
             </button>
 
             <button type="submit">
 
-              {clientEdit ? "Save Changes" : "Save Customer"}
+              {clientEdit ? "Guardar Cambios" : "Guardar Cliente"}
 
             </button>
 
