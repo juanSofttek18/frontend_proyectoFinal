@@ -54,7 +54,7 @@ function VehicleCatalog() {
         >
           {availableVehicles.map((vehicle) => (
             <tr key={vehicle.id}>
-              <td>{vehicle.license_plate}</td>
+              <td>{vehicle.licensePlate}</td>
               <td>{vehicle.brand}</td>
               <td>{vehicle.model}</td>
               <td>{vehicle.price} €</td>
@@ -62,7 +62,7 @@ function VehicleCatalog() {
               <td>{vehicle.potency} CV</td>
               <td>{vehicle.color}</td>
               <td>{vehicle.spots}</td>
-              <td>{vehicle.base_monthly_fee} €</td>
+              <td>{vehicle.baseMonthlyFee} €</td>
               <td>
                 <button
                   className="vehicle-detail-button"
