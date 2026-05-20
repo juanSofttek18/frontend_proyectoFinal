@@ -13,7 +13,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     vehicles: [
       {
         vehicleId: "",
-        extraId: "",
+        extraIds: [],
       },
     ],
   });
@@ -50,7 +50,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
           vehicles: [
             {
               vehicleId: "",
-              extraId: "",
+              extraIds: [],
             },
           ],
         });
@@ -81,13 +81,41 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     }));
   };
 
-  const handleVehicleChange = (index, field, value) => {
+  const handleVehicleChange = (index, value) => {
     setFormData((prev) => {
       const updatedVehicles = [...prev.vehicles];
 
       updatedVehicles[index] = {
         ...updatedVehicles[index],
-        [field]: value,
+        vehicleId: value,
+        extraIds: [],
+      };
+
+      return {
+        ...prev,
+        vehicles: updatedVehicles,
+      };
+    });
+  };
+
+  const handleExtraChange = (vehicleIndex, extraId) => {
+    setFormData((prev) => {
+      const updatedVehicles = [...prev.vehicles];
+      const currentVehicle = updatedVehicles[vehicleIndex];
+
+      const currentExtras = currentVehicle.extraIds || [];
+
+      const exists = currentExtras.some(
+        (id) => String(id) === String(extraId)
+      );
+
+      const updatedExtras = exists
+        ? currentExtras.filter((id) => String(id) !== String(extraId))
+        : [...currentExtras, extraId];
+
+      updatedVehicles[vehicleIndex] = {
+        ...currentVehicle,
+        extraIds: updatedExtras,
       };
 
       return {
@@ -104,7 +132,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
         ...prev.vehicles,
         {
           vehicleId: "",
-          extraId: "",
+          extraIds: [],
         },
       ],
     }));
@@ -121,7 +149,13 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     return vehiculos.find((vehicle) => String(vehicle.id) === String(vehicleId));
   };
 
-  const calculateVehicleFee = (vehicle, extra) => {
+  const getSelectedExtras = (extraIds) => {
+    return extras.filter((extra) =>
+      extraIds.some((id) => String(id) === String(extra.id))
+    );
+  };
+
+  const calculateVehicleFee = (vehicle, selectedExtras = []) => {
     if (!vehicle) return 0;
 
     let fee = Number(vehicle.baseMonthlyFee || 0);
@@ -138,7 +172,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
       fee = fee * (1 - discount);
     }
 
-    if (extra) {
+    selectedExtras.forEach((extra) => {
       if (extra.price) {
         fee += Number(extra.price);
       }
@@ -146,7 +180,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
       if (extra.percentage) {
         fee += fee * (Number(extra.percentage) / 100);
       }
-    }
+    });
 
     return fee;
   };
@@ -154,9 +188,9 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
   const calculateTotalFee = () => {
     return formData.vehicles.reduce((total, line) => {
       const vehicle = getSelectedVehicle(line.vehicleId);
-      const extra = extras.find((e) => String(e.id) === String(line.extraId));
+      const selectedExtras = getSelectedExtras(line.extraIds || []);
 
-      return total + calculateVehicleFee(vehicle, extra);
+      return total + calculateVehicleFee(vehicle, selectedExtras);
     }, 0);
   };
 
@@ -181,6 +215,31 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     return true;
   };
 
+  const buildVehiclesForBackend = () => {
+    const details = [];
+
+    formData.vehicles.forEach((line) => {
+      const vehicleId = Number(line.vehicleId);
+      const extraIds = line.extraIds || [];
+
+      if (extraIds.length === 0) {
+        details.push({
+          vehicleId,
+          extraId: null,
+        });
+      } else {
+        extraIds.forEach((extraId) => {
+          details.push({
+            vehicleId,
+            extraId: Number(extraId),
+          });
+        });
+      }
+    });
+
+    return details;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -193,10 +252,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
       const dtoToSend = {
         customerId: Number(formData.customerId),
         periodInMonths: Number(formData.periodInMonths),
-        vehicles: formData.vehicles.map((line) => ({
-          vehicleId: Number(line.vehicleId),
-          extraId: line.extraId ? Number(line.extraId) : null,
-        })),
+        vehicles: buildVehiclesForBackend(),
       };
 
       console.log("DTO enviado al backend:", dtoToSend);
@@ -210,9 +266,15 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
       close();
     } catch (err) {
       console.error("Error creando solicitud:", err);
-      setError(
-        "Error al crear la solicitud. Revisa que el cliente, vehículo y extra existan en backend."
-      );
+
+      const backendMessage =
+        typeof err.response?.data === "string"
+          ? err.response.data
+          : err.response?.data?.message ||
+            err.response?.data?.error ||
+            "Error al crear la solicitud. Revisa que el cliente, vehículo y extras existan en backend.";
+
+      setError(backendMessage);
     } finally {
       setSaving(false);
     }
@@ -265,14 +327,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
               required
             />
 
-            <div
-              style={{
-                marginTop: "1.5rem",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+            <div className="request-section-header">
               <h3>Vehículos</h3>
 
               <button
@@ -286,47 +341,22 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
 
             {formData.vehicles.map((line, index) => {
               const selectedVehicle = getSelectedVehicle(line.vehicleId);
-              const selectedExtra = extras.find(
-                (extra) => String(extra.id) === String(line.extraId)
-              );
-
+              const selectedExtras = getSelectedExtras(line.extraIds || []);
               const finalFee = calculateVehicleFee(
                 selectedVehicle,
-                selectedExtra
+                selectedExtras
               );
 
               return (
-                <div
-                  key={index}
-                  style={{
-                    border: "1px solid #E2E8F0",
-                    borderRadius: "8px",
-                    padding: "1rem",
-                    marginTop: "1rem",
-                    background: "#F7FAFA",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
+                <div key={index} className="request-vehicle-card">
+                  <div className="request-vehicle-card-header">
                     <strong>Vehículo #{index + 1}</strong>
 
                     {formData.vehicles.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveVehicle(index)}
-                        style={{
-                          background: "#dc3545",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "6px",
-                          padding: "6px 10px",
-                          cursor: "pointer",
-                        }}
+                        className="btn-remove-vehicle"
                       >
                         Eliminar
                       </button>
@@ -337,11 +367,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                   <select
                     value={line.vehicleId}
                     onChange={(event) =>
-                      handleVehicleChange(
-                        index,
-                        "vehicleId",
-                        event.target.value
-                      )
+                      handleVehicleChange(index, event.target.value)
                     }
                     required
                   >
@@ -356,13 +382,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                   </select>
 
                   {selectedVehicle && (
-                    <div
-                      style={{
-                        marginTop: "0.8rem",
-                        fontSize: "0.9rem",
-                        color: "#4A5568",
-                      }}
-                    >
+                    <div className="vehicle-info-box">
                       <p>
                         <strong>Color:</strong> {selectedVehicle.color}
                       </p>
@@ -373,35 +393,66 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                     </div>
                   )}
 
-                  <label>Extra</label>
-                  <select
-                    value={line.extraId}
-                    onChange={(event) =>
-                      handleVehicleChange(index, "extraId", event.target.value)
-                    }
-                  >
-                    <option value="">Sin extra</option>
+                  <label>Extras</label>
 
-                    {extras.map((extra) => (
-                      <option key={extra.id} value={extra.id}>
-                        {extra.name}
-                        {extra.price
-                          ? ` +${extra.price}€`
-                          : extra.percentage
-                          ? ` +${extra.percentage}%`
-                          : ""}
-                      </option>
-                    ))}
-                  </select>
+                  {extras.length === 0 ? (
+                    <p className="empty-extras-message">
+                      No hay extras disponibles.
+                    </p>
+                  ) : (
+                    <div className="extras-checkbox-list">
+                      {extras.map((extra) => {
+                        const checked = (line.extraIds || []).some(
+                          (id) => String(id) === String(extra.id)
+                        );
+
+                        return (
+                          <label
+                            key={extra.id}
+                            className="extra-checkbox-item"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() =>
+                                handleExtraChange(index, extra.id)
+                              }
+                            />
+
+                            <span>
+                              {extra.name}
+                              {extra.price
+                                ? ` +${extra.price}€`
+                                : extra.percentage
+                                ? ` +${extra.percentage}%`
+                                : ""}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {selectedExtras.length > 0 && (
+                    <div className="selected-extras-box">
+                      <strong>Extras seleccionados:</strong>
+                      <ul>
+                        {selectedExtras.map((extra) => (
+                          <li key={extra.id}>
+                            {extra.name}
+                            {extra.price
+                              ? ` +${extra.price}€`
+                              : extra.percentage
+                              ? ` +${extra.percentage}%`
+                              : ""}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {selectedVehicle && (
-                    <p
-                      style={{
-                        marginTop: "0.8rem",
-                        fontWeight: "bold",
-                        color: "#1A365D",
-                      }}
-                    >
+                    <p className="estimated-fee">
                       Cuota estimada: {finalFee.toFixed(2)} €/mes
                     </p>
                   )}
@@ -409,30 +460,13 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
               );
             })}
 
-            <div
-              style={{
-                marginTop: "1rem",
-                padding: "1rem",
-                background: "#E2E8F0",
-                borderRadius: "8px",
-                color: "#1A365D",
-              }}
-            >
+            <div className="total-fee-box">
               <strong>
                 Cuota total estimada: {calculateTotalFee().toFixed(2)} €/mes
               </strong>
             </div>
 
-            {error && (
-              <p
-                className="error-message"
-                style={{
-                  marginTop: "1rem",
-                }}
-              >
-                {error}
-              </p>
-            )}
+            {error && <p className="error-message request-error">{error}</p>}
 
             <div className="Modal_Actions">
               <button type="button" onClick={close} disabled={saving}>
