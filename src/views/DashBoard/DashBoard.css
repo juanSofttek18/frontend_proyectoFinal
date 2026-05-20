@@ -20,10 +20,10 @@
 }
 
 .dashboard-container {
-    padding: 2rem;
-    background: #F7FAFA;
+    padding: 0 0 2rem 0;
     min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
 }
 
 .dashboard-header {
@@ -52,53 +52,23 @@
 
 .stats-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     padding: 1rem 0;
+    width: 100%;
 }
 
 .stat-card {
     background: white;
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(26, 54, 93, 0.05);
-    text-align: center;
-    border-top: 4px solid #1A365D;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(26, 54, 93, 0.04);
+    border: 1px solid #E2E8F0;
 }
 
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(26, 54, 93, 0.1);
-}
-
-.stat-card h2 {
-    font-size: 1.1rem;
-    color: #4A5568;
-    margin: 0 0 1rem 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-card p {
-    font-size: 3rem;
-    font-weight: 700;
-    color: #1A365D;
-    margin: 0;
-}
-
-.stat-card.approved {
-    border-top-color: #28a745;
-}
-
-.stat-card.approved p {
-    color: #28a745;
-}
-
-.stat-card.denied {
-    border-top-color: #dc3545;
-}
-
-.stat-card.denied p {
-    color: #dc3545;
+@media (max-width: 576px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
