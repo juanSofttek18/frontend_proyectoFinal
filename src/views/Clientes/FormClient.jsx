@@ -95,7 +95,6 @@ function FormClient({
 
     saveClient(clientData);
 
-    close();
   };
 
   if (!open) return null;

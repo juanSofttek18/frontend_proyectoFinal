@@ -56,7 +56,7 @@ function ListClient() {
         </button>
       </div>
 
-      {loading === "loading" ? (
+      {loading ? (
         <div className="loading-spinner">
           <div className="spinner"></div>
         </div>
@@ -71,8 +71,10 @@ function ListClient() {
         >
           <div className="client-filters">
             <input
-              type="text"
-                  placeholder="Buscar por nombre o NIF..."
+                type="text"
+                placeholder="Buscar por nombre o NIF..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
