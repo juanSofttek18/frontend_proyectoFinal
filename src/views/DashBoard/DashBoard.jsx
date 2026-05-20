@@ -1,4 +1,4 @@
-import useDashBoard from "./useDashBoard";
+import useDashBoard from "../../hooks/useDashBoard";
 import "./DashBoard.css";
 
 function DashBoard() {
