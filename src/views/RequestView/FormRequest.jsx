@@ -44,16 +44,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
         setVehiculos(vehiculosData);
         setExtras(extrasData);
 
-        setFormData({
-          customerId: "",
-          periodInMonths: 12,
-          vehicles: [
-            {
-              vehicleId: "",
-              extraIds: [],
-            },
-          ],
-        });
+        resetForm();
       } catch (err) {
         console.error("Error cargando datos del formulario:", err);
         setError("Error al cargar clientes, vehículos o extras.");
@@ -65,7 +56,21 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     loadData();
   }, [open]);
 
-  if (!open) return null;
+  const resetForm = () => {
+    setFormData({
+      customerId: "",
+      periodInMonths: 12,
+      vehicles: [
+        {
+          vehicleId: "",
+          extraIds: [],
+        },
+      ],
+    });
+
+    setError(null);
+    setSaving(false);
+  };
 
   const handleCustomerChange = (event) => {
     setFormData((prev) => ({
@@ -103,19 +108,19 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
       const updatedVehicles = [...prev.vehicles];
       const currentVehicle = updatedVehicles[vehicleIndex];
 
-      const currentExtras = currentVehicle.extraIds || [];
+      const currentExtraIds = currentVehicle.extraIds || [];
 
-      const exists = currentExtras.some(
+      const alreadySelected = currentExtraIds.some(
         (id) => String(id) === String(extraId)
       );
 
-      const updatedExtras = exists
-        ? currentExtras.filter((id) => String(id) !== String(extraId))
-        : [...currentExtras, extraId];
+      const updatedExtraIds = alreadySelected
+        ? currentExtraIds.filter((id) => String(id) !== String(extraId))
+        : [...currentExtraIds, extraId];
 
       updatedVehicles[vehicleIndex] = {
         ...currentVehicle,
-        extraIds: updatedExtras,
+        extraIds: updatedExtraIds,
       };
 
       return {
@@ -146,52 +151,15 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
   };
 
   const getSelectedVehicle = (vehicleId) => {
-    return vehiculos.find((vehicle) => String(vehicle.id) === String(vehicleId));
+    return vehiculos.find(
+      (vehicle) => String(vehicle.id) === String(vehicleId)
+    );
   };
 
   const getSelectedExtras = (extraIds) => {
     return extras.filter((extra) =>
       extraIds.some((id) => String(id) === String(extra.id))
     );
-  };
-
-  const calculateVehicleFee = (vehicle, selectedExtras = []) => {
-    if (!vehicle) return 0;
-
-    let fee = Number(vehicle.baseMonthlyFee || 0);
-    const months = Number(formData.periodInMonths || 12);
-
-    if (months < 12) {
-      const monthsReduced = 12 - months;
-      fee = fee * (1 + monthsReduced * 0.1);
-    }
-
-    if (months > 12) {
-      const monthsIncreased = months - 12;
-      const discount = Math.min(monthsIncreased * 0.03, 0.2);
-      fee = fee * (1 - discount);
-    }
-
-    selectedExtras.forEach((extra) => {
-      if (extra.price) {
-        fee += Number(extra.price);
-      }
-
-      if (extra.percentage) {
-        fee += fee * (Number(extra.percentage) / 100);
-      }
-    });
-
-    return fee;
-  };
-
-  const calculateTotalFee = () => {
-    return formData.vehicles.reduce((total, line) => {
-      const vehicle = getSelectedVehicle(line.vehicleId);
-      const selectedExtras = getSelectedExtras(line.extraIds || []);
-
-      return total + calculateVehicleFee(vehicle, selectedExtras);
-    }, 0);
   };
 
   const validateForm = () => {
@@ -202,6 +170,11 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
 
     if (!formData.periodInMonths || formData.periodInMonths <= 0) {
       setError("Debe indicar un plazo válido.");
+      return false;
+    }
+
+    if (formData.vehicles.length === 0) {
+      setError("Debe añadir al menos un vehículo.");
       return false;
     }
 
@@ -280,6 +253,8 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     }
   };
 
+  if (!open) return null;
+
   return (
     <div className="Modal_Overlay">
       <div className="Modal_Request">
@@ -311,7 +286,8 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
 
               {clientes.map((cliente) => (
                 <option key={cliente.id} value={cliente.id}>
-                  {cliente.name} {cliente.firstSurname || ""} - {cliente.nif}
+                  {cliente.name} {cliente.firstSurname || ""}{" "}
+                  {cliente.secondSurname || ""} - {cliente.nif}
                 </option>
               ))}
             </select>
@@ -328,7 +304,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
             />
 
             <div className="request-section-header">
-              <h3>Vehículos</h3>
+              <h3>Vehículos solicitados</h3>
 
               <button
                 type="button"
@@ -342,10 +318,6 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
             {formData.vehicles.map((line, index) => {
               const selectedVehicle = getSelectedVehicle(line.vehicleId);
               const selectedExtras = getSelectedExtras(line.extraIds || []);
-              const finalFee = calculateVehicleFee(
-                selectedVehicle,
-                selectedExtras
-              );
 
               return (
                 <div key={index} className="request-vehicle-card">
@@ -383,6 +355,12 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
 
                   {selectedVehicle && (
                     <div className="vehicle-info-box">
+                      <p>
+                        <strong>Marca:</strong> {selectedVehicle.brand}
+                      </p>
+                      <p>
+                        <strong>Modelo:</strong> {selectedVehicle.model}
+                      </p>
                       <p>
                         <strong>Color:</strong> {selectedVehicle.color}
                       </p>
@@ -422,7 +400,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                             <span>
                               {extra.name}
                               {extra.price
-                                ? ` +${extra.price}€`
+                                ? ` +${extra.price}€/mes`
                                 : extra.percentage
                                 ? ` +${extra.percentage}%`
                                 : ""}
@@ -436,12 +414,13 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                   {selectedExtras.length > 0 && (
                     <div className="selected-extras-box">
                       <strong>Extras seleccionados:</strong>
+
                       <ul>
                         {selectedExtras.map((extra) => (
                           <li key={extra.id}>
                             {extra.name}
                             {extra.price
-                              ? ` +${extra.price}€`
+                              ? ` +${extra.price}€/mes`
                               : extra.percentage
                               ? ` +${extra.percentage}%`
                               : ""}
@@ -450,21 +429,9 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                       </ul>
                     </div>
                   )}
-
-                  {selectedVehicle && (
-                    <p className="estimated-fee">
-                      Cuota estimada: {finalFee.toFixed(2)} €/mes
-                    </p>
-                  )}
                 </div>
               );
             })}
-
-            <div className="total-fee-box">
-              <strong>
-                Cuota total estimada: {calculateTotalFee().toFixed(2)} €/mes
-              </strong>
-            </div>
 
             {error && <p className="error-message request-error">{error}</p>}
 
