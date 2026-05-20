@@ -5,6 +5,8 @@
   padding: 1.8rem;
   margin-bottom: 1.5rem;
   color: #1A365D;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(26, 54, 93, 0.02);
 }
 
 .generic-card-header {
@@ -25,10 +27,23 @@
 
 .generic-card-content {
   color: #1A365D;
+  width: 100%;
 }
 
 .generic-card-actions {
   display: flex;
   gap: 0.8rem;
   margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* 📱 Ajuste adaptativo de padding */
+@media (max-width: 576px) {
+  .generic-card {
+    padding: 1.2rem;
+    border-radius: 12px;
+  }
+  .generic-card-header h2 {
+    font-size: 1.25rem;
+  }
 }

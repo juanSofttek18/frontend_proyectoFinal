@@ -1,3 +1,4 @@
+/* Sobreescribe tanto FormClient como FormRequest con este comportamiento seguro */
 .Modal_Overlay {
   position: fixed;
   top: 0;
@@ -10,9 +11,10 @@
   align-items: center;
   z-index: 1000;
   backdrop-filter: blur(3px);
+  padding: 15px; /* Margen colchón protector */
 }
 
-.Modal_Client {
+.Modal_Client, .Modal_Request {
   background: #ffffff;
   width: 100%;
   max-width: 500px;
@@ -20,52 +22,32 @@
   padding: 2rem;
   box-shadow: 0 10px 25px rgba(26, 54, 93, 0.15);
   border-top: 4px solid #1A365D;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 85vh; /* Evita salirse de los límites de la pantalla */
+  overflow-y: auto; /* Scroll interno si el formulario es largo */
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .Modal_Header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid #E2E8F0;
   padding-bottom: 1rem;
 }
 
 .Modal_Header h2 {
-  margin: 0 0 0.4rem 0;
+  margin: 0;
   font-size: 1.4rem;
   color: #1A365D;
 }
 
-.Modal_Header p {
-  margin: 0;
-  color: #4A5568;
-  font-size: 0.9rem;
-}
-
-.Modal_Header button {
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #A0AEC0;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.Modal_Header button:hover {
-  color: #dc3545;
-}
-
-.Modal_Client form {
+.Modal_Client form, .Modal_Request form {
   display: flex;
   flex-direction: column;
 }
 
-.Modal_Client label {
+.Modal_Client label, .Modal_Request label {
   font-weight: 600;
   color: #1A365D;
   font-size: 0.9rem;
@@ -73,8 +55,8 @@
   margin-bottom: 0.4rem;
 }
 
-.Modal_Client input,
-.Modal_Client select {
+.Modal_Client input, .Modal_Client select,
+.Modal_Request input, .Modal_Request select {
   padding: 10px 14px;
   border: 1px solid #E2E8F0;
   border-radius: 8px;
@@ -83,12 +65,23 @@
   outline: none;
   transition: border-color 0.2s ease;
   background-color: #F7FAFA;
+  width: 100%;
 }
 
-.Modal_Client input:focus,
-.Modal_Client select:focus {
-  border-color: #1A365D;
-  background-color: #ffffff;
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: #F7FAFA;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .FormError {
@@ -110,18 +103,11 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
-  transition: 0.2s;
 }
 
 .Modal_Actions button[type="button"] {
-  background: #e2e8f0;
+  background: #E2E8F0;
   color: #4A5568;
-}
-
-.Modal_Actions button[type="button"]:hover {
-  background: #cbd5e1;
-  color: #1A365D;
 }
 
 .Modal_Actions button[type="submit"] {
@@ -129,13 +115,15 @@
   color: white;
 }
 
-.Modal_Actions button[type="submit"]:hover {
-  background: #4A5568;
-}
-
-@media (max-width: 600px) {
-  .Modal_Client {
-    width: 90%;
-    padding: 1.5rem;
+@media (max-width: 576px) {
+  .Modal_Client, .Modal_Request {
+    padding: 1.2rem;
+  }
+  .Modal_Actions {
+    flex-direction: column;
+  }
+  .Modal_Actions button {
+    width: 100%;
+    text-align: center;
   }
 }
