@@ -162,3 +162,42 @@
     text-align: center;
   }
 }
+
+.btn-rechazar {
+  background: #9b2c2c;
+  color: white;
+}
+
+.btn-rechazar:hover {
+  background: #742a2a;
+}
+
+.status-pending-analyst {
+  background: #ebf8ff;
+  color: #2a4365;
+  border: 1px solid #bee3f8;
+}
+
+.status-approved {
+  background: #e6fffa;
+  color: #234e52;
+  border: 1px solid #b2f5ea;
+}
+
+.status-denied {
+  background: #fff5f5;
+  color: #9b2c2c;
+  border: 1px solid #fed7d7;
+}
+
+.status-approved-with-warranties {
+  background: #fffaf0;
+  color: #9c4221;
+  border: 1px solid #feebc8;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}

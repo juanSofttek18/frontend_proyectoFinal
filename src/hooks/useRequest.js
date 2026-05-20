@@ -4,24 +4,25 @@ import {
   logicalDeleteRequest,
   resolveRequest,
   createRequest,
-  updateRequest as updateRequestService
 } from "../services/solicitudService";
 
 export function useRequest() {
   const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState("loading");
   const [error, setError] = useState(null);
 
   const fetchRequests = useCallback(async () => {
     try {
-      setLoading(true);
+      setLoading("loading");
       setError(null);
+
       const data = await getPendingRequests();
-      setRequests(Array.isArray(data) ? data : []);
+      setRequests(data);
+      setLoading("success");
     } catch (err) {
+      console.error("Error al cargar solicitudes:", err);
       setError(err.message || "Error al cargar las solicitudes");
-    } finally {
-      setLoading(false);
+      setLoading("error");
     }
   }, []);
 
@@ -30,47 +31,54 @@ export function useRequest() {
   }, [fetchRequests]);
 
   const deleteRequest = useCallback(async (id) => {
+    const confirmacion = window.confirm(
+      `¿Seguro que quieres eliminar la solicitud #${id}?`
+    );
+
+    if (!confirmacion) return;
+
     try {
       await logicalDeleteRequest(id);
-      setRequests((prev) => prev.filter((r) => r.id !== id));
+
+      setRequests((prev) => prev.filter((request) => request.id !== id));
     } catch (err) {
-      alert(`Error al eliminar la solicitud: ${err.message}`);
+      console.error("Error al eliminar solicitud:", err);
+      alert(
+        "No se pudo eliminar la solicitud. Recuerda que el backend no permite borrar solicitudes aprobadas."
+      );
     }
   }, []);
 
   const updateRequestStatus = useCallback(async (id, nuevoEstado) => {
     try {
-      const resolveDTO = { status: nuevoEstado };
-      await resolveRequest(id, resolveDTO);
-      setRequests((prev) => prev.filter((r) => r.id !== id));
+      const dto = {
+        status: nuevoEstado,
+      };
+
+      await resolveRequest(id, dto);
+
+      // Como el listado es de pendientes, al resolverla la quitamos de la tabla
+      setRequests((prev) => prev.filter((request) => request.id !== id));
     } catch (err) {
-      alert(`Error al actualizar el estado: ${err.message}`);
+      console.error("Error al resolver solicitud:", err);
+      alert("No se pudo cambiar el estado de la solicitud.");
       throw err;
     }
   }, []);
 
-  const saveRequest = useCallback(async (dto) => {
-    try {
-      await createRequest(dto);
-      await fetchRequests();
-    } catch (err) {
-      alert(`Error al guardar la solicitud: ${err.message}`);
-      throw err;
-    }
-  }, [fetchRequests]);
-
-  const updateRequest = useCallback(async (id, data) => {
-    try {
-      const updatedData = await updateRequestService(id, data);
-      setRequests((prev) =>
-          prev.map((r) => (r.id === id ? { ...r, ...updatedData } : r))
-      );
-      await fetchRequests();
-    } catch (err) {
-      alert(`Error al modificar la solicitud: ${err.message}`);
-      throw err;
-    }
-  }, [fetchRequests]);
+  const saveRequest = useCallback(
+    async (dto) => {
+      try {
+        await createRequest(dto);
+        await fetchRequests();
+      } catch (err) {
+        console.error("Error al crear solicitud:", err);
+        alert("No se pudo crear la solicitud.");
+        throw err;
+      }
+    },
+    [fetchRequests]
+  );
 
   return {
     requests,
@@ -79,7 +87,6 @@ export function useRequest() {
     deleteRequest,
     updateRequestStatus,
     saveRequest,
-    updateRequest,
-    refetchRequests: fetchRequests
+    refetchRequests: fetchRequests,
   };
 }
