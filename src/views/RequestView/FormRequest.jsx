@@ -4,6 +4,7 @@ import {
   getClientes,
   getVehiculos,
   getExtras,
+  calculateVehiclePrice,
 } from "../../services/solicitudService";
 
 export default function FormRequest({ open, close, saveRequest, onFormSubmit }) {
@@ -25,6 +26,12 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
   const [loadingData, setLoadingData] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [priceResults, setPriceResults] = useState([]);
+
+  const formatCurrency = (val) => {
+    const num = Number(val);
+    return isNaN(num) ? "0.00" : num.toFixed(2);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -56,6 +63,51 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     loadData();
   }, [open]);
 
+  useEffect(() => {
+    let active = true;
+
+    async function updateCalculations() {
+      if (!formData.vehicles || formData.vehicles.length === 0) {
+        setPriceResults([]);
+        return;
+      }
+
+      try {
+        const promises = formData.vehicles.map(async (line) => {
+          if (!line.vehicleId || !formData.periodInMonths) {
+            return null;
+          }
+
+          try {
+            const data = await calculateVehiclePrice({
+              vehicleId: Number(line.vehicleId),
+              extraIds: (line.extraIds || []).map(Number),
+              months: Number(formData.periodInMonths),
+            });
+            return data;
+          } catch (err) {
+            console.error("Error calculating vehicle price:", err);
+            return null;
+          }
+        });
+
+        const results = await Promise.all(promises);
+
+        if (active) {
+          setPriceResults(results);
+        }
+      } catch (err) {
+        console.error("Error calculating vehicle prices:", err);
+      }
+    }
+
+    updateCalculations();
+
+    return () => {
+      active = false;
+    };
+  }, [formData.vehicles, formData.periodInMonths]);
+
   const resetForm = () => {
     setFormData({
       customerId: "",
@@ -70,6 +122,7 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
 
     setError(null);
     setSaving(false);
+    setPriceResults([]);
   };
 
   const handleCustomerChange = (event) => {
@@ -429,9 +482,63 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                       </ul>
                     </div>
                   )}
+
+                  {selectedVehicle && priceResults[index] && (
+                    <div className="vehicle-price-breakdown">
+                      <h4>Desglose de Precios</h4>
+                      <div className="price-row">
+                        <span>Cuota Base:</span>
+                        <span>{formatCurrency(selectedVehicle.baseMonthlyFee)} €/mes</span>
+                      </div>
+                      <div className="price-row">
+                        <span>Extras Fijos:</span>
+                        <span>+{formatCurrency(priceResults[index].extraFixedIncrement)} €/mes</span>
+                      </div>
+                      <div className="price-row">
+                        <span>Extras Porcentuales:</span>
+                        <span>+{formatCurrency(priceResults[index].extraPercentageIncrement)} €/mes</span>
+                      </div>
+                      <div className="price-row">
+                        <span>Ajuste por Plazo ({formData.periodInMonths} meses):</span>
+                        <span className={Number(priceResults[index].termAdjustment) < 0 ? "discount" : Number(priceResults[index].termAdjustment) > 0 ? "penalty" : ""}>
+                          {Number(priceResults[index].termAdjustment) >= 0 ? "+" : ""}{formatCurrency(priceResults[index].termAdjustment)} €/mes
+                        </span>
+                      </div>
+                      <div className="price-row highlight">
+                        <span>Inversión Final:</span>
+                        <span>{formatCurrency(priceResults[index].finalInvestment)} €</span>
+                      </div>
+                      <div className="price-row highlight">
+                        <span>Cuota Final:</span>
+                        <span>{formatCurrency(priceResults[index].finalMonthlyFee)} €/mes</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
+
+            {priceResults.length > 0 && priceResults.some(res => res) && (
+              <div className="request-totals-summary">
+                <h3>Resumen Total de la Solicitud</h3>
+                <div className="total-row">
+                  <span>Inversión Total:</span>
+                  <span className="total-val">
+                    {formatCurrency(
+                      priceResults.reduce((acc, curr) => acc + (curr ? Number(curr.finalInvestment) : 0), 0)
+                    )} €
+                  </span>
+                </div>
+                <div className="total-row">
+                  <span>Cuota Total Mensual:</span>
+                  <span className="total-val">
+                    {formatCurrency(
+                      priceResults.reduce((acc, curr) => acc + (curr ? Number(curr.finalMonthlyFee) : 0), 0)
+                    )} €/mes
+                  </span>
+                </div>
+              </div>
+            )}
 
             {error && <p className="error-message request-error">{error}</p>}
 
