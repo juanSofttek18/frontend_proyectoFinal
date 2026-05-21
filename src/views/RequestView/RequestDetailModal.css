@@ -1,0 +1,272 @@
+.request-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(26, 54, 93, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  backdrop-filter: blur(3px);
+  padding: 15px;
+}
+
+.request-detail-modal {
+  background: #ffffff;
+  width: 100%;
+  max-width: 850px;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(26, 54, 93, 0.18);
+  border-top: 4px solid #1A365D;
+  max-height: 88vh;
+  overflow-y: auto;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.request-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.request-detail-header h2 {
+  margin: 0;
+  color: #1A365D;
+  font-size: 1.5rem;
+}
+
+.request-detail-header p {
+  margin: 0.4rem 0 0;
+  color: #4A5568;
+  font-size: 0.95rem;
+}
+
+.request-detail-close {
+  background: #E2E8F0;
+  color: #1A365D;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.request-detail-close:hover {
+  background: #cbd5e1;
+}
+
+.request-detail-section {
+  margin-bottom: 1.5rem;
+}
+
+.request-detail-section h3 {
+  margin: 0 0 1rem;
+  color: #1A365D;
+  font-size: 1.15rem;
+}
+
+.request-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.8rem;
+}
+
+.request-detail-field {
+  background: #F7FAFA;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.request-detail-field span {
+  color: #4A5568;
+  font-size: 0.82rem;
+}
+
+.request-detail-field strong {
+  color: #1A365D;
+  font-size: 0.95rem;
+}
+
+.request-detail-vehicles {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.request-detail-vehicle-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(26, 54, 93, 0.05);
+}
+
+.request-detail-vehicle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.request-detail-vehicle-header h4 {
+  margin: 0;
+  color: #1A365D;
+  font-size: 1.05rem;
+}
+
+.request-detail-vehicle-header p {
+  margin: 0.35rem 0 0;
+  color: #4A5568;
+  font-size: 0.9rem;
+}
+
+.request-detail-vehicle-id {
+  background: #EBF8FF;
+  color: #2A4365;
+  border: 1px solid #BEE3F8;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.request-detail-extras {
+  margin-top: 1rem;
+  background: #F7FAFA;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.request-detail-extras h5 {
+  margin: 0 0 0.8rem;
+  color: #1A365D;
+  font-size: 1rem;
+}
+
+.request-detail-extras ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.request-detail-extras li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.request-detail-extras li:last-child {
+  margin-bottom: 0;
+}
+
+.request-detail-extras li strong {
+  display: block;
+  color: #1A365D;
+  font-size: 0.95rem;
+}
+
+.request-detail-extras li span {
+  display: block;
+  color: #4A5568;
+  font-size: 0.82rem;
+  margin-top: 0.25rem;
+}
+
+.request-detail-extra-price {
+  color: #1A365D;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.request-detail-empty {
+  margin: 0;
+  color: #4A5568;
+  background: #F7FAFA;
+  border: 1px dashed #CBD5E1;
+  border-radius: 8px;
+  padding: 0.9rem;
+}
+
+.request-detail-loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.request-detail-error {
+  color: #9B2C2C;
+  background: #FFF5F5;
+  border: 1px solid #FED7D7;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.request-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 1rem;
+  margin-top: 1.5rem;
+}
+
+.request-detail-actions button {
+  background: #1A365D;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.request-detail-actions button:hover {
+  background: #4A5568;
+}
+
+@media (max-width: 576px) {
+  .request-detail-modal {
+    padding: 1.2rem;
+  }
+
+  .request-detail-header {
+    flex-direction: column;
+  }
+
+  .request-detail-close {
+    width: 100%;
+  }
+
+  .request-detail-vehicle-header {
+    flex-direction: column;
+  }
+
+  .request-detail-extras li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .request-detail-actions button {
+    width: 100%;
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRequest } from "../../hooks/useRequest";
 import FormRequest from "./FormRequest";
+import RequestDetailModal from "./RequestDetailModal";
 import Pagination from "../../components/Pagination";
 import "./ListRequest.css";
 
@@ -16,6 +17,8 @@ export default function ListRequest() {
   } = useRequest();
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [mostrarDetalle, setMostrarDetalle] = useState(false);
+  const [requestIdDetalle, setRequestIdDetalle] = useState(null);
   const [filtroActivo, setFiltroActivo] = useState("TODAS");
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -26,7 +29,7 @@ export default function ListRequest() {
 
   const handleResolve = async (id, status) => {
     const confirmacion = window.confirm(
-        `¿Seguro que quieres cambiar la solicitud #${id} a ${status}?`
+      `¿Seguro que quieres cambiar la solicitud #${id} a ${status}?`,
     );
 
     if (!confirmacion) return;
@@ -38,6 +41,16 @@ export default function ListRequest() {
     if (!status) return "pending";
     return status.toLowerCase().replaceAll("_", "-");
   };
+
+    const handleOpenDetail = (id) => {
+      setRequestIdDetalle(id);
+      setMostrarDetalle(true);
+    };
+
+    const handleCloseDetail = () => {
+      setMostrarDetalle(false);
+      setRequestIdDetalle(null);
+    };
 
   const getEstadoTexto = (status) => {
     switch (status) {
@@ -61,88 +74,104 @@ export default function ListRequest() {
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(solicitudesFiltradas.length / itemsPerPage);
-  const activePage = currentPage >= totalPages ? Math.max(0, totalPages - 1) : currentPage;
+  const activePage =
+    currentPage >= totalPages ? Math.max(0, totalPages - 1) : currentPage;
   const solicitudesPaginadas = solicitudesFiltradas.slice(
     activePage * itemsPerPage,
-    (activePage + 1) * itemsPerPage
+    (activePage + 1) * itemsPerPage,
   );
 
   const renderContent = () => {
     if (loading === "loading") {
       return (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-          </div>
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+        </div>
       );
     }
 
     if (loading === "error") {
       return (
-          <div className="error-message">
-            {error || "Error al cargar las solicitudes"}
-          </div>
+        <div className="error-message">
+          {error || "Error al cargar las solicitudes"}
+        </div>
       );
     }
 
     if (!requests || requests.length === 0) {
       return (
-          <div className="empty-message">
-            No hay solicitudes registradas en el sistema.
-          </div>
+        <div className="empty-message">
+          No hay solicitudes registradas en el sistema.
+        </div>
       );
     }
 
     return (
-        <>
-          <div className="filters-container">
-            <button
-                className={`filter-btn ${filtroActivo === "TODAS" ? "active" : ""}`}
-                onClick={() => { setFiltroActivo("TODAS"); setCurrentPage(0); }}
-            >
-              Todas
-            </button>
-            <button
-                className={`filter-btn ${
-                    filtroActivo === "PENDING_ANALYST" ? "active" : ""
-                }`}
-                onClick={() => { setFiltroActivo("PENDING_ANALYST"); setCurrentPage(0); }}
-            >
-              Pendientes
-            </button>
-            <button
-                className={`filter-btn ${
-                    filtroActivo === "APPROVED" ? "active" : ""
-                }`}
-                onClick={() => { setFiltroActivo("APPROVED"); setCurrentPage(0); }}
-            >
-              Aprobadas
-            </button>
-            <button
-                className={`filter-btn ${
-                    filtroActivo === "DENIED" ? "active" : ""
-                }`}
-                onClick={() => { setFiltroActivo("DENIED"); setCurrentPage(0); }}
-            >
-              Denegadas
-            </button>
-            <button
-                className={`filter-btn ${
-                    filtroActivo === "APPROVED_WITH_WARRANTIES" ? "active" : ""
-                }`}
-                onClick={() => { setFiltroActivo("APPROVED_WITH_WARRANTIES"); setCurrentPage(0); }}
-            >
-              Con Garantías
-            </button>
-          </div>
+      <>
+        <div className="filters-container">
+          <button
+            className={`filter-btn ${filtroActivo === "TODAS" ? "active" : ""}`}
+            onClick={() => {
+              setFiltroActivo("TODAS");
+              setCurrentPage(0);
+            }}
+          >
+            Todas
+          </button>
+          <button
+            className={`filter-btn ${
+              filtroActivo === "PENDING_ANALYST" ? "active" : ""
+            }`}
+            onClick={() => {
+              setFiltroActivo("PENDING_ANALYST");
+              setCurrentPage(0);
+            }}
+          >
+            Pendientes
+          </button>
+          <button
+            className={`filter-btn ${
+              filtroActivo === "APPROVED" ? "active" : ""
+            }`}
+            onClick={() => {
+              setFiltroActivo("APPROVED");
+              setCurrentPage(0);
+            }}
+          >
+            Aprobadas
+          </button>
+          <button
+            className={`filter-btn ${
+              filtroActivo === "DENIED" ? "active" : ""
+            }`}
+            onClick={() => {
+              setFiltroActivo("DENIED");
+              setCurrentPage(0);
+            }}
+          >
+            Denegadas
+          </button>
+          <button
+            className={`filter-btn ${
+              filtroActivo === "APPROVED_WITH_WARRANTIES" ? "active" : ""
+            }`}
+            onClick={() => {
+              setFiltroActivo("APPROVED_WITH_WARRANTIES");
+              setCurrentPage(0);
+            }}
+          >
+            Con Garantías
+          </button>
+        </div>
 
-          {solicitudesFiltradas.length === 0 ? (
-              <div className="empty-message">
-                No hay solicitudes que coincidan con este filtro.
-              </div>
-          ) : (
-            <>
-              <table>
-                <thead>
+        {solicitudesFiltradas.length === 0 ? (
+          <div className="empty-message">
+            No hay solicitudes que coincidan con este filtro.
+          </div>
+        ) : (
+          <>
+            <table>
+              <thead>
                 <tr>
                   <th>ID</th>
                   <th>ID Cliente</th>
@@ -152,108 +181,119 @@ export default function ListRequest() {
                   <th>Fecha resolución</th>
                   <th>Acciones</th>
                 </tr>
-                </thead>
-                <tbody>
+              </thead>
+              <tbody>
                 {solicitudesPaginadas.map((solicitud) => (
-                    <tr key={solicitud.id}>
-                      <td>{solicitud.id}</td>
-                      <td>{solicitud.customerId}</td>
-                      <td>{solicitud.periodInMonths} meses</td>
-                      <td>
-                    <span
+                  <tr key={solicitud.id}  onClick={() => handleOpenDetail(solicitud.id)}>
+                    <td>{solicitud.id}</td>
+                    <td>{solicitud.customerId}</td>
+                    <td>{solicitud.periodInMonths} meses</td>
+                    <td>
+                      <span
                         className={`status-badge status-${getEstadoClase(
-                            solicitud.status
+                          solicitud.status,
                         )}`}
-                    >
-                      {getEstadoTexto(solicitud.status)}
-                    </span>
-                      </td>
-                      <td>
-                        {solicitud.createdAt
-                            ? new Date(solicitud.createdAt).toLocaleString()
-                            : "Sin fecha"}
-                      </td>
-                      <td>
-                        {solicitud.resolutionDate
-                            ? new Date(solicitud.resolutionDate).toLocaleString()
-                            : "Sin resolver"}
-                      </td>
-                      <td>
-                        <div className="actions-cell">
-                          {solicitud.status === "PENDING_ANALYST" && (
-                              <>
-                                <button
-                                    className="action-btn btn-aprobar"
-                                    onClick={() =>
-                                        handleResolve(solicitud.id, "APPROVED")
-                                    }
-                                >
-                                  Aprobar
-                                </button>
-                                <button
-                                    className="action-btn btn-rechazar"
-                                    onClick={() =>
-                                        handleResolve(solicitud.id, "DENIED")
-                                    }
-                                >
-                                  Denegar
-                                </button>
-                                <button
-                                    className="action-btn btn-garantias"
-                                    onClick={() =>
-                                        handleResolve(
-                                            solicitud.id,
-                                            "APPROVED_WITH_WARRANTIES"
-                                        )
-                                    }
-                                >
-                                  Garantías
-                                </button>
-                              </>
-                          )}
-                          {solicitud.status === "DENIED" && (
-                              <button
-                                  className="action-btn btn-eliminar"
-                                  onClick={() => deleteRequest(solicitud.id)}
-                              >
-                                Eliminar
-                              </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
+                      >
+                        {getEstadoTexto(solicitud.status)}
+                      </span>
+                    </td>
+                    <td>
+                      {solicitud.createdAt
+                        ? new Date(solicitud.createdAt).toLocaleString()
+                        : "Sin fecha"}
+                    </td>
+                    <td>
+                      {solicitud.resolutionDate
+                        ? new Date(solicitud.resolutionDate).toLocaleString()
+                        : "Sin resolver"}
+                    </td>
+                    <td>
+                      <div className="actions-cell">
+                        {solicitud.status === "PENDING_ANALYST" && (
+                          <>
+                            <button
+                              className="action-btn btn-aprobar"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleResolve(solicitud.id, "APPROVED")
+                              }}
+                            >
+                              Aprobar
+                            </button>
+                            <button
+                              className="action-btn btn-rechazar"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleResolve(solicitud.id, "DENIED")
+                              }}
+                            >
+                              Denegar
+                            </button>
+                            <button
+                              className="action-btn btn-garantias"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleResolve(
+                                  solicitud.id,
+                                  "APPROVED_WITH_WARRANTIES",
+                                )
+                              }}
+                            >
+                              Garantías
+                            </button>
+                          </>
+                        )}
+                        {solicitud.status === "DENIED" && (
+                          <button
+                            className="action-btn btn-eliminar"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteRequest(solicitud.id)
+                            }}
+                          >
+                            Eliminar
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
                 ))}
-                </tbody>
-              </table>
-              <Pagination
-                currentPage={activePage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            </>
-          )}
-        </>
+              </tbody>
+            </table>
+            <Pagination
+              currentPage={activePage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </>
+        )}
+      </>
     );
   };
 
   return (
-      <div className="list-request-container">
-        <div className="request-header">
-          <div>
-            <h1>Gestión de Solicitudes</h1>
-            <p>Consulta, crea y gestiona todas las solicitudes del sistema</p>
-          </div>
-          <button onClick={() => setMostrarFormulario(true)} className="btn-add">
-            Añadir Solicitud
-          </button>
+    <div className="list-request-container">
+      <div className="request-header">
+        <div>
+          <h1>Gestión de Solicitudes</h1>
+          <p>Consulta, crea y gestiona todas las solicitudes del sistema</p>
         </div>
-        {renderContent()}
-        <FormRequest
-            open={mostrarFormulario}
-            close={() => setMostrarFormulario(false)}
-            saveRequest={saveRequest}
-            onFormSubmit={handleFormSubmit}
-        />
+        <button onClick={() => setMostrarFormulario(true)} className="btn-add">
+          Añadir Solicitud
+        </button>
       </div>
+      {renderContent()}
+      <FormRequest
+        open={mostrarFormulario}
+        close={() => setMostrarFormulario(false)}
+        saveRequest={saveRequest}
+        onFormSubmit={handleFormSubmit}
+      />
+      <RequestDetailModal
+        open={mostrarDetalle}
+        requestId={requestIdDetalle}
+        close={handleCloseDetail}
+      />
+    </div>
   );
 }

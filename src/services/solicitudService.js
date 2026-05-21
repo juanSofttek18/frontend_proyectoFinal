@@ -61,3 +61,7 @@ export const getDashboardStats = async () => {
   const response = await axios.get(`${API_BASE_URL}/dashboard/stats`);
   return response.data;
 };
+export const getRequestDetail = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/requests/${id}/details`);
+  return response.data;
+};
