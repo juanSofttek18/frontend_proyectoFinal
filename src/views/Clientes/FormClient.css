@@ -90,6 +90,34 @@
   font-size: 0.9rem;
 }
 
+/* ── Errores por campo ── */
+.FieldError {
+  color: #d9534f;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Borde rojo cuando un campo tiene error */
+.Modal_Client input.input-error,
+.Modal_Client select.input-error {
+  border-color: #d9534f;
+  background-color: #fff5f5;
+}
+
+/* Asterisco rojo para campos obligatorios */
+.required-mark {
+  color: #d9534f;
+  font-weight: 700;
+}
+
+/* Texto gris para campos opcionales */
+.optional-mark {
+  color: #A0AEC0;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
 .Modal_Actions {
   display: flex;
   justify-content: flex-end;
