@@ -7,7 +7,12 @@ import {
   calculateVehiclePrice,
 } from "../../services/solicitudService";
 
-export default function FormRequest({ open, close, saveRequest, onFormSubmit }) {
+export default function FormRequest({
+  open,
+  close,
+  saveRequest,
+  onFormSubmit,
+}) {
   const [formData, setFormData] = useState({
     customerId: "",
     periodInMonths: 12,
@@ -156,20 +161,49 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
     });
   };
 
-  const handleExtraChange = (vehicleIndex, extraId) => {
+  const handleExtraChange = (vehicleIndex, extra) => {
     setFormData((prev) => {
       const updatedVehicles = [...prev.vehicles];
       const currentVehicle = updatedVehicles[vehicleIndex];
 
       const currentExtraIds = currentVehicle.extraIds || [];
 
-      const alreadySelected = currentExtraIds.some(
-        (id) => String(id) === String(extraId)
+      const extrasSameCategory = extras
+        .filter((item) => item.category === extra.category)
+        .map((item) => item.id);
+
+      const extraIdsWithoutSameCategory = currentExtraIds.filter(
+        (id) =>
+          !extrasSameCategory.some((extraId) => String(extraId) === String(id)),
       );
 
-      const updatedExtraIds = alreadySelected
-        ? currentExtraIds.filter((id) => String(id) !== String(extraId))
-        : [...currentExtraIds, extraId];
+      updatedVehicles[vehicleIndex] = {
+        ...currentVehicle,
+        extraIds: [...extraIdsWithoutSameCategory, extra.id],
+      };
+
+      return {
+        ...prev,
+        vehicles: updatedVehicles,
+      };
+    });
+  };
+
+  const handleNoExtraForCategory = (vehicleIndex, category) => {
+    setFormData((prev) => {
+      const updatedVehicles = [...prev.vehicles];
+      const currentVehicle = updatedVehicles[vehicleIndex];
+
+      const currentExtraIds = currentVehicle.extraIds || [];
+
+      const extrasSameCategory = extras
+        .filter((item) => item.category === category)
+        .map((item) => item.id);
+
+      const updatedExtraIds = currentExtraIds.filter(
+        (id) =>
+          !extrasSameCategory.some((extraId) => String(extraId) === String(id)),
+      );
 
       updatedVehicles[vehicleIndex] = {
         ...currentVehicle,
@@ -205,14 +239,62 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
 
   const getSelectedVehicle = (vehicleId) => {
     return vehiculos.find(
-      (vehicle) => String(vehicle.id) === String(vehicleId)
+      (vehicle) => String(vehicle.id) === String(vehicleId),
     );
   };
 
   const getSelectedExtras = (extraIds) => {
     return extras.filter((extra) =>
-      extraIds.some((id) => String(id) === String(extra.id))
+      extraIds.some((id) => String(id) === String(extra.id)),
     );
+  };
+
+  const getExtrasGroupedByCategory = () => {
+    return extras.reduce((groups, extra) => {
+      const category = extra.category || "OTROS";
+
+      if (!groups[category]) {
+        groups[category] = [];
+      }
+
+      groups[category].push(extra);
+
+      return groups;
+    }, {});
+  };
+
+  const isExtraSelected = (line, extraId) => {
+    return (line.extraIds || []).some((id) => String(id) === String(extraId));
+  };
+
+  const hasSelectedExtraInCategory = (line, category) => {
+    return extras.some(
+      (extra) =>
+        extra.category === category &&
+        (line.extraIds || []).some((id) => String(id) === String(extra.id)),
+    );
+  };
+
+  const getCategoryText = (category) => {
+    if (category === "WHEELS") return "Ruedas";
+    if (category === "COLOR") return "Color";
+    if (category === "TAPESTRY") return "Tapicería";
+    if (category === "RADIO") return "Radio";
+    if (category === "LIGHTS") return "Luces";
+
+    return category || "Otros";
+  };
+
+  const getExtraPriceText = (extra) => {
+    if (extra.price) {
+      return `+${extra.price}€/mes`;
+    }
+
+    if (extra.percentage) {
+      return `+${extra.percentage}%`;
+    }
+
+    return "";
   };
 
   const validateForm = () => {
@@ -400,8 +482,8 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
 
                     {vehiculos.map((vehicle) => (
                       <option key={vehicle.id} value={vehicle.id}>
-                        {vehicle.licensePlate} - {vehicle.brand}{" "}
-                        {vehicle.model} - {vehicle.price} €
+                        {vehicle.licensePlate} - {vehicle.brand} {vehicle.model}{" "}
+                        - {vehicle.price} €
                       </option>
                     ))}
                   </select>
@@ -431,36 +513,49 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                       No hay extras disponibles.
                     </p>
                   ) : (
-                    <div className="extras-checkbox-list">
-                      {extras.map((extra) => {
-                        const checked = (line.extraIds || []).some(
-                          (id) => String(id) === String(extra.id)
-                        );
+                    <div className="extras-category-list">
+                      {Object.entries(getExtrasGroupedByCategory()).map(
+                        ([category, categoryExtras]) => (
+                          <div key={category} className="extra-category-box">
+                            <h4>{getCategoryText(category)}</h4>
 
-                        return (
-                          <label
-                            key={extra.id}
-                            className="extra-checkbox-item"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() =>
-                                handleExtraChange(index, extra.id)
-                              }
-                            />
+                            <div className="extra-options-row">
+                              <button
+                                type="button"
+                                className={
+                                  hasSelectedExtraInCategory(line, category)
+                                    ? "extra-option-btn"
+                                    : "extra-option-btn selected"
+                                }
+                                onClick={() =>
+                                  handleNoExtraForCategory(index, category)
+                                }
+                              >
+                                Sin extra
+                              </button>
 
-                            <span>
-                              {extra.name}
-                              {extra.price
-                                ? ` +${extra.price}€/mes`
-                                : extra.percentage
-                                ? ` +${extra.percentage}%`
-                                : ""}
-                            </span>
-                          </label>
-                        );
-                      })}
+                              {categoryExtras.map((extra) => (
+                                <button
+                                  type="button"
+                                  key={extra.id}
+                                  className={
+                                    isExtraSelected(line, extra.id)
+                                      ? "extra-option-btn selected"
+                                      : "extra-option-btn"
+                                  }
+                                  onClick={() =>
+                                    handleExtraChange(index, extra)
+                                  }
+                                >
+                                  <span>{extra.name}</span>
+
+                                  <small>{getExtraPriceText(extra)}</small>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ),
+                      )}
                     </div>
                   )}
 
@@ -471,12 +566,8 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                       <ul>
                         {selectedExtras.map((extra) => (
                           <li key={extra.id}>
-                            {extra.name}
-                            {extra.price
-                              ? ` +${extra.price}€/mes`
-                              : extra.percentage
-                              ? ` +${extra.percentage}%`
-                              : ""}
+                            {getCategoryText(extra.category)}: {extra.name}{" "}
+                            {getExtraPriceText(extra)}
                           </li>
                         ))}
                       </ul>
@@ -488,29 +579,63 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
                       <h4>Desglose de Precios</h4>
                       <div className="price-row">
                         <span>Cuota Base:</span>
-                        <span>{formatCurrency(selectedVehicle.baseMonthlyFee)} €/mes</span>
+                        <span>
+                          {formatCurrency(selectedVehicle.baseMonthlyFee)} €/mes
+                        </span>
                       </div>
                       <div className="price-row">
                         <span>Extras Fijos:</span>
-                        <span>+{formatCurrency(priceResults[index].extraFixedIncrement)} €/mes</span>
+                        <span>
+                          +
+                          {formatCurrency(
+                            priceResults[index].extraFixedIncrement,
+                          )}{" "}
+                          €/mes
+                        </span>
                       </div>
                       <div className="price-row">
                         <span>Extras Porcentuales:</span>
-                        <span>+{formatCurrency(priceResults[index].extraPercentageIncrement)} €/mes</span>
+                        <span>
+                          +
+                          {formatCurrency(
+                            priceResults[index].extraPercentageIncrement,
+                          )}{" "}
+                          €/mes
+                        </span>
                       </div>
                       <div className="price-row">
-                        <span>Ajuste por Plazo ({formData.periodInMonths} meses):</span>
-                        <span className={Number(priceResults[index].termAdjustment) < 0 ? "discount" : Number(priceResults[index].termAdjustment) > 0 ? "penalty" : ""}>
-                          {Number(priceResults[index].termAdjustment) >= 0 ? "+" : ""}{formatCurrency(priceResults[index].termAdjustment)} €/mes
+                        <span>
+                          Ajuste por Plazo ({formData.periodInMonths} meses):
+                        </span>
+                        <span
+                          className={
+                            Number(priceResults[index].termAdjustment) < 0
+                              ? "discount"
+                              : Number(priceResults[index].termAdjustment) > 0
+                                ? "penalty"
+                                : ""
+                          }
+                        >
+                          {Number(priceResults[index].termAdjustment) >= 0
+                            ? "+"
+                            : ""}
+                          {formatCurrency(priceResults[index].termAdjustment)}{" "}
+                          €/mes
                         </span>
                       </div>
                       <div className="price-row highlight">
                         <span>Inversión Final:</span>
-                        <span>{formatCurrency(priceResults[index].finalInvestment)} €</span>
+                        <span>
+                          {formatCurrency(priceResults[index].finalInvestment)}{" "}
+                          €
+                        </span>
                       </div>
                       <div className="price-row highlight">
                         <span>Cuota Final:</span>
-                        <span>{formatCurrency(priceResults[index].finalMonthlyFee)} €/mes</span>
+                        <span>
+                          {formatCurrency(priceResults[index].finalMonthlyFee)}{" "}
+                          €/mes
+                        </span>
                       </div>
                     </div>
                   )}
@@ -518,23 +643,33 @@ export default function FormRequest({ open, close, saveRequest, onFormSubmit }) 
               );
             })}
 
-            {priceResults.length > 0 && priceResults.some(res => res) && (
+            {priceResults.length > 0 && priceResults.some((res) => res) && (
               <div className="request-totals-summary">
                 <h3>Resumen Total de la Solicitud</h3>
                 <div className="total-row">
                   <span>Inversión Total:</span>
                   <span className="total-val">
                     {formatCurrency(
-                      priceResults.reduce((acc, curr) => acc + (curr ? Number(curr.finalInvestment) : 0), 0)
-                    )} €
+                      priceResults.reduce(
+                        (acc, curr) =>
+                          acc + (curr ? Number(curr.finalInvestment) : 0),
+                        0,
+                      ),
+                    )}{" "}
+                    €
                   </span>
                 </div>
                 <div className="total-row">
                   <span>Cuota Total Mensual:</span>
                   <span className="total-val">
                     {formatCurrency(
-                      priceResults.reduce((acc, curr) => acc + (curr ? Number(curr.finalMonthlyFee) : 0), 0)
-                    )} €/mes
+                      priceResults.reduce(
+                        (acc, curr) =>
+                          acc + (curr ? Number(curr.finalMonthlyFee) : 0),
+                        0,
+                      ),
+                    )}{" "}
+                    €/mes
                   </span>
                 </div>
               </div>
