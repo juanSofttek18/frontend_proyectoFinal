@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useRequest } from "../../hooks/useRequest";
+import { getRequestDetail } from "../../services/solicitudService";
 import FormRequest from "./FormRequest";
+import ModalRequestDetail from "./ModalRequestDetail";
 import "./ListRequest.css";
 
 export default function ListRequest() {
@@ -16,9 +18,46 @@ export default function ListRequest() {
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
+  const [mostrarDetalle, setMostrarDetalle] = useState(false);
+  const [detalleSolicitud, setDetalleSolicitud] = useState(null);
+  const [loadingDetalle, setLoadingDetalle] = useState(false);
+  const [errorDetalle, setErrorDetalle] = useState("");
+
   const handleFormSubmit = async () => {
     setMostrarFormulario(false);
     await refetchRequests();
+  };
+
+  const handleOpenDetail = async (id) => {
+    try {
+      setMostrarDetalle(true);
+      setLoadingDetalle(true);
+      setErrorDetalle("");
+      setDetalleSolicitud(null);
+
+      const detail = await getRequestDetail(id);
+
+      setDetalleSolicitud(detail);
+    } catch (err) {
+      console.error("Error cargando detalle de solicitud:", err);
+
+      const message =
+        typeof err.response?.data === "string"
+          ? err.response.data
+          : err.response?.data?.message ||
+            err.response?.data?.error ||
+            "No se pudo cargar el detalle de la solicitud.";
+
+      setErrorDetalle(message);
+    } finally {
+      setLoadingDetalle(false);
+    }
+  };
+
+  const handleCloseDetail = () => {
+    setMostrarDetalle(false);
+    setDetalleSolicitud(null);
+    setErrorDetalle("");
   };
 
   const handleResolve = async (id, status) => {
@@ -93,7 +132,12 @@ export default function ListRequest() {
 
         <tbody>
           {requests.map((solicitud) => (
-            <tr key={solicitud.id}>
+            <tr
+              key={solicitud.id}
+              onClick={() => {
+                alert("Para ver el detalle de la solicitud, haz clic en el número de ID o en el botón 'Ver Detalle'.")
+                handleOpenDetail(solicitud.id)}}
+            >
               <td>{solicitud.id}</td>
 
               <td>{solicitud.customerId}</td>
@@ -126,30 +170,40 @@ export default function ListRequest() {
                 <div className="actions-cell">
                   <button
                     className="action-btn btn-aprobar"
-                    onClick={() => handleResolve(solicitud.id, "APPROVED")}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleResolve(solicitud.id, "APPROVED");
+                    }}
                   >
                     Aprobar
                   </button>
 
                   <button
                     className="action-btn btn-rechazar"
-                    onClick={() => handleResolve(solicitud.id, "DENIED")}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleResolve(solicitud.id, "DENIED");
+                    }}
                   >
                     Denegar
                   </button>
 
                   <button
                     className="action-btn btn-garantias"
-                    onClick={() =>
-                      handleResolve(solicitud.id, "APPROVED_WITH_WARRANTIES")
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleResolve(solicitud.id, "APPROVED_WITH_WARRANTIES");
+                    }}
                   >
                     Garantías
                   </button>
 
                   <button
                     className="action-btn btn-eliminar"
-                    onClick={() => deleteRequest(solicitud.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteRequest(solicitud.id);
+                    }}
                   >
                     Eliminar
                   </button>
@@ -182,6 +236,14 @@ export default function ListRequest() {
         close={() => setMostrarFormulario(false)}
         saveRequest={saveRequest}
         onFormSubmit={handleFormSubmit}
+      />
+
+      <ModalRequestDetail
+        open={mostrarDetalle}
+        close={handleCloseDetail}
+        detail={detalleSolicitud}
+        loading={loadingDetalle}
+        error={errorDetalle}
       />
     </div>
   );

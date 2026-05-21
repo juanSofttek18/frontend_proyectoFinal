@@ -32,6 +32,11 @@ export const getPendingRequests = async () => {
   return Array.isArray(response.data) ? response.data : [];
 };
 
+export const getRequestDetail = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/requests/${id}/detail`);
+  return response.data;
+};
+
 export const createRequest = async (solicitudDTO) => {
   const response = await axios.post(`${API_BASE_URL}/requests`, solicitudDTO);
   return response.data;
