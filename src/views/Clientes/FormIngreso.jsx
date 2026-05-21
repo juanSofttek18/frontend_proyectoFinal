@@ -14,24 +14,33 @@ function FormIngreso({ open, close, client, saveIncome }) {
     }
   }, [open, client]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!preTaxes || Number(preTaxes) <= 0 || !postTaxes || Number(postTaxes) <= 0 ) {
-      setFormError("Ingresa valores válidos para pre_taxes y post_taxes.");
-      return;
-    }
+  if (
+    !preTaxes ||
+    Number(preTaxes) <= 0 ||
+    !postTaxes ||
+    Number(postTaxes) <= 0
+  ) {
+    setFormError("Ingresa valores válidos para ingresos brutos y netos.");
+    return;
+  }
 
-    setFormError("");
+  setFormError("");
 
-    saveIncome(client.id, {
-      pre_taxes: Number(preTaxes),
-      post_taxes: Number(postTaxes),
-      created_at: new Date().toISOString(),
+  try {
+    await saveIncome(client.id, {
+      preTaxes: Number(preTaxes),
+      postTaxes: Number(postTaxes),
     });
 
     close();
-  };
+  } catch (err) {
+    console.error("Error al guardar ingreso:", err);
+    setFormError("No se pudo guardar el ingreso.");
+  }
+};
 
   if (!open || !client) return null;
 

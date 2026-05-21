@@ -94,34 +94,14 @@ export function useClient() {
     }
   };
 
-  const saveClientIncome = async (clientId, income) => {
-    try {
-      setError(null);
-      const cleanedIncome = cleanData(income);
-      const response = await addCustomerIncome(clientId, cleanedIncome);
-
-      setClients((prev) =>
-        prev.map((client) => {
-          if (client.id !== clientId) return client;
-
-          
-          if (response && response.id && response.ingresos) {
-            return response;
-          }
-
-
-          const currentIncomes = client.ingresos || client.incomes || [];
-          return {
-            ...client,
-            ingresos: [...currentIncomes, response],
-          };
-        })
-      );
-    } catch (err) {
-      console.error("Error al añadir ingresos:", err);
-      setError(err);
-    }
-  };
+const saveClientIncome = async (clientId, income) => {
+  try {
+    await addCustomerIncome(clientId, income);
+  } catch (err) {
+    console.error("Error al añadir ingresos:", err);
+    throw err;
+  }
+};
 
   const deleteClient = async (id) => {
     try {
