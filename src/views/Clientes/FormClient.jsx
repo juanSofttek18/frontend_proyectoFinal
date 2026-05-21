@@ -1,140 +1,8 @@
 import { useState, useEffect } from "react";
+import { COUNTRIES } from "../../utils/countries";
+import { validateField } from "../../utils/clientValidation";
 import "./FormClient.css";
 
-// ─── Países ISO 3166-1 alfa-2 (lista reducida pero representativa) ───────────
-const COUNTRIES = [
-  { code: "AF", name: "Afganistán" },
-  { code: "AL", name: "Albania" },
-  { code: "DE", name: "Alemania" },
-  { code: "AD", name: "Andorra" },
-  { code: "AO", name: "Angola" },
-  { code: "SA", name: "Arabia Saudita" },
-  { code: "DZ", name: "Argelia" },
-  { code: "AR", name: "Argentina" },
-  { code: "AM", name: "Armenia" },
-  { code: "AU", name: "Australia" },
-  { code: "AT", name: "Austria" },
-  { code: "AZ", name: "Azerbaiyán" },
-  { code: "BS", name: "Bahamas" },
-  { code: "BD", name: "Bangladés" },
-  { code: "BE", name: "Bélgica" },
-  { code: "BZ", name: "Belice" },
-  { code: "BO", name: "Bolivia" },
-  { code: "BA", name: "Bosnia y Herzegovina" },
-  { code: "BR", name: "Brasil" },
-  { code: "BG", name: "Bulgaria" },
-  { code: "CA", name: "Canadá" },
-  { code: "CL", name: "Chile" },
-  { code: "CN", name: "China" },
-  { code: "CO", name: "Colombia" },
-  { code: "KR", name: "Corea del Sur" },
-  { code: "CR", name: "Costa Rica" },
-  { code: "HR", name: "Croacia" },
-  { code: "CU", name: "Cuba" },
-  { code: "DK", name: "Dinamarca" },
-  { code: "EC", name: "Ecuador" },
-  { code: "EG", name: "Egipto" },
-  { code: "SV", name: "El Salvador" },
-  { code: "AE", name: "Emiratos Árabes Unidos" },
-  { code: "SK", name: "Eslovaquia" },
-  { code: "SI", name: "Eslovenia" },
-  { code: "ES", name: "España" },
-  { code: "US", name: "Estados Unidos" },
-  { code: "EE", name: "Estonia" },
-  { code: "ET", name: "Etiopía" },
-  { code: "PH", name: "Filipinas" },
-  { code: "FI", name: "Finlandia" },
-  { code: "FR", name: "Francia" },
-  { code: "GE", name: "Georgia" },
-  { code: "GH", name: "Ghana" },
-  { code: "GR", name: "Grecia" },
-  { code: "GT", name: "Guatemala" },
-  { code: "HN", name: "Honduras" },
-  { code: "HU", name: "Hungría" },
-  { code: "IN", name: "India" },
-  { code: "ID", name: "Indonesia" },
-  { code: "IQ", name: "Irak" },
-  { code: "IR", name: "Irán" },
-  { code: "IE", name: "Irlanda" },
-  { code: "IS", name: "Islandia" },
-  { code: "IL", name: "Israel" },
-  { code: "IT", name: "Italia" },
-  { code: "JM", name: "Jamaica" },
-  { code: "JP", name: "Japón" },
-  { code: "JO", name: "Jordania" },
-  { code: "KZ", name: "Kazajistán" },
-  { code: "KE", name: "Kenia" },
-  { code: "KW", name: "Kuwait" },
-  { code: "LV", name: "Letonia" },
-  { code: "LB", name: "Líbano" },
-  { code: "LY", name: "Libia" },
-  { code: "LT", name: "Lituania" },
-  { code: "LU", name: "Luxemburgo" },
-  { code: "MK", name: "Macedonia del Norte" },
-  { code: "MY", name: "Malasia" },
-  { code: "MA", name: "Marruecos" },
-  { code: "MX", name: "México" },
-  { code: "MD", name: "Moldavia" },
-  { code: "MN", name: "Mongolia" },
-  { code: "ME", name: "Montenegro" },
-  { code: "MZ", name: "Mozambique" },
-  { code: "NA", name: "Namibia" },
-  { code: "NP", name: "Nepal" },
-  { code: "NI", name: "Nicaragua" },
-  { code: "NG", name: "Nigeria" },
-  { code: "NO", name: "Noruega" },
-  { code: "NZ", name: "Nueva Zelanda" },
-  { code: "NL", name: "Países Bajos" },
-  { code: "PK", name: "Pakistán" },
-  { code: "PA", name: "Panamá" },
-  { code: "PY", name: "Paraguay" },
-  { code: "PE", name: "Perú" },
-  { code: "PL", name: "Polonia" },
-  { code: "PT", name: "Portugal" },
-  { code: "QA", name: "Qatar" },
-  { code: "GB", name: "Reino Unido" },
-  { code: "CZ", name: "República Checa" },
-  { code: "DO", name: "República Dominicana" },
-  { code: "RO", name: "Rumanía" },
-  { code: "RU", name: "Rusia" },
-  { code: "RS", name: "Serbia" },
-  { code: "SG", name: "Singapur" },
-  { code: "SY", name: "Siria" },
-  { code: "SO", name: "Somalia" },
-  { code: "LK", name: "Sri Lanka" },
-  { code: "SE", name: "Suecia" },
-  { code: "CH", name: "Suiza" },
-  { code: "TH", name: "Tailandia" },
-  { code: "TZ", name: "Tanzania" },
-  { code: "TN", name: "Túnez" },
-  { code: "TR", name: "Turquía" },
-  { code: "UA", name: "Ucrania" },
-  { code: "UG", name: "Uganda" },
-  { code: "UY", name: "Uruguay" },
-  { code: "VE", name: "Venezuela" },
-  { code: "VN", name: "Vietnam" },
-  { code: "YE", name: "Yemen" },
-  { code: "ZA", name: "Sudáfrica" },
-  { code: "ZW", name: "Zimbabue" },
-];
-
-// Valida NIF (12345678Z) o NIE (X1234567L / Y / Z) — solo estructura, sin algoritmo módulo 23
-function validateNifNie(value) {
-  const upper = value.toUpperCase().trim();
-  // NIF: 8 dígitos + 1 letra
-  const nifRegex = /^\d{8}[A-Z]$/;
-  // NIE: X/Y/Z + 7 dígitos + 1 letra
-  const nieRegex = /^[XYZ]\d{7}[A-Z]$/;
-  return nifRegex.test(upper) || nieRegex.test(upper);
-}
-
-// Regex para nombre/apellido: letras latinas (incluye Ñ, Ç, tildes, diéresis), espacios y guiones
-const NAME_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿÑñÇç][A-Za-zÀ-ÖØ-öø-ÿÑñÇç\s\-]*$/;
-
-// Regex teléfono: + opcional al inicio, solo dígitos, 7-15 caracteres totales
-const PHONE_REGEX = /^\+?\d{7,15}$/;
-
-// ─── Componente ──────────────────────────────────────────────────────────────
 function FormClient({ open, close, saveClient, clientEdit }) {
 
   const [id, setId] = useState(null);
@@ -151,7 +19,7 @@ function FormClient({ open, close, saveClient, clientEdit }) {
   const [nonPayment, setNonPayment] = useState(false);
   const [isActive, setIsActive] = useState(true);
 
-  // Errores por campo
+  
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -195,80 +63,6 @@ function FormClient({ open, close, saveClient, clientEdit }) {
     setErrors({});
   }, [clientEdit, open]);
 
-  // ── Validación campo a campo ────────────────────────────────────────────────
-  function validateField(field, value) {
-    switch (field) {
-      case "name":
-        if (!value.trim()) return "El nombre es obligatorio.";
-        if (!NAME_REGEX.test(value.trim()))
-          return "Solo se permiten letras, espacios y guiones. Sin números ni caracteres especiales.";
-        if (value.trim().length > 60)
-          return "El nombre no puede superar los 60 caracteres.";
-        return "";
-
-      case "firstSurname":
-        if (!value.trim()) return "El primer apellido es obligatorio.";
-        if (!NAME_REGEX.test(value.trim()))
-          return "Solo se permiten letras, espacios y guiones. Sin números ni caracteres especiales.";
-        if (value.trim().length > 60)
-          return "El primer apellido no puede superar los 60 caracteres.";
-        return "";
-
-      case "secondSurname":
-        // Opcional: si está vacío es válido
-        if (!value.trim()) return "";
-        if (!NAME_REGEX.test(value.trim()))
-          return "Solo se permiten letras, espacios y guiones. Sin números ni caracteres especiales.";
-        if (value.trim().length > 60)
-          return "El segundo apellido no puede superar los 60 caracteres.";
-        return "";
-
-      case "nif":
-        if (!value.trim()) return "El NIF/NIE es obligatorio.";
-        if (!validateNifNie(value))
-          return "NIF/NIE inválido. Formato: 12345678Z (NIF) o X1234567L (NIE).";
-        return "";
-
-      case "nationality":
-        if (!value) return "La nacionalidad es obligatoria.";
-        return "";
-
-      case "birthdate": {
-        if (!value) return "La fecha de nacimiento es obligatoria.";
-        const birth = new Date(value);
-        const today = new Date();
-        let age = today.getFullYear() - birth.getFullYear();
-        const monthDiff = today.getMonth() - birth.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-          age--;
-        }
-        if (age < 18) return "El cliente debe ser mayor de edad (mínimo 18 años).";
-        return "";
-      }
-
-      case "careerTime":
-        if (!value) return "La fecha de inicio de carrera es obligatoria.";
-        return "";
-
-      case "phone":
-        if (!value.trim()) return "El teléfono es obligatorio.";
-        if (!PHONE_REGEX.test(value.trim()))
-          return "Teléfono inválido. Usa solo dígitos (7-15). Puedes añadir + al inicio (ej. +34600123456).";
-        return "";
-
-      case "scoring": {
-        const n = Number(value);
-        if (value === "" || value === null) return "El scoring es obligatorio.";
-        if (Number.isNaN(n) || n < 0 || n > 10)
-          return "El scoring debe estar entre 0 y 10.";
-        return "";
-      }
-
-      default:
-        return "";
-    }
-  }
-
   // Actualiza estado + valida en tiempo real
   const handleChange = (field, setter) => (e) => {
     const val = e.target.value;
@@ -283,14 +77,14 @@ function FormClient({ open, close, saveClient, clientEdit }) {
     setErrors((prev) => ({ ...prev, nif: validateField("nif", val) }));
   };
 
-  // Manejo especial para teléfono: limpiar espacios y guiones al perder el foco
+  // Manejo para teléfono: limpiar espacios y guiones al perder el foco
   const handlePhoneBlur = () => {
     const cleaned = phone.replace(/[\s\-]/g, "");
     setPhone(cleaned);
     setErrors((prev) => ({ ...prev, phone: validateField("phone", cleaned) }));
   };
 
-  // ── Submit ──────────────────────────────────────────────────────────────────
+  // ── Submit ─────
   const handleSubmit = (e) => {
     e.preventDefault();
 
