@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRequest } from "../../hooks/useRequest";
 import FormRequest from "./FormRequest";
+import Pagination from "../../components/Pagination";
 import "./ListRequest.css";
 
 export default function ListRequest() {
@@ -16,6 +17,7 @@ export default function ListRequest() {
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [filtroActivo, setFiltroActivo] = useState("TODAS");
+  const [currentPage, setCurrentPage] = useState(0);
 
   const handleFormSubmit = async () => {
     setMostrarFormulario(false);
@@ -57,6 +59,14 @@ export default function ListRequest() {
     return solicitud.status === filtroActivo;
   });
 
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(solicitudesFiltradas.length / itemsPerPage);
+  const activePage = currentPage >= totalPages ? Math.max(0, totalPages - 1) : currentPage;
+  const solicitudesPaginadas = solicitudesFiltradas.slice(
+    activePage * itemsPerPage,
+    (activePage + 1) * itemsPerPage
+  );
+
   const renderContent = () => {
     if (loading === "loading") {
       return (
@@ -87,7 +97,7 @@ export default function ListRequest() {
           <div className="filters-container">
             <button
                 className={`filter-btn ${filtroActivo === "TODAS" ? "active" : ""}`}
-                onClick={() => setFiltroActivo("TODAS")}
+                onClick={() => { setFiltroActivo("TODAS"); setCurrentPage(0); }}
             >
               Todas
             </button>
@@ -95,7 +105,7 @@ export default function ListRequest() {
                 className={`filter-btn ${
                     filtroActivo === "PENDING_ANALYST" ? "active" : ""
                 }`}
-                onClick={() => setFiltroActivo("PENDING_ANALYST")}
+                onClick={() => { setFiltroActivo("PENDING_ANALYST"); setCurrentPage(0); }}
             >
               Pendientes
             </button>
@@ -103,7 +113,7 @@ export default function ListRequest() {
                 className={`filter-btn ${
                     filtroActivo === "APPROVED" ? "active" : ""
                 }`}
-                onClick={() => setFiltroActivo("APPROVED")}
+                onClick={() => { setFiltroActivo("APPROVED"); setCurrentPage(0); }}
             >
               Aprobadas
             </button>
@@ -111,7 +121,7 @@ export default function ListRequest() {
                 className={`filter-btn ${
                     filtroActivo === "DENIED" ? "active" : ""
                 }`}
-                onClick={() => setFiltroActivo("DENIED")}
+                onClick={() => { setFiltroActivo("DENIED"); setCurrentPage(0); }}
             >
               Denegadas
             </button>
@@ -119,7 +129,7 @@ export default function ListRequest() {
                 className={`filter-btn ${
                     filtroActivo === "APPROVED_WITH_WARRANTIES" ? "active" : ""
                 }`}
-                onClick={() => setFiltroActivo("APPROVED_WITH_WARRANTIES")}
+                onClick={() => { setFiltroActivo("APPROVED_WITH_WARRANTIES"); setCurrentPage(0); }}
             >
               Con Garantías
             </button>
@@ -130,6 +140,7 @@ export default function ListRequest() {
                 No hay solicitudes que coincidan con este filtro.
               </div>
           ) : (
+            <>
               <table>
                 <thead>
                 <tr>
@@ -143,7 +154,7 @@ export default function ListRequest() {
                 </tr>
                 </thead>
                 <tbody>
-                {solicitudesFiltradas.map((solicitud) => (
+                {solicitudesPaginadas.map((solicitud) => (
                     <tr key={solicitud.id}>
                       <td>{solicitud.id}</td>
                       <td>{solicitud.customerId}</td>
@@ -214,6 +225,12 @@ export default function ListRequest() {
                 ))}
                 </tbody>
               </table>
+              <Pagination
+                currentPage={activePage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </>
           )}
         </>
     );

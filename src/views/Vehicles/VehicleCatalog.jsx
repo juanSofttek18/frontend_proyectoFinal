@@ -1,14 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useVehicles from "../../hooks/useVehicles";
 import { getAllAbleVehicles } from "../../services/vehiculoService";
 import GenericTable from "../../components/GenericTable";
 import GenericCard from "../../components/GenericCard";
+import Pagination from "../../components/Pagination";
 import "./VehicleCatalog.css";
 
 function VehicleCatalog() {
   const params = useParams();
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(0);
 
   const apiFn = useCallback(() => {
     return getAllAbleVehicles(params.id);
@@ -33,6 +35,14 @@ function VehicleCatalog() {
       return <div className="empty-message">No hay vehículos disponibles</div>;
     }
 
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(availableVehicles.length / itemsPerPage);
+    const activePage = currentPage >= totalPages ? Math.max(0, totalPages - 1) : currentPage;
+    const vehiclesPaginados = availableVehicles.slice(
+      activePage * itemsPerPage,
+      (activePage + 1) * itemsPerPage
+    );
+
     return (
       <GenericCard
         title="Catálogo Disponible"
@@ -52,7 +62,7 @@ function VehicleCatalog() {
             "Acciones",
           ]}
         >
-          {availableVehicles.map((vehicle) => (
+          {vehiclesPaginados.map((vehicle) => (
             <tr key={vehicle.id}>
               <td>{vehicle.licensePlate}</td>
               <td>{vehicle.brand}</td>
@@ -74,6 +84,11 @@ function VehicleCatalog() {
             </tr>
           ))}
         </GenericTable>
+        <Pagination
+          currentPage={activePage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </GenericCard>
     );
   };

@@ -4,10 +4,11 @@ import GenericTable from "../../components/GenericTable";
 import GenericCard from "../../components/GenericCard";
 import FormClient from "./FormClient";
 import FormIngreso from "./FormIngreso";
+import Pagination from "../../components/Pagination";
 import "./ListClient.css";
 
 function ListClient() {
-  const { clients = [], loading, error, search, setSearch, deleteClient, saveClient, saveClientIncome } = useClient();
+  const { clients = [], loading, error, search, setSearch, deleteClient, saveClient, saveClientIncome, page, totalPages, setPage } = useClient();
   const [openForm, setOpenForm] = useState(false);
   const [clientEdit, setClientEdit] = useState(null);
   const [openIncomeForm, setOpenIncomeForm] = useState(false);
@@ -114,6 +115,11 @@ function ListClient() {
               ))}
             </GenericTable>
           )}
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </GenericCard>
       )}
 
