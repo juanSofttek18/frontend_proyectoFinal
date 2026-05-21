@@ -264,30 +264,12 @@ export default function FormRequest({
     return true;
   };
 
-  const buildVehiclesForBackend = () => {
-    const details = [];
-
-    formData.vehicles.forEach((line) => {
-      const vehicleId = Number(line.vehicleId);
-      const extraIds = line.extraIds || [];
-
-      if (extraIds.length === 0) {
-        details.push({
-          vehicleId,
-          extraId: null,
-        });
-      } else {
-        extraIds.forEach((extraId) => {
-          details.push({
-            vehicleId,
-            extraId: Number(extraId),
-          });
-        });
-      }
-    });
-
-    return details;
-  };
+const buildVehiclesForBackend = () => {
+  return formData.vehicles.map((line) => ({
+    vehicleId: Number(line.vehicleId),
+    extraIds: (line.extraIds || []).map(Number),
+  }));
+};
 
   const handleSubmit = async (event) => {
     event.preventDefault();
