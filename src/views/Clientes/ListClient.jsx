@@ -83,10 +83,11 @@ function ListClient() {
             <div className="empty-message">No se encontraron clientes.</div>
           ) : (
             <GenericTable
-              headers={["Cliente", "NIF", "Nacionalidad", "Tipo", "Contacto", "Scoring", "Estado", "Acciones"]}
+              headers={["ID","Cliente", "NIF", "Nacionalidad", "Tipo", "Contacto", "Scoring", "Estado", "Acciones"]}
             >
               {clients.map((client) => (
                 <tr key={client.id}>
+                  <td>{client.id}</td>
                   <td>{client.name} {client.firstSurname || ""} {client.secondSurname || ""}</td>
                   <td>{client.nif}</td>
                   <td>{client.nationality}</td>
