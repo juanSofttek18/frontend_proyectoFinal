@@ -45,50 +45,56 @@ const handleSubmit = async (e) => {
   if (!open || !client) return null;
 
   return (
-    <div className="Modal_Overlay">
-      <div className="Modal_Client">
-        <div className="Modal_Header">
-          <div>
-            <h2>Añadir Ingreso</h2>
-            <p>
-              Cliente: {client.name} {client.first_surname}
-            </p>
+      <div className="Modal_Overlay">
+        <div className="Modal_Client">
+          <div className="Modal_Header">
+            <div>
+              <h2>Añadir Ingreso</h2>
+              <p>
+                Cliente: {client.name} {client.firstSurname || client.first_surname || ""}
+              </p>
+            </div>
+            <button type="button" onClick={close}>✕</button>
           </div>
-          <button onClick={close}>X</button>
+
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="fi-preTaxes">Pre-impuestos</label>
+            <input
+                id="fi-preTaxes"
+                type="number"
+                value={preTaxes}
+                onChange={(e) => setPreTaxes(e.target.value)}
+                required
+                min="0"
+                step="0.01"
+                placeholder="Ej: 2500.00"
+            />
+
+            <label htmlFor="fi-postTaxes">Post-impuestos</label>
+            <input
+                id="fi-postTaxes"
+                type="number"
+                value={postTaxes}
+                onChange={(e) => setPostTaxes(e.target.value)}
+                required
+                min="0"
+                step="0.01"
+                placeholder="Ej: 1950.00"
+            />
+
+            {formError && <span className="FieldError">{formError}</span>}
+
+            <div className="Modal_Actions">
+              <button type="button" onClick={close}>
+                Cancelar
+              </button>
+              <button type="submit">
+                Guardar Ingreso
+              </button>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={handleSubmit}>
-          <label>Pre-impuestos</label>
-          <input
-            type="number"
-            value={preTaxes}
-            onChange={(e) => setPreTaxes(e.target.value)}
-            required
-            min="0"
-            step="0.01"
-          />
-
-          <label>Post-impuestos</label>
-          <input
-            type="number"
-            value={postTaxes}
-            onChange={(e) => setPostTaxes(e.target.value)}
-            required
-            min="0"
-            step="0.01"
-          />
-
-          {formError && <p className="FormError">{formError}</p>}
-
-          <div className="Modal_Actions">
-            <button type="button" onClick={close}>
-              Cancelar
-            </button>
-            <button type="submit">Guardar Ingreso</button>
-          </div>
-        </form>
       </div>
-    </div>
   );
 }
 

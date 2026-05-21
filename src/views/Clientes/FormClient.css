@@ -155,3 +155,21 @@
     text-align: center;
   }
 }
+.Modal_Header button[type="button"] {
+  background: #F7FAFA; /* Gris claro a juego con las cajas del formulario */
+  color: #4A5568; /* Color de texto secundario */
+  border: 1px solid #E2E8F0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Botón circular limpio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(26, 54, 93, 0.04);
+}

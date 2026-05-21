@@ -12,15 +12,15 @@
   width: 100%;
   border-collapse: collapse;
   background: white;
-  min-width: 800px; 
+  min-width: 800px;
 }
 
-.generic-table th, 
+.generic-table th,
 .generic-table td {
   padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid #E2E8F0;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .list-client-container {
@@ -65,8 +65,52 @@
   cursor: pointer;
   font-weight: 600;
   white-space: nowrap;
+  transition: background 0.2s;
 }
 
+.btn-add-client:hover {
+  background: #2a4a7f;
+}
+
+/* =========================================
+   Barra de Búsqueda Estilizada
+   ========================================= */
+.client-filters {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 400px; /* Evita que se estire demasiado en pantallas grandes */
+}
+
+.client-filters input[type="text"] {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px; /* Mismo radio que tus tablas y botones */
+  font-size: 0.95rem;
+  color: #1A365D; /* Texto en el color corporativo */
+  background-color: #F7FAFA; /* Fondo limpio que usas en filas pares */
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.client-filters input[type="text"]::placeholder {
+  color: #a0aec0; /* Gris suave para el texto de ayuda */
+}
+
+.client-filters input[type="text"]:hover {
+  border-color: #cbd5e1;
+}
+
+.client-filters input[type="text"]:focus {
+  border-color: #1A365D; /* Iluminación en azul principal */
+  background-color: #ffffff; /* Pasa a blanco limpio al escribir */
+  box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1); /* Efecto glow suave */
+}
+
+/* =========================================
+   Badges y Acciones
+   ========================================= */
 .status-badge {
   display: inline-block;
   padding: 4px 10px;
@@ -97,6 +141,7 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 0.85rem;
+  transition: background 0.2s;
 }
 
 .btn-edit-client {
@@ -127,5 +172,8 @@
   .btn-add-client {
     width: 100%;
     text-align: center;
+  }
+  .client-filters {
+    max-width: 100%; /* Ocupa todo el ancho disponible en móviles */
   }
 }

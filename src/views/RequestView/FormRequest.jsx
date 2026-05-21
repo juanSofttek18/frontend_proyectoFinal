@@ -9,11 +9,11 @@ import {
 } from "../../services/solicitudService";
 
 export default function FormRequest({
-  open,
-  close,
-  saveRequest,
-  onFormSubmit,
-}) {
+                                      open,
+                                      close,
+                                      saveRequest,
+                                      onFormSubmit,
+                                    }) {
   const [formData, setFormData] = useState({
     customerId: "",
     periodInMonths: 12,
@@ -170,12 +170,12 @@ export default function FormRequest({
       const currentExtraIds = currentVehicle.extraIds || [];
 
       const extrasSameCategory = extras
-        .filter((item) => item.category === extra.category)
-        .map((item) => item.id);
+          .filter((item) => item.category === extra.category)
+          .map((item) => item.id);
 
       const extraIdsWithoutSameCategory = currentExtraIds.filter(
-        (id) =>
-          !extrasSameCategory.some((extraId) => String(extraId) === String(id)),
+          (id) =>
+              !extrasSameCategory.some((extraId) => String(extraId) === String(id)),
       );
 
       updatedVehicles[vehicleIndex] = {
@@ -198,12 +198,12 @@ export default function FormRequest({
       const currentExtraIds = currentVehicle.extraIds || [];
 
       const extrasSameCategory = extras
-        .filter((item) => item.category === category)
-        .map((item) => item.id);
+          .filter((item) => item.category === category)
+          .map((item) => item.id);
 
       const updatedExtraIds = currentExtraIds.filter(
-        (id) =>
-          !extrasSameCategory.some((extraId) => String(extraId) === String(id)),
+          (id) =>
+              !extrasSameCategory.some((extraId) => String(extraId) === String(id)),
       );
 
       updatedVehicles[vehicleIndex] = {
@@ -213,7 +213,7 @@ export default function FormRequest({
 
       return {
         ...prev,
-        vehicles: updatedVehicles,
+        vehicles: updatedExtraIds,
       };
     });
   };
@@ -264,12 +264,30 @@ export default function FormRequest({
     return true;
   };
 
-const buildVehiclesForBackend = () => {
-  return formData.vehicles.map((line) => ({
-    vehicleId: Number(line.vehicleId),
-    extraIds: (line.extraIds || []).map(Number),
-  }));
-};
+  const buildVehiclesForBackend = () => {
+    const details = [];
+
+    formData.vehicles.forEach((line) => {
+      const vehicleId = Number(line.vehicleId);
+      const extraIds = line.extraIds || [];
+
+      if (extraIds.length === 0) {
+        details.push({
+          vehicleId,
+          extraId: null,
+        });
+      } else {
+        extraIds.forEach((extraId) => {
+          details.push({
+            vehicleId,
+            extraId: Number(extraId),
+          });
+        });
+      }
+    });
+
+    return details;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -299,143 +317,158 @@ const buildVehiclesForBackend = () => {
       console.error("Error creando solicitud:", err);
 
       const backendMessage =
-        typeof err.response?.data === "string"
-          ? err.response.data
-          : err.response?.data?.message ||
-            err.response?.data?.error ||
-            "Error al crear la solicitud. Revisa que el cliente, vehículo y extras existan en backend.";
+          typeof err.response?.data === "string"
+              ? err.response.data
+              : err.response?.data?.message ||
+              err.response?.data?.error ||
+              "Error al crear la solicitud. Revisa que el cliente, vehículo y extras existan en backend.";
 
       setError(backendMessage);
-    } finally {
+    } finally{
       setSaving(false);
     }
   };
 
+  const totalInvestment = priceResults.reduce(
+      (acc, curr) => acc + (curr ? Number(curr.finalInvestment) : 0),
+      0
+  );
+
+  const totalMonthlyFeeNet = priceResults.reduce(
+      (acc, curr) => acc + (curr ? Number(curr.finalMonthlyFee) : 0),
+      0
+  );
+
+  const totalIva = totalMonthlyFeeNet * 0.21;
+  const totalMonthlyFeeWithIva = totalMonthlyFeeNet + totalIva;
+
   if (!open) return null;
 
   return (
-    <div className="Modal_Overlay">
-      <div className="Modal_Request">
-        <div className="Modal_Header">
-          <div>
-            <h2>Nueva Solicitud</h2>
-            <p>Registra una solicitud de renting</p>
-          </div>
-
-          <button type="button" onClick={close}>
-            X
-          </button>
-        </div>
-
-        {loadingData ? (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="customerId">Cliente</label>
-            <select
-              id="customerId"
-              value={formData.customerId}
-              onChange={handleCustomerChange}
-              required
-            >
-              <option value="">-- Seleccione un cliente --</option>
-
-              {clientes.map((cliente) => (
-                <option key={cliente.id} value={cliente.id}>
-                  {cliente.name} {cliente.firstSurname || ""}{" "}
-                  {cliente.secondSurname || ""} - {cliente.nif}
-                </option>
-              ))}
-            </select>
-
-            <label htmlFor="periodInMonths">Plazo en meses</label>
-            <input
-              id="periodInMonths"
-              type="number"
-              min="1"
-              max="60"
-              value={formData.periodInMonths}
-              onChange={handlePeriodChange}
-              required
-            />
-
-            <div className="request-section-header">
-              <h3>Vehículos solicitados</h3>
-
-              <button
-                type="button"
-                className="btn-add"
-                onClick={handleAddVehicle}
-              >
-                + Añadir vehículo
-              </button>
+      <div className="Modal_Overlay">
+        <div className="Modal_Request">
+          <div className="Modal_Header">
+            <div>
+              <h2>Nueva Solicitud</h2>
+              <p>Registra una solicitud de renting</p>
             </div>
 
-            {formData.vehicles.map((line, index) => (
-              <RequestVehicleCard
-                key={index}
-                index={index}
-                line={line}
-                vehiculos={vehiculos}
-                extras={extras}
-                priceResult={priceResults[index]}
-                periodInMonths={formData.periodInMonths}
-                showRemoveButton={formData.vehicles.length > 1}
-                onRemove={() => handleRemoveVehicle(index)}
-                onVehicleChange={(val) => handleVehicleChange(index, val)}
-                onExtraChange={(extra) => handleExtraChange(index, extra)}
-                onNoExtraForCategory={(category) => handleNoExtraForCategory(index, category)}
-              />
-            ))}
+            <button type="button" onClick={close}>✕</button>
+          </div>
 
-            {priceResults.length > 0 && priceResults.some((res) => res) && (
-              <div className="request-totals-summary">
-                <h3>Resumen Total de la Solicitud</h3>
-                <div className="total-row">
-                  <span>Inversión Total:</span>
-                  <span className="total-val">
-                    {formatCurrency(
-                      priceResults.reduce(
-                        (acc, curr) =>
-                          acc + (curr ? Number(curr.finalInvestment) : 0),
-                        0,
-                      ),
-                    )}{" "}
-                    €
-                  </span>
-                </div>
-                <div className="total-row">
-                  <span>Cuota Total Mensual:</span>
-                  <span className="total-val">
-                    {formatCurrency(
-                      priceResults.reduce(
-                        (acc, curr) =>
-                          acc + (curr ? Number(curr.finalMonthlyFee) : 0),
-                        0,
-                      ),
-                    )}{" "}
-                    €/mes
-                  </span>
-                </div>
+          {loadingData ? (
+              <div className="loading-spinner">
+                <div className="spinner"></div>
               </div>
-            )}
+          ) : (
+              <form onSubmit={handleSubmit}>
+                <label htmlFor="customerId">Cliente</label>
+                <select
+                    id="customerId"
+                    value={formData.customerId}
+                    onChange={handleCustomerChange}
+                    required
+                >
+                  <option value="">-- Seleccione un cliente --</option>
 
-            {error && <p className="error-message request-error">{error}</p>}
+                  {clientes.map((cliente) => (
+                      <option key={cliente.id} value={cliente.id}>
+                        {cliente.name} {cliente.firstSurname || ""}{" "}
+                        {cliente.secondSurname || ""} - {cliente.nif}
+                      </option>
+                  ))}
+                </select>
 
-            <div className="Modal_Actions">
-              <button type="button" onClick={close} disabled={saving}>
-                Cancelar
-              </button>
+                <label htmlFor="periodInMonths">Plazo en meses</label>
+                <input
+                    id="periodInMonths"
+                    type="number"
+                    min="1"
+                    max="60"
+                    value={formData.periodInMonths}
+                    onChange={handlePeriodChange}
+                    required
+                />
 
-              <button type="submit" disabled={saving}>
-                {saving ? "Guardando..." : "Crear solicitud"}
-              </button>
-            </div>
-          </form>
-        )}
+                <div className="request-section-header">
+                  <h3>Vehículos solicitados</h3>
+
+                  <button
+                      type="button"
+                      className="btn-add"
+                      onClick={handleAddVehicle}
+                  >
+                    + Añadir vehículo
+                  </button>
+                </div>
+
+                {formData.vehicles.map((line, index) => (
+                    <RequestVehicleCard
+                        key={index}
+                        index={index}
+                        line={line}
+                        vehiculos={vehiculos}
+                        extras={extras}
+                        priceResult={priceResults[index]}
+                        periodInMonths={formData.periodInMonths}
+                        showRemoveButton={formData.vehicles.length > 1}
+                        onRemove={() => handleRemoveVehicle(index)}
+                        onVehicleChange={(val) => handleVehicleChange(index, val)}
+                        onExtraChange={(extra) => handleExtraChange(index, extra)}
+                        onNoExtraForCategory={(category) => handleNoExtraForCategory(index, category)}
+                    />
+                ))}
+
+                {priceResults.length > 0 && priceResults.some((res) => res) && (
+                    <div className="request-totals-summary">
+                      <h3>Resumen Total de la Solicitud</h3>
+
+                      {/* Filas secundarias menos llamativas */}
+                      <div className="total-row total-row-secondary">
+                        <span>Inversión Total:</span>
+                        <span className="total-val-secondary">
+                          {formatCurrency(totalInvestment)} €
+                        </span>
+                      </div>
+
+                      <div className="total-row total-row-secondary">
+                        <span>Cuota Base Mensual (Neto):</span>
+                        <span className="total-val-secondary">
+                          {formatCurrency(totalMonthlyFeeNet)} €/mes
+                        </span>
+                      </div>
+
+                      <div className="total-row total-row-secondary">
+                        <span>IVA (21%):</span>
+                        <span className="total-val-secondary">
+                          {formatCurrency(totalIva)} €/mes
+                        </span>
+                      </div>
+
+                      {/* Fila principal llamática */}
+                      <div className="total-row total-highlight">
+                        <span>Cuota Total Mensual (Con IVA):</span>
+                        <span className="total-val">
+                          {formatCurrency(totalMonthlyFeeWithIva)} €/mes
+                        </span>
+                      </div>
+                    </div>
+                )}
+
+                {error && <p className="error-message request-error">{error}</p>}
+
+                <div className="Modal_Actions">
+                  <button type="button" onClick={close} disabled={saving}>
+                    Cancelar
+                  </button>
+
+                  <button type="submit" disabled={saving}>
+                    {saving ? "Guardando..." : "Crear solicitud"}
+                  </button>
+                </div>
+              </form>
+          )}
+        </div>
       </div>
-    </div>
   );
 }

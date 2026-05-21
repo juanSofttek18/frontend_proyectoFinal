@@ -1,6 +1,3 @@
-/* =========================================
-   Contenedor Principal (Catálogo homólogo)
-   ========================================= */
 .list-request-container {
   padding: 0 0 2rem 0;
   min-height: 100vh;
@@ -8,9 +5,6 @@
   width: 100%;
 }
 
-/* =========================================
-   Cabecera
-   ========================================= */
 .request-header {
   display: flex;
   justify-content: space-between;
@@ -52,9 +46,6 @@
   background: #4A5568;
 }
 
-/* =========================================
-   Filtros (Adaptados a los botones del catálogo)
-   ========================================= */
 .filters-container {
   display: flex;
   gap: 0.8rem;
@@ -85,19 +76,16 @@
   border-color: #1A365D;
 }
 
-/* =========================================
-   Tabla (Calcando GenericTable y wrapper)
-   ========================================= */
 .list-request-container table {
   width: 100%;
-  border-collapse: separate; /* ¡Clave para que funcione el border-radius! */
+  border-collapse: separate;
   border-spacing: 0;
   background: white;
   min-width: 800px;
-  border-radius: 16px;
+  border-radius: 8px;
   border: 1px solid #E2E8F0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-  overflow: hidden; /* Corta el fondo de las celdas en las esquinas */
+  overflow: hidden;
 }
 
 .list-request-container th,
@@ -115,14 +103,10 @@
   background: #fafafa;
 }
 
-/* Evita que el borde de la última fila se sume al borde de la tabla */
 .list-request-container tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* =========================================
-   Botones de Acción de Tabla
-   ========================================= */
 .actions-cell {
   display: flex;
   gap: 0.5rem;
@@ -151,9 +135,6 @@
 .btn-eliminar { background: #e2e8f0; color: #4A5568; }
 .btn-eliminar:hover { background: #cbd5e1; color: #dc3545; }
 
-/* =========================================
-   Badges de Estado
-   ========================================= */
 .status-badge {
   padding: 6px 10px;
   border-radius: 6px;
@@ -186,9 +167,6 @@
   border: 1px solid #feebc8;
 }
 
-/* =========================================
-   Estados de Carga y Vacío
-   ========================================= */
 .empty-message, .error-message {
   text-align: center;
   padding: 3rem;
@@ -225,9 +203,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* =========================================
-   Responsive (Igual que el catálogo)
-   ========================================= */
 @media (max-width: 576px) {
   .request-header {
     flex-direction: column;
@@ -240,7 +215,19 @@
     text-align: center;
   }
 
-  /* Aplica el scroll horizontal del GenericTable en pantallas pequeñas */
+  .filters-container {
+    justify-content: space-between;
+  }
+
+  .filter-btn {
+    flex: 1 1 calc(50% - 0.4rem);
+    text-align: center;
+  }
+
+  .filter-btn:first-child {
+    flex: 1 1 100%;
+  }
+
   .list-request-container table {
     display: block;
     overflow-x: auto;

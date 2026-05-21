@@ -38,13 +38,13 @@ export function useRequest() {
 
     try {
       await logicalDeleteRequest(id);
-      setRequests((prev) => prev.filter((request) => request.id !== id));
+      await fetchRequests();
     } catch (err) {
       alert(
           "No se pudo eliminar la solicitud. Recuerda que el backend no permite borrar solicitudes aprobadas."
       );
     }
-  }, []);
+  }, [fetchRequests]);
 
   const updateRequestStatus = useCallback(async (id, nuevoEstado) => {
     try {
@@ -53,23 +53,12 @@ export function useRequest() {
       };
 
       await resolveRequest(id, dto);
-
-      setRequests((prev) =>
-          prev.map((request) =>
-              request.id === id
-                  ? {
-                    ...request,
-                    status: nuevoEstado,
-                    resolutionDate: new Date().toISOString(),
-                  }
-                  : request
-          )
-      );
+      await fetchRequests();
     } catch (err) {
       alert("No se pudo cambiar el estado de la solicitud.");
       throw err;
     }
-  }, []);
+  }, [fetchRequests]);
 
   const saveRequest = useCallback(
       async (dto) => {
