@@ -37,6 +37,14 @@ export const createRequest = async (solicitudDTO) => {
   return response.data;
 };
 
+export const calculateVehiclePrice = async (calculationDTO) => {
+  const response = await axios.post(
+    `${API_BASE_URL}/vehicles/calculate-price`,
+    calculationDTO
+  );
+  return response.data;
+};
+
 export const resolveRequest = async (id, resolveDTO) => {
   const response = await axios.patch(
     `${API_BASE_URL}/requests/${id}/resolve`,
