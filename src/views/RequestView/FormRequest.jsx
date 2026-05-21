@@ -56,7 +56,6 @@ export default function FormRequest({
         setClientes(clientesData);
         setVehiculos(vehiculosData);
         setExtras(extrasData);
-
         resetForm();
       } catch (err) {
         console.error("Error cargando datos del formulario:", err);
