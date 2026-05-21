@@ -213,7 +213,7 @@ export default function FormRequest({
 
       return {
         ...prev,
-        vehicles: updatedExtraIds,
+        vehicles: updatedVehicles,
       };
     });
   };
@@ -329,18 +329,11 @@ export default function FormRequest({
     }
   };
 
-  const totalInvestment = priceResults.reduce(
-      (acc, curr) => acc + (curr ? Number(curr.finalInvestment) : 0),
-      0
-  );
-
-  const totalMonthlyFeeNet = priceResults.reduce(
+  // Calculamos únicamente la cuota total acumulada con el IVA incluido
+  const totalMonthlyFeeWithIvaGlobal = priceResults.reduce(
       (acc, curr) => acc + (curr ? Number(curr.finalMonthlyFee) : 0),
       0
-  );
-
-  const totalIva = totalMonthlyFeeNet * 0.21;
-  const totalMonthlyFeeWithIva = totalMonthlyFeeNet + totalIva;
+  ) * 1.21;
 
   if (!open) return null;
 
@@ -423,33 +416,10 @@ export default function FormRequest({
                     <div className="request-totals-summary">
                       <h3>Resumen Total de la Solicitud</h3>
 
-                      {/* Filas secundarias menos llamativas */}
-                      <div className="total-row total-row-secondary">
-                        <span>Inversión Total:</span>
-                        <span className="total-val-secondary">
-                          {formatCurrency(totalInvestment)} €
-                        </span>
-                      </div>
-
-                      <div className="total-row total-row-secondary">
-                        <span>Cuota Base Mensual (Neto):</span>
-                        <span className="total-val-secondary">
-                          {formatCurrency(totalMonthlyFeeNet)} €/mes
-                        </span>
-                      </div>
-
-                      <div className="total-row total-row-secondary">
-                        <span>IVA (21%):</span>
-                        <span className="total-val-secondary">
-                          {formatCurrency(totalIva)} €/mes
-                        </span>
-                      </div>
-
-                      {/* Fila principal llamática */}
                       <div className="total-row total-highlight">
-                        <span>Cuota Total Mensual (Con IVA):</span>
+                        <span>Cuota Total Mensual:</span>
                         <span className="total-val">
-                          {formatCurrency(totalMonthlyFeeWithIva)} €/mes
+                          {formatCurrency(totalMonthlyFeeWithIvaGlobal)} €/mes
                         </span>
                       </div>
                     </div>
