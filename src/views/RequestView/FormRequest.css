@@ -121,3 +121,113 @@
     text-align: center;
   }
 }
+.request-section-header {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.request-section-header h3 {
+  margin: 0;
+  color: #1A365D;
+}
+
+.request-vehicle-card {
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: #F7FAFA;
+}
+
+.request-vehicle-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-remove-vehicle {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.vehicle-info-box {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: #4A5568;
+}
+
+.vehicle-info-box p {
+  margin: 0.25rem 0;
+}
+
+.extras-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.8rem;
+}
+
+.extra-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 !important;
+  font-weight: 500 !important;
+  color: #1A365D;
+}
+
+.extra-checkbox-item input {
+  width: auto !important;
+  margin: 0;
+}
+
+.selected-extras-box {
+  margin-top: 0.8rem;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.8rem;
+  color: #1A365D;
+}
+
+.selected-extras-box ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.selected-extras-box li {
+  margin-bottom: 0.25rem;
+}
+
+.empty-extras-message {
+  margin: 0.5rem 0 0;
+  color: #4A5568;
+  font-size: 0.9rem;
+}
+
+.estimated-fee {
+  margin-top: 0.8rem;
+  font-weight: bold;
+  color: #1A365D;
+}
+
+.total-fee-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #E2E8F0;
+  border-radius: 8px;
+  color: #1A365D;
+}
+
+.request-error {
+  margin-top: 1rem;
+}
