@@ -12,15 +12,15 @@
   width: 100%;
   border-collapse: collapse;
   background: white;
-  min-width: 800px; 
+  min-width: 800px;
 }
 
-.generic-table th, 
+.generic-table th,
 .generic-table td {
   padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid #E2E8F0;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .catalog-container {

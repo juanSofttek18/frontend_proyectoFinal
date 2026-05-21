@@ -1,28 +1,6 @@
-/* Contenedor salvavidas de tablas */
-.table-responsive-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin: 0 auto;
-  border-radius: 8px;
-  border: 1px solid #E2E8F0;
-}
-
-.generic-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  min-width: 800px; /* Garantiza legibilidad bajo el scroll horizontal en móviles */
-}
-
-.generic-table th, 
-.generic-table td {
-  padding: 14px 16px;
-  text-align: left;
-  border-bottom: 1px solid #E2E8F0;
-  white-space: nowrap; /* Evita cortes extraños de texto */
-}
-
+/* =========================================
+   Contenedor Principal (Catálogo homólogo)
+   ========================================= */
 .list-request-container {
   padding: 0 0 2rem 0;
   min-height: 100vh;
@@ -30,6 +8,9 @@
   width: 100%;
 }
 
+/* =========================================
+   Cabecera
+   ========================================= */
 .request-header {
   display: flex;
   justify-content: space-between;
@@ -40,8 +21,6 @@
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(26, 54, 93, 0.08);
   border-left: 5px solid #D69E2E;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
 .request-header h1 {
@@ -60,116 +39,127 @@
   background: #1A365D;
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 0.85rem;
+  transition: 0.2s;
   white-space: nowrap;
 }
 
-
-.list-request-container table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  box-shadow: 0 10px 25px rgba(26, 54, 93, 0.06);
-  border-radius: 10px;
-  overflow: hidden;
+.btn-add:hover {
+  background: #4A5568;
 }
 
-.list-request-container th, 
+/* =========================================
+   Filtros (Adaptados a los botones del catálogo)
+   ========================================= */
+.filters-container {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: #ffffff;
+  color: #4A5568;
+  border: 1px solid #E2E8F0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.filter-btn:hover {
+  background: #4A5568;
+  color: white;
+}
+
+.filter-btn.active {
+  background: #1A365D;
+  color: white;
+  border-color: #1A365D;
+}
+
+/* =========================================
+   Tabla (Calcando GenericTable y wrapper)
+   ========================================= */
+.list-request-container table {
+  width: 100%;
+  border-collapse: separate; /* ¡Clave para que funcione el border-radius! */
+  border-spacing: 0;
+  background: white;
+  min-width: 800px;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  overflow: hidden; /* Corta el fondo de las celdas en las esquinas */
+}
+
+.list-request-container th,
 .list-request-container td {
-  padding: 14px 18px;
+  padding: 14px 16px;
   text-align: left;
+  border-bottom: 1px solid #E2E8F0;
+  white-space: nowrap;
+  color: #333;
 }
 
 .list-request-container th {
-  background: #1A365D;
-  color: white;
+  color: #1A365D;
   font-weight: 600;
+  background: #fafafa;
 }
 
-.list-request-container tr:nth-child(even) {
-  background: #F7FAFA;
+/* Evita que el borde de la última fila se sume al borde de la tabla */
+.list-request-container tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.list-request-container tr {
-  border-bottom: 1px solid #E2E8F0;
-}
-
-.action-buttons {
+/* =========================================
+   Botones de Acción de Tabla
+   ========================================= */
+.actions-cell {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .action-btn {
-  padding: 6px 12px;
   border: none;
+  padding: 8px 14px;
   border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: 0.2s;
 }
 
 .btn-aprobar { background: #22543D; color: white; }
 .btn-aprobar:hover { background: #1c4431; }
 
-.btn-garantias { background: #D69E2E; color: #1A365D; }
-.btn-garantias:hover { background: #b7791f; color: white; }
+.btn-rechazar { background: #9b2c2c; color: white; }
+.btn-rechazar:hover { background: #742a2a; }
 
-.btn-modificar { background: #4A5568; color: white; }
-.btn-modificar:hover { background: #1A365D; }
+.btn-garantias { background: #D69E2E; color: white; }
+.btn-garantias:hover { background: #b7791f; }
 
 .btn-eliminar { background: #e2e8f0; color: #4A5568; }
 .btn-eliminar:hover { background: #cbd5e1; color: #dc3545; }
 
+/* =========================================
+   Badges de Estado
+   ========================================= */
 .status-badge {
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 600;
   display: inline-block;
-}
-
-.status-aprobada {
-  background: #e6fffa;
-  color: #234e52;
-  border: 1px solid #b2f5ea;
-}
-
-.status-denegada {
-  background: #fff5f5;
-  color: #9b2c2c;
-  border: 1px solid #fed7d7;
-}
-
-.status-aprobada_con_garantias {
-  background: #fffaf0;
-  color: #9c4221;
-  border: 1px solid #feebc8;
-}
-
-
-@media (max-width: 768px) {
-  .request-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .btn-add {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-.btn-rechazar {
-  background: #9b2c2c;
-  color: white;
-}
-
-.btn-rechazar:hover {
-  background: #742a2a;
 }
 
 .status-pending-analyst {
@@ -196,8 +186,64 @@
   border: 1px solid #feebc8;
 }
 
-.actions-cell {
+/* =========================================
+   Estados de Carga y Vacío
+   ========================================= */
+.empty-message, .error-message {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 8px;
+  color: #4A5568;
+  border: 1px solid #E2E8F0;
+  margin-top: 1rem;
+}
+
+.error-message {
+  color: #9b2c2c;
+  background: #fff5f5;
+  border-color: #fed7d7;
+}
+
+.loading-spinner {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  padding: 4rem;
+}
+
+.spinner {
+  border: 4px solid #E2E8F0;
+  border-top: 4px solid #1A365D;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* =========================================
+   Responsive (Igual que el catálogo)
+   ========================================= */
+@media (max-width: 576px) {
+  .request-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .btn-add {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Aplica el scroll horizontal del GenericTable en pantallas pequeñas */
+  .list-request-container table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }

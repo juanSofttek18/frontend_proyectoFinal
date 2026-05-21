@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  getPendingRequests,
+  getAllRequests,
   logicalDeleteRequest,
   resolveRequest,
   createRequest,
@@ -16,11 +16,10 @@ export function useRequest() {
       setLoading("loading");
       setError(null);
 
-      const data = await getPendingRequests();
+      const data = await getAllRequests();
       setRequests(data);
       setLoading("success");
     } catch (err) {
-      console.error("Error al cargar solicitudes:", err);
       setError(err.message || "Error al cargar las solicitudes");
       setLoading("error");
     }
@@ -32,19 +31,17 @@ export function useRequest() {
 
   const deleteRequest = useCallback(async (id) => {
     const confirmacion = window.confirm(
-      `¿Seguro que quieres eliminar la solicitud #${id}?`
+        `¿Seguro que quieres eliminar la solicitud #${id}?`
     );
 
     if (!confirmacion) return;
 
     try {
       await logicalDeleteRequest(id);
-
       setRequests((prev) => prev.filter((request) => request.id !== id));
     } catch (err) {
-      console.error("Error al eliminar solicitud:", err);
       alert(
-        "No se pudo eliminar la solicitud. Recuerda que el backend no permite borrar solicitudes aprobadas."
+          "No se pudo eliminar la solicitud. Recuerda que el backend no permite borrar solicitudes aprobadas."
       );
     }
   }, []);
@@ -57,27 +54,34 @@ export function useRequest() {
 
       await resolveRequest(id, dto);
 
-      
-      setRequests((prev) => prev.filter((request) => request.id !== id));
+      setRequests((prev) =>
+          prev.map((request) =>
+              request.id === id
+                  ? {
+                    ...request,
+                    status: nuevoEstado,
+                    resolutionDate: new Date().toISOString(),
+                  }
+                  : request
+          )
+      );
     } catch (err) {
-      console.error("Error al resolver solicitud:", err);
       alert("No se pudo cambiar el estado de la solicitud.");
       throw err;
     }
   }, []);
 
   const saveRequest = useCallback(
-    async (dto) => {
-      try {
-        await createRequest(dto);
-        await fetchRequests();
-      } catch (err) {
-        console.error("Error al crear solicitud:", err);
-        alert("No se pudo crear la solicitud.");
-        throw err;
-      }
-    },
-    [fetchRequests]
+      async (dto) => {
+        try {
+          await createRequest(dto);
+          await fetchRequests();
+        } catch (err) {
+          alert("No se pudo crear la solicitud.");
+          throw err;
+        }
+      },
+      [fetchRequests]
   );
 
   return {

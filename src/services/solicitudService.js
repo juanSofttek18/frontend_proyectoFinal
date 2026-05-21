@@ -22,14 +22,13 @@ export const getExtras = async () => {
     const response = await axios.get(`${API_BASE_URL}/extras`);
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
-    console.error("No se pudieron cargar los extras:", error);
     return [];
   }
 };
 
-export const getPendingRequests = async () => {
-  const response = await axios.get(`${API_BASE_URL}/requests/pending`);
-  return Array.isArray(response.data) ? response.data : [];
+export const getAllRequests = async () => {
+  const response = await axios.get(`${API_BASE_URL}/requests`);
+  return Array.isArray(response.data) ? response.data : response.data.content || [];
 };
 
 export const createRequest = async (solicitudDTO) => {
@@ -39,8 +38,8 @@ export const createRequest = async (solicitudDTO) => {
 
 export const resolveRequest = async (id, resolveDTO) => {
   const response = await axios.patch(
-    `${API_BASE_URL}/requests/${id}/resolve`,
-    resolveDTO
+      `${API_BASE_URL}/requests/${id}/resolve`,
+      resolveDTO
   );
 
   return response.data;

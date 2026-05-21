@@ -45,8 +45,6 @@ export const calcularResumenSolicitud = (lineasVehiculos = [], plazo = 12) => {
     const vehiculosDesglosados = lineasVehiculos.map((linea) => {
         if (!linea || !linea.vehiculo) return null;
         const { vehiculo, extras = [] } = linea;
-
-        // CORRECCIÓN CRÍTICA: La cuota se calcula partiendo de base_monthly_fee (250€), NO de price (18000€)
         const cuotaBaseMatricula = Number(vehiculo.base_monthly_fee || 0);
         const cuotaBaseAjustada = cuotaBaseMatricula * factorPlazo;
         const costeExtras = calcularPrecioExtras(extras, cuotaBaseAjustada);
